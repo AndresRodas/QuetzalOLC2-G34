@@ -115,67 +115,21 @@ const cleanEditor = (editor) => {
 }
 
 /**
- * ANALIZADOR DESCENDENTE XML
+ * ANALIZADOR QUETZAL
  */
-const analysDescXml = () => {
-
-  console.log('Analizador Descendente')
-  var texto = xmlEditor.getValue();
-
-  //creacion del arbol
-  const raiz_arbol = gramdesc.parse(texto);
-  GlobalTree = raiz_arbol;
-
-  //creacion de la tabla de simbolos
-  const tabla_simbolos = new Tabla_Simbolos(CrearTabla(raiz_arbol.objeto));
-  GlobalSymbolTable = tabla_simbolos;
-
-  //generacion del arbol 
-  dotStringCst = CST_XML(raiz_arbol.objeto);
-
-  //generacion reporte tabla de simbolos
-  const TablaSimbolos = ReporteTabla(tabla_simbolos.simbolos, 'Global', []);
-
-  //cargando datos a tabla de simbolos
-  symbolTableXml.destroy();
-  symbolTableXml = newDataTable('#symbolTableXml',
-    [{ data: "Idientifier" }, { data: "Type" }, { data: "Value" }, { data: "Row" }, { data: "Column" }, { data: "Environment" }],
-    TablaSimbolos);
-
-  //cargando datos a tabla de errores
-  errorTableXml.destroy();
-  errorTableXml = newDataTable('#errorTableXml',
-    [{ data: "Error Type" }, { data: "Row" }, { data: "Column" }, { data: "Description" }],
-    raiz_arbol.errores);
-
-  alert('Archivo XML analizado.')
-
-}
-
-/**
- * ANALIZADOR ASCENDENTE XML
- */
-const analysAscXml = () => {
+const AnalyzeQtzl = () => {
 
   console.log('Analizador Ascendente')
   var texto = xmlEditor.getValue();
+  console.log(texto)
+
 
   //creacion del arbol
-  const raiz_arbol = gramasc.parse(texto);
-  GlobalTree = raiz_arbol;
+  var arbol = grammar.parse(texto);
 
-  //creacion de la tabla de simbolos
-  const tabla_simbolos = new Tabla_Simbolos(CrearTabla(raiz_arbol.objeto));
-  GlobalSymbolTable = tabla_simbolos;
-
-  //generacion del arbol
-  dotStringCst = CST_XML(raiz_arbol.objeto);
-
-  //generacion reporte tabla de simbolos
-  const TablaSimbolos = ReporteTabla(tabla_simbolos.simbolos, 'Global', []);
-
-
-  //cargando datos a tabla de simbolos
+  console.log(arbol)
+  
+ /*  //cargando datos a tabla de simbolos
   symbolTableXml.destroy();
   symbolTableXml = newDataTable('#symbolTableXml',
     [{ data: "Idientifier" }, { data: "Type" }, { data: "Value" }, { data: "Row" }, { data: "Column" }, { data: "Environment" }],
@@ -184,91 +138,16 @@ const analysAscXml = () => {
   errorTableXml.destroy();
   errorTableXml = newDataTable('#errorTableXml',
     [{ data: "Error Type" }, { data: "Row" }, { data: "Column" }, { data: "Description" }],
-    raiz_arbol.errores);
-
-
-  alert('Archivo XML analizado.')
+    raiz_arbol.errores); */
 
 
 }
 
 /**
- * ANALIZADOR DESCENDENTE XPATH
+ * TRADUCTOR QUETZAL
  */
-const analysDescXpath = () => {
-
-  console.log('Analizador XPath Descendente')
-  var consol_out = ''
-  var query_out = ''
-  var path = xpathEditor.getValue();
-
-  //Analizador XPath
-  const xpath = gram_xpath_desc.parse(path);
-  if (xpath) consol_out = 'LA CONSULTA XPATH ES VALIDA'
-  else consol_out = 'LA CONSULTA XPATH CONTIENE ERRORES'
-
-
-  //test consulta
-  let entrada = path.split('/');
-  entrada.splice(0, 1);
-  const consulta = new Consulta(entrada, 1, 1);
-  query_out = consulta.ejecutar(GlobalSymbolTable.simbolos, {});
-
-  //encoding
-  query_out = Encoding(query_out);
-
-
-  //seteando consola
-  consoleResult.setValue(consol_out + '\n' + query_out);
-
-
-  //Manejando errores
-  // errorTableXpath.destroy();
-  // errorTableXpath = newDataTable('#errorTableXpath',
-  //   [{ data: "Error Type" }, { data: "Row" }, { data: "Column" }, { data: "Description" }],
-  //   dataTest1);
-
-
-}
-
-/**
- * ANALIZADOR ASCENDENTE XPATH
- */
-const analysAscXpath = () => {
-
-  console.log('Analizador XPath Ascendente')
-  var consol_out = ''
-  var query_out = ''
-  var path = xpathEditor.getValue();
-
-  //Analizador XPath
-  const xpath = gram_xpath_asc.parse(path);
-  if (xpath) consol_out = 'LA CONSULTA XPATH ES VALIDA'
-  else consol_out = 'LA CONSULTA XPATH CONTIENE ERRORES'
-
-
-  //test consulta
-  let entrada = path.split('/')
-  entrada.splice(0, 1);
-  const consulta = new Consulta(entrada, 1, 1);
-  query_out = consulta.ejecutar(GlobalSymbolTable.simbolos, {});
-
-  //encoding
-  query_out = Encoding(query_out);
-
-  //seteando consola
-  consoleResult.setValue(consol_out + '\n' + query_out);
-
-
-  //Manejando errores
-  // errorTableXpath.destroy();
-  // errorTableXpath = newDataTable('#errorTableXpath',
-  //   [{ data: "Error Type" }, { data: "Row" }, { data: "Column" }, { data: "Description" }],
-  //   dataTest2);
-
-
-
-
+const TranslateQtzl = () => {
+  console.log('Codigo de 3 direcciones')
 }
 
 /**
@@ -435,26 +314,26 @@ const newDataTable = (id, columns, data) => {
 const btnOpenXml = document.getElementById('btn__open__xml'),
   btnSaveXml = document.getElementById('btn__save__xml'),
   btnCleanXml = document.getElementById('btn__clean__xml'),
-  btnShowCst = document.getElementById('showCST'),
+  btnShowCst = document.getElementById('showAST'),
   btnDescXml = document.getElementById('btn__descAnalysis__xml'),
   btnAscXml = document.getElementById('btn__ascAnalysis__xml'),
   btnOpenXpath = document.getElementById('btn__open__xpath'),
   btnSaveXpath = document.getElementById('btn__save__xpath'),
   btnCleanXpath = document.getElementById('btn__clean__xpath'),
   btnShowAst = document.getElementById('showAST');
-btnDescXpath = document.getElementById('btn__descAnalysis__xpath'),
-  btnAscXpaht = document.getElementById('btn__ascAnalysis__xpath')
+  btnRun = document.getElementById('btn_run'),
+  btnC3d = document.getElementById('btn_c3d')
 
 btnOpenXml.addEventListener('click', () => openFile(xmlEditor));
 btnSaveXml.addEventListener('click', () => saveFile("database", "xml", xmlEditor));
 btnCleanXml.addEventListener('click', () => cleanEditor(xmlEditor));
 btnShowCst.addEventListener('click', () => localStorage.setItem("dot", dotStringCst));
-btnDescXml.addEventListener('click', () => analysDescXml());
-btnAscXml.addEventListener('click', () => analysAscXml());
+// btnDescXml.addEventListener('click', () => analysDescXml());
+// btnAscXml.addEventListener('click', () => analysAscXml());
 
-btnOpenXpath.addEventListener('click', () => openFile(xpathEditor));
-btnSaveXpath.addEventListener('click', () => saveFile("query", "txt", xpathEditor));
-btnCleanXpath.addEventListener('click', () => cleanEditor(xpathEditor));
+// btnOpenXpath.addEventListener('click', () => openFile(xpathEditor));
+// btnSaveXpath.addEventListener('click', () => saveFile("query", "txt", xpathEditor));
+// btnCleanXpath.addEventListener('click', () => cleanEditor(xpathEditor));
 btnShowAst.addEventListener('click', () => localStorage.setItem("dot", dotStringAst));
-btnDescXpath.addEventListener('click', () => analysDescXpath());
-btnAscXpaht.addEventListener('click', () => analysAscXpath());
+btnRun.addEventListener('click', () => AnalyzeQtzl());
+btnC3d.addEventListener('click', () => TranslateQtzl());

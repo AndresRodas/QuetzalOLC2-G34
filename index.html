@@ -56,15 +56,13 @@
 
                     <ul id="nav-mobile" class="nav__options">
                         <li>
-                            <button class="btn-floating waves-effect waves-circle waves-light red  tooltipped" data-position="bottom" data-tooltip="Desc Analysis" id="btn__descAnalysis__xml">
+                            <button class="btn-floating waves-effect waves-circle waves-light red  tooltipped" data-position="bottom" data-tooltip="Desc Analysis" id="btn_run">
                                 Run
-                                <i class="material-icons"> arrow_downward </i>
                             </button>
                         </li>
                         <li>
-                            <button class="btn-floating waves-effect waves-circle waves-light red  tooltipped" data-position="bottom" data-tooltip="Asc Analysis" id="btn__ascAnalysis__xml">
+                            <button class="btn-floating waves-effect waves-circle waves-light red  tooltipped" data-position="bottom" data-tooltip="Asc Analysis" id="btn_c3d">
                                 C3D
-                                <i class="material-icons"> arrow_upward </i>
                             </button>
                         </li>
                     </ul>
@@ -145,7 +143,7 @@
            
             <div id="cst" class="col s12 tab__panel">
                 <div class="tab__panel__btn">
-                    <a href="graph.html" target="blank" class="waves-effect waves-light btn-large red" id="showCST">
+                    <a href="graph.html" target="blank" class="waves-effect waves-light btn-large red" id="showAST">
                         <i class="material-icons right">timeline</i>
                         Show AST 
                     </a>
@@ -172,37 +170,37 @@
     <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.10.25/js/jquery.dataTables.js"></script>
     
     <!-- ============================= SWEET ALERT ============================== -->
-    <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <!-- <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script> -->
 
  
     <!-- ============================= MY SCRIPT ============================== -->
-    <script  src="js/main.js"></script>
+    <script type="text/javascript" src="js/main.js"></script>
     
     <!-- ============================= GRAMMAR ============================== -->
-    <script type="text/javascript" src="analyzers/xml/Gramatica/gramasc.js"></script>
-    <script type="text/javascript" src="analyzers/xml/Gramatica/gramdesc.js"></script>
-    <script type="text/javascript" src="analyzers/xpath/Gramatica/gram_xpath_asc.js"></script>
-    <script type="text/javascript" src="analyzers/xpath/Gramatica/gram_xpath_desc.js"></script>
+    <script type="text/javascript" src="analyzers/Grammar/grammar.js"></script>
+    <!-- <script type="text/javascript" src="analyzers/xml/Gramatica/gramdesc.js"></script> -->
+    <!-- <script type="text/javascript" src="analyzers/xpath/Gramatica/gram_xpath_asc.js"></script> -->
+    <!-- <script type="text/javascript" src="analyzers/xpath/Gramatica/gram_xpath_desc.js"></script> -->
 
     <!-- <script type="text/javascript" src="analyzers/xml/Gramatica/gramxpath.js"></script> -->
     
     <!-- ============================= ENVIRONMENT ============================== -->
-    <script type="text/javascript" src="analyzers/xml/Entornos/Raiz.js"></script>
+    <!-- <script type="text/javascript" src="analyzers/xml/Entornos/Raiz.js"></script>
     <script type="text/javascript" src="analyzers/xml/Entornos/Simbolo.js"></script>
-    <script type="text/javascript" src="analyzers/xml/Entornos/Tabla_Simbolos.js"></script>
+    <script type="text/javascript" src="analyzers/xml/Entornos/Tabla_Simbolos.js"></script> -->
 
     <!-- ============================= EXPRESSIONS ============================== -->
-    <script type="text/javascript" src="analyzers/xml/Expresiones/Objeto.js"></script>
+    <!-- <script type="text/javascript" src="analyzers/xml/Expresiones/Objeto.js"></script>
     <script type="text/javascript" src="analyzers/xml/Expresiones/Atributo.js"></script>
     <script type="text/javascript" src="analyzers/xpath/Expresiones/Operacion.js"></script>
-    <script type="text/javascript" src="analyzers/xpath/Expresiones/Primitivo.js"></script>
+    <script type="text/javascript" src="analyzers/xpath/Expresiones/Primitivo.js"></script> -->
 
     <!-- ============================= INSTRUCTIONS ============================== -->
-    <script type="text/javascript" src="analyzers/xpath/Instricciones/Consulta.js"></script>
+    <!-- <script type="text/javascript" src="analyzers/xpath/Instricciones/Consulta.js"></script>
     <script type="text/javascript" src="analyzers/xpath/AST/AST.js"></script>
     <script type="text/javascript" src="analyzers/xpath/AST/Tipo.js"></script>
     <script type="text/javascript" src="analyzers/xpath/Interfaces/Expresion.js"></script>
-    <script type="text/javascript" src="analyzers/xpath/Interfaces/Instruccion.js"></script>
+    <script type="text/javascript" src="analyzers/xpath/Interfaces/Instruccion.js"></script> -->
 
 </body>
 </html>
