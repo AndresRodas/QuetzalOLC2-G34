@@ -24,9 +24,26 @@
     <!-- ============================= MY STYLE ============================== -->
     <link rel="stylesheet" href="css/style.css">
 
+     <!-- ========================== JQUERY ============================ -->
+     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    
+     <!-- ========================== MATERIALIZE ============================ -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script> 
+    
+    <!-- ========================== CODE MIRROR  ============================ -->
+    <script src="https://cdn.jsdelivr.net/npm/codemirror@5.61.0/lib/codemirror.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/codemirror@5.61.1/addon/selection/active-line.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/codemirror@5.61.0/mode/xml/xml.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/codemirror@5.61.0/mode/xquery/xquery.js"></script>
+
+    <!-- ============================= DATA TABLE ============================== -->
+    <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.10.25/js/jquery.dataTables.js"></script>
+
     <title>Quetzal OLC2</title>
 </head>
 <body>
+
+    
 
     <a href="" id="download" style="display: none" download=""></a>
     <div class="row">
@@ -153,54 +170,30 @@
     </div>
    
         
-
-     <!-- ========================== JQUERY ============================ -->
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
-    
-     <!-- ========================== MATERIALIZE ============================ -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script> 
-    
-    <!-- ========================== CODE MIRROR  ============================ -->
-    <script src="https://cdn.jsdelivr.net/npm/codemirror@5.61.0/lib/codemirror.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/codemirror@5.61.1/addon/selection/active-line.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/codemirror@5.61.0/mode/xml/xml.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/codemirror@5.61.0/mode/xquery/xquery.js"></script>
-
-    <!-- ============================= DATA TABLE ============================== -->
-    <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.10.25/js/jquery.dataTables.js"></script>
-    
-    <!-- ============================= SWEET ALERT ============================== -->
-    <!-- <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script> -->
-
- 
     <!-- ============================= MY SCRIPT ============================== -->
     <script type="text/javascript" src="js/main.js"></script>
     
     <!-- ============================= GRAMMAR ============================== -->
-    <script type="text/javascript" src="analyzers/Grammar/grammar.js"></script>
-    <!-- <script type="text/javascript" src="analyzers/xml/Gramatica/gramdesc.js"></script> -->
-    <!-- <script type="text/javascript" src="analyzers/xpath/Gramatica/gram_xpath_asc.js"></script> -->
-    <!-- <script type="text/javascript" src="analyzers/xpath/Gramatica/gram_xpath_desc.js"></script> -->
-
-    <!-- <script type="text/javascript" src="analyzers/xml/Gramatica/gramxpath.js"></script> -->
-    
+    <script type="text/javascript" src="analyzer/Grammar/grammar.js"></script>
+        
     <!-- ============================= ENVIRONMENT ============================== -->
-    <!-- <script type="text/javascript" src="analyzers/xml/Entornos/Raiz.js"></script>
-    <script type="text/javascript" src="analyzers/xml/Entornos/Simbolo.js"></script>
-    <script type="text/javascript" src="analyzers/xml/Entornos/Tabla_Simbolos.js"></script> -->
+    <script type="text/javascript" src="analyzer/AST/AST.js"></script>
+    <script type="text/javascript" src="analyzer/AST/Entorno.js"></script>
+    <script type="text/javascript" src="analyzer/AST/Simbolo.js"></script>
+    <script type="text/javascript" src="analyzer/AST/Tipo.js"></script>
 
-    <!-- ============================= EXPRESSIONS ============================== -->
-    <!-- <script type="text/javascript" src="analyzers/xml/Expresiones/Objeto.js"></script>
-    <script type="text/javascript" src="analyzers/xml/Expresiones/Atributo.js"></script>
-    <script type="text/javascript" src="analyzers/xpath/Expresiones/Operacion.js"></script>
-    <script type="text/javascript" src="analyzers/xpath/Expresiones/Primitivo.js"></script> -->
+    <!-- ============================= EXPRESSIONS ============================== -->4
+    <script type="text/javascript" src="analyzer/Expresiones/Operador.js"></script>
+    <script type="text/javascript" src="analyzer/Expresiones/Operacion.js"></script>
+    <script type="text/javascript" src="analyzer/Expresiones/Primitivo.js"></script>
 
     <!-- ============================= INSTRUCTIONS ============================== -->
-    <!-- <script type="text/javascript" src="analyzers/xpath/Instricciones/Consulta.js"></script>
-    <script type="text/javascript" src="analyzers/xpath/AST/AST.js"></script>
-    <script type="text/javascript" src="analyzers/xpath/AST/Tipo.js"></script>
-    <script type="text/javascript" src="analyzers/xpath/Interfaces/Expresion.js"></script>
-    <script type="text/javascript" src="analyzers/xpath/Interfaces/Instruccion.js"></script> -->
+    <script type="text/javascript" src="analyzer/Instrucciones/Print.js"></script>
+  
+     <!-- ============================= INTERFACES ============================== -->
+     <script type="text/javascript" src="analyzer/Interfaces/Expresion.js"></script>
+     <script type="text/javascript" src="analyzer/Interfaces/Instruccion.js"></script>
+    
 
 </body>
 </html>

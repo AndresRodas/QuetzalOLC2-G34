@@ -1,9 +1,10 @@
 import { AST } from "../AST/AST";
-import { Simbolo } from "../Entornos/Simbolo";
+import { Entorno } from "../AST/Entorno";
 
 export interface Instruccion{
      linea:number;
      columna: number;
-    
-     ejecutar(ent:Simbolo, arbol:AST):any ;
+     
+     ejecutar(ent:Entorno, arbol:AST):any ;
+     traducir(ent:Entorno, arbol:AST):any ;
 }

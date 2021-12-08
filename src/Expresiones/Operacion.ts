@@ -1,25 +1,29 @@
+import { AST } from "../AST/AST";
+import { Entorno } from "../AST/Entorno";
 import { Tipo } from "../AST/Tipo";
-import { Simbolo } from "../Entornos/Simbolo";
 import { Expresion } from "../Interfaces/Expresion";
-
+import { Operador } from "./Operador"
 
 export class Operacion implements Expresion {
     linea: number;
     columna: number;
     op_izquierda: Expresion;
     op_derecha: Expresion;
-    operador: string;
+    operador: Operador;
 
-    constructor(op_izquierda:Expresion,op_derecha:Expresion, operacion:string, linea:number, columna:number){
+    constructor(op_izquierda:Expresion,op_derecha:Expresion, operacion:Operador, linea:number, columna:number){
         this.linea = linea;
         this.columna = columna;
         this.op_izquierda = op_izquierda;
         this.op_derecha = op_derecha;
         this.operador = operacion;
     }
+    traducir(ent: Entorno, arbol: AST) {
+        throw new Error("Method not implemented.");
+    }
 
-    getTipo(ent: Simbolo): Tipo {
-        const valor = this.getValorImplicito(ent);
+    getTipo(ent: Entorno, arbol: AST): Tipo {
+        const valor = this.getValorImplicito(ent, arbol);
         if (typeof(valor) === 'boolean')
         {
             return Tipo.BOOL;
@@ -43,23 +47,17 @@ export class Operacion implements Expresion {
     }
     
 
-    getValorImplicito(ent: Simbolo) {
-        if (this.operador !== 'menos_unario' && this.operador !== 'not'){
-            let op1 = this.op_izquierda.getValorImplicito(ent);
-            let op2 = this.op_derecha.getValorImplicito(ent);
+    getValorImplicito(ent: Entorno, arbol: AST) {
+        if (this.operador !== Operador.MENOS_UNARIO && this.operador !== Operador.NOT){
+            let op1 = this.op_izquierda.getValorImplicito(ent, arbol);
+            let op2 = this.op_derecha.getValorImplicito(ent, arbol);
             
             //suma
-            if (this.operador == 'suma')
+            if (this.operador == Operador.SUMA)
             {
                 if (typeof(op1==="number") && typeof(op2==="number"))
                 {
                     return op1 + op2;
-                }
-                else if (op1==="string" || op2 ==="string")
-                {
-                    if (op1 == null) op1 = "null";
-                    if (op2 == null) op2 = "null";
-                    return op1.ToString() + op2.ToString();
                 }
                 else
                 {
@@ -68,17 +66,11 @@ export class Operacion implements Expresion {
                 }
             }
             //resta
-            else if (this.operador == 'resta')
+            else if (this.operador == Operador.RESTA)
             {
                 if (typeof(op1==="number") && typeof(op2==="number"))
                 {
                     return op1 - op2;
-                }
-                else if (op1==="string" || op2 ==="string")
-                {
-                    if (op1 == null) op1 = "null";
-                    if (op2 == null) op2 = "null";
-                    return op1.ToString() - op2.ToString();
                 }
                 else
                 {
@@ -87,7 +79,7 @@ export class Operacion implements Expresion {
                 }
             }
             //multiplicación
-            else if (this.operador == 'mult')
+            else if (this.operador == Operador.MULTIPLICACION)
             {
                 if (typeof(op1==="number") && typeof(op2==="number"))
                 {
@@ -100,7 +92,7 @@ export class Operacion implements Expresion {
                 }
             }
             //division
-            else if (this.operador == 'div')
+            else if (this.operador == Operador.DIVISION)
             {
                 if (typeof(op1==="number") && typeof(op2==="number"))
                 {
@@ -117,7 +109,7 @@ export class Operacion implements Expresion {
                 }
             }
             //modulo
-            else if (this.operador == 'mod')
+            else if (this.operador == Operador.MODULO)
             {
                 if (typeof(op1==="number") && typeof(op2==="number"))
                 {
@@ -133,45 +125,10 @@ export class Operacion implements Expresion {
                     return null;
                 }
             }
-            //or
-            else if (this.operador == 'or')
-            {
-                if (typeof(op1==="boolean") && typeof(op2==="boolean"))
-                {
-                    if(op1 || op2)
-                    {
-                        return true;
-                    }
-                    return false;
-                }
-                else
-                {
-                    console.log("Error de tipos de datos no permitidos realizando una operacion logica");
-                    return null;
-                }
-            }
-            //and
-            else if (this.operador == 'and')
-            {
-                if (typeof(op1==="boolean") && typeof(op2==="boolean"))
-                {
-                    if(op1 && op2)
-                    {
-                        return true;
-                    }
-                    return false;
-                }
-                else
-                {
-                    console.log("Error de tipos de datos no permitidos realizando una operacion logica");
-                    return null;
-                }
-            }
-           
 
         }else{
-            let op1 = this.op_izquierda.getValorImplicito(ent);
-            if (this.operador == 'menos_unario')
+            let op1 = this.op_izquierda.getValorImplicito(ent, arbol);
+            if (this.operador == Operador.MENOS_UNARIO)
             {
                 if (typeof(op1==="number"))
                 {

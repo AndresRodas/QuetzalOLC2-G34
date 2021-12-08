@@ -1,8 +1,8 @@
 /******************************EXPORTACIONES*******************************/
 %{
     // /*****************EXPRESIONES**********************/
-    // const { Primitivo } = require ('./Expresiones/Primitivo')
-    // const { Operacion, Operador } = require ('./Expresiones/Operacion')
+    // const { Primitivo } = require ('../Expresiones/Primitivo')
+    //const { Operacion, Operador } = require ('../Expresiones/Operacion')
     // const { Path } = require ('./Expresiones/Path')
     // const { SourcePath } = require ('./Expresiones/SourcePath')
     // const { Variable } = require ('./Expresiones/Variable')
@@ -13,6 +13,7 @@
     // const { LowerCase } = require ('./Expresiones/LowerCase')
     // const { ToString } = require ('./Expresiones/ToString')
     // const { ToNumber } = require ('./Expresiones/ToNumber') 
+
 %}
  
 /******************************LEXICO***************************************/ 
@@ -21,10 +22,14 @@
 %options case-sensitive
 escapechar                          [\'\"\\bfnrtv]
 escape                              \\{escapechar}
+
 acceptedcharsdouble                 [^\"\\]+
 stringdouble                        {escape}|{acceptedcharsdouble}
 stringliteral                       \"{stringdouble}*\"
-entero                              [0-9]+("."[0-9]+)?
+
+acceptedcharssingle                 [^\'\\]
+stringsingle                        {escape}|{acceptedcharssingle}
+charliteral                         \'{stringsingle}\'
 
 %%
 
@@ -72,16 +77,16 @@ entero                              [0-9]+("."[0-9]+)?
 "#"                     return 'copy'
 
 /* TYPES */
-"null"                  return 'null'
-"int"                   return 'int'
-"double"                return 'double'
-"boolean"               return 'boolean'
-"char"                  return 'char'
-"String"                return 'string'
-"boolean"               return 'boolean'
-"struct"                return 'struct'
-"float"                 return 'float'
-"void"                  return 'void'
+"null"                  return 'Tnull'
+"int"                   return 'Tint'
+"double"                return 'Tdouble'
+"boolean"               return 'Tboolean'
+"char"                  return 'Tchar'
+"String"                return 'Tstring'
+"boolean"               return 'Tboolean'
+"struct"                return 'Tstruct'
+"float"                 return 'Tfloat'
+"void"                  return 'Tvoid'
 
 /* NATIVES */
 "pow"                   return 'pow'
@@ -121,12 +126,15 @@ entero                              [0-9]+("."[0-9]+)?
 "end"                   return 'Rend'
 "push"                  return 'Rpush'
 "pop"                   return 'Rpop'
+"main"                  return 'Rmain'
+"true"                  return 'Rtrue'
+"false"                 return 'Rfalse'
 
 /* LITERALS */
 (([0-9]+"."[0-9]*)|("."[0-9]+))|[0-9]+      return 'num';
-[a-zA-ZÀ-ÿ][a-zA-ZÀ-ÿ0-9_ñÑ]*               return 'id'; 
 {stringliteral}                             return 'StringLiteral'
 {charliteral}                               return 'CharLiteral'
+[a-zA-ZÀ-ÿ][a-zA-ZÀ-ÿ0-9_ñÑ]*               return 'id'; 
 
 //errores
 . {  
@@ -153,32 +161,59 @@ entero                              [0-9]+("."[0-9]+)?
 
 /******************************SINTACTICO***************************************/ 
 
-BEGIN: ACCIONES EOF                
+BEGIN: GLOBAL EOF { 
+                $$ = $1 
+                return $$ 
+                }          
 ;
 
-ACCIONES: ACCIONES ACCION
-        | ACCION
+GLOBAL : GLOBAL STRUCTS
+        | GLOBAL DECLARACION
+        | GLOBAL METODOS
+        | GLOBAL MAIN
+        | STRUCTS
+        | DECLARACION
+        | METODOS
+        | MAIN { $$ = $1 }
 ;
 
-ACCION : EXPRESION pyc
+MAIN : Tvoid Rmain p_abre p_cierra l_abre ACCIONES l_cierra { $$ = $6 }
+;
+
+ACCIONES : ACCIONES ACCION
+        | ACCION { $$ = $1 }
+;
+
+ACCION : EXPRESION pyc { $$ = $1 }
         | INSTRUCCION pyc
 ;
 
-EXPRESION : EXPRESION mas EXPRESION
-        | EXPRESION menos EXPRESION
-        | EXPRESION por EXPRESION
-        | EXPRESION div EXPRESION
-        | EXPRESION mod EXPRESION
-        | EXPRESION land EXPRESION
-        | EXPRESION lor EXPRESION
-        | EXPRESION igual EXPRESION
-        | EXPRESION dif EXPRESION
-        | EXPRESION may_ig EXPRESION
-        | EXPRESION may_que EXPRESION
-        | EXPRESION men_ig EXPRESION
-        | EXPRESION men_que EXPRESION
-        | num
-        | id
+EXPRESION : OPERACION { $$ = $1 }
+        | PRIMITIVA { $$ = $1 }
 ;
 
+OPERACION : EXPRESION mas EXPRESION     { $$ = new Operacion($1,$3,'SUMA', @1.first_line, @1.first_column); }
+        | EXPRESION menos EXPRESION     { $$ = new Operacion($1,$3,'RESTA', @1.first_line, @1.first_column); }
+        | EXPRESION por EXPRESION       { $$ = new Operacion($1,$3,'MULTIPLICACION', @1.first_line, @1.first_column); }
+        | EXPRESION div EXPRESION       { $$ = new Operacion($1,$3,'DIVISION', @1.first_line, @1.first_column); }
+        | EXPRESION mod EXPRESION       { $$ = new Operacion($1,$3,'MODULO', @1.first_line, @1.first_column); }
+        | EXPRESION land EXPRESION      { $$ = new Operacion($1,$3,'AND', @1.first_line, @1.first_column); }
+        | EXPRESION lor EXPRESION       { $$ = new Operacion($1,$3,'OR', @1.first_line, @1.first_column); }
+        | EXPRESION igual EXPRESION     { $$ = new Operacion($1,$3,'IGUAL_IGUAL', @1.first_line, @1.first_column); }
+        | EXPRESION dif EXPRESION       { $$ = new Operacion($1,$3,'DIRENTE_QUE', @1.first_line, @1.first_column); }
+        | EXPRESION may_ig EXPRESION    { $$ = new Operacion($1,$3,'MAYOR_IGUA_QUE', @1.first_line, @1.first_column); }
+        | EXPRESION may_que EXPRESION   { $$ = new Operacion($1,$3,'MAYOR_QUE', @1.first_line, @1.first_column); }
+        | EXPRESION men_ig EXPRESION    { $$ = new Operacion($1,$3,'MENOR_IGUA_QUE', @1.first_line, @1.first_column); }
+        | EXPRESION men_que EXPRESION   { $$ = new Operacion($1,$3,'MENOR_QUE', @1.first_line, @1.first_column); }
+        | menos EXPRESION %prec UMINUS  { $$ = new Operacion($1,$3,'MENOS_UNARIO', @1.first_line, @1.first_column); }
+        | p_abre EXPRESION p_cierra     { $$ = $2 }
+;
+
+PRIMITIVA : num         { $$ = new Primitivo(Number($1), @1.first_line, @1.first_column); }
+        | StringLiteral { $$ = new Primitivo($1, @1.first_line, @1.first_column); }
+        | CharLiteral   { $$ = new Primitivo($1, @1.first_line, @1.first_column); }
+        | Tnull         { $$ = new Primitivo(null, @1.first_line, @1.first_column); }
+        | Rtrue         { $$ = new Primitivo(true, @1.first_line, @1.first_column); }
+        | Rfalse        { $$ = new Primitivo(false, @1.first_line, @1.first_column); }
+;
 

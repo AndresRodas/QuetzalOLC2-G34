@@ -125,7 +125,8 @@ const AnalyzeQtzl = () => {
 
 
   //creacion del arbol
-  var arbol = grammar.parse(texto);
+  console.log(grammar)
+  const arbol = grammar.parse(texto);
 
   console.log(arbol)
   

@@ -1,11 +1,11 @@
 import { AST } from "../AST/AST";
+import { Entorno } from "../AST/Entorno";
 import { Tipo } from "../AST/Tipo";
-import { Simbolo } from "../Entornos/Simbolo";
 import { Expresion } from "../Interfaces/Expresion";
 
 export class Primitivo implements Expresion {
-    linea: number; 
-    columna: number; 
+    linea: number;
+    columna: number;
     valor: any;
 
     constructor(valor:any, linea:number, columna:number){
@@ -13,9 +13,13 @@ export class Primitivo implements Expresion {
         this.columna = columna;
         this.valor = valor;
     }
+    
+    traducir(ent: Entorno, arbol: AST) {
+        throw new Error("Method not implemented.");
+    }
 
-    getTipo(ent: Simbolo): Tipo {
-        const valor = this.getValorImplicito(ent);
+    getTipo(ent: Entorno, arbol: AST): Tipo {
+        const valor = this.getValorImplicito(ent, arbol);
         if (typeof(valor) === 'boolean')
         {
             return Tipo.BOOL;
@@ -38,7 +42,7 @@ export class Primitivo implements Expresion {
         return Tipo.VOID;
     }
 
-    getValorImplicito(ent: Simbolo) {
+    getValorImplicito(ent: Entorno, arbol: AST) {
         return this.valor;
     }
 
