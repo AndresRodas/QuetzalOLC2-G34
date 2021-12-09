@@ -34,6 +34,10 @@ class Ternario {
             }
            return 'DOUBLE';
         }
+        else if (typeof(valor) === 'object')
+        {
+            return 'ARRAY';
+        }
         else if(valor === null){
             return 'NULL';
         }
@@ -48,8 +52,8 @@ class Ternario {
             }
             return this.exp_false.getValorImplicito()
         }
-        console.log('Error en expresion ternaria')
-        return null
+        console.log('Expresion ternaria incorrecta')
+        return { err: 'Expresion ternaria incorrecta' }
         
     }
 

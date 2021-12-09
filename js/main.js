@@ -18,8 +18,8 @@ $(document).ready(function () {
   $('.tooltipped').tooltip();
 
   xmlEditor = editor('xml__editor', 'java');
-  consoleResult = editor('console__result', 'java');
-  //consoleResult = editor('console__result', '', false, true, false);
+  //consoleResult = editor('console__result', 'java');
+  consoleResult = editor('console__result', 'java', false, true, false);
   grammarReport = editor('grammar__report__editor', 'xml', false, true, false);
 });
 
@@ -135,11 +135,9 @@ const AnalyzeQtzl = () => {
     Output += element.ejecutar(null, null)
     )
   
-  console.log('SALIDA: ')
   console.log(Output)
 
-  console.log(consoleResult)
-  console.log(xmlEditor)
+  consoleResult.setValue(Output)
 
  /*  //cargando datos a tabla de simbolos
   symbolTableXml.destroy();

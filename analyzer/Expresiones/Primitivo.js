@@ -30,6 +30,10 @@ class Primitivo {
             }
            return 'DOUBLE';
         }
+        else if (typeof(valor) === 'object')
+        {
+            return 'ARRAY';
+        }
         else if(valor === null){
             return 'NULL';
         }

@@ -216,13 +216,18 @@ OPERACION : EXPRESION mas EXPRESION     { $$ = new Operacion($1,$3,'SUMA', @1.fi
         | p_abre EXPRESION p_cierra     { $$ = $2 }
 ;
 
-PRIMITIVA : num         { $$ = new Primitivo(Number($1), @1.first_line, @1.first_column); }
-        | StringLiteral { $$ = new Primitivo($1.split("\"")[1], @1.first_line, @1.first_column); }
-        | CharLiteral   { $$ = new Primitivo($1.split("\'")[1], @1.first_line, @1.first_column); }
-        | Tnull         { $$ = new Primitivo(null, @1.first_line, @1.first_column); }
-        | Rtrue         { $$ = new Primitivo(true, @1.first_line, @1.first_column); }
-        | Rfalse        { $$ = new Primitivo(false, @1.first_line, @1.first_column); }
+PRIMITIVA : num                         { $$ = new Primitivo(Number($1), @1.first_line, @1.first_column); }
+        | StringLiteral                 { $$ = new Primitivo($1.split("\"")[1], @1.first_line, @1.first_column); }
+        | CharLiteral                   { $$ = new Primitivo($1.split("\'")[1], @1.first_line, @1.first_column); }
+        | Tnull                         { $$ = new Primitivo(null, @1.first_line, @1.first_column); }
+        | Rtrue                         { $$ = new Primitivo(true, @1.first_line, @1.first_column); }
+        | Rfalse                        { $$ = new Primitivo(false, @1.first_line, @1.first_column); }
+        | c_abre ARRAY c_cierra         { $$ = new Primitivo($1, @1.first_line, @1.first_column); }
         | id
+;
+
+ARRAY : ARRAY EXPRESION { $1.push($2); $$ = $1; }
+        | EXPRESION     { $$ = [$1] } 
 ;
 
 INSTRUCCION : IMPRESION { $$ = $1 }

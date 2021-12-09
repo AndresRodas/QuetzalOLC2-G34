@@ -34,6 +34,10 @@ class Operacion {
             }
            return 'DOUBLE';
         }
+        else if (typeof(valor) === 'object')
+        {
+            return 'ARRAY';
+        }
         else if(valor === null){
             return 'NULL';
         }
@@ -50,7 +54,7 @@ class Operacion {
             //suma
             if (this.operador == 'SUMA')
             {
-                if (typeof(op1==="number") && typeof(op2==="number"))
+                if (typeof(op1)==="number" && typeof(op2)==="number")
                 {
                     return op1 + op2;
                 }
@@ -63,7 +67,7 @@ class Operacion {
             //resta
             else if (this.operador == 'RESTA')
             {
-                if (typeof(op1==="number") && typeof(op2==="number"))
+                if (typeof(op1)==="number" && typeof(op2)==="number")
                 {
                     return op1 - op2;
                 }
@@ -76,7 +80,7 @@ class Operacion {
             //multiplicación
             else if (this.operador == 'MULTIPLICACION')
             {
-                if (typeof(op1==="number") && typeof(op2==="number"))
+                if (typeof(op1)==="number" && typeof(op2)==="number")
                 {
                     return op1 * op2;
                 }
@@ -89,7 +93,7 @@ class Operacion {
             //division
             else if (this.operador == 'DIVISION')
             {
-                if (typeof(op1==="number") && typeof(op2==="number"))
+                if (typeof(op1)==="number" && typeof(op2)==="number")
                 {
                     if(op2===0){
                         console.log("Resultado indefinido, no puede ejecutarse división sobre cero");
@@ -106,7 +110,7 @@ class Operacion {
             //modulo
             else if (this.operador == 'MODULO')
             {
-                if (typeof(op1==="number") && typeof(op2==="number"))
+                if (typeof(op1)==="number" && typeof(op2)==="number")
                 {
                     if(op2===0){
                         console.log("Resultado indefinido, no puede ejecutarse operación sobre cero.");
@@ -123,7 +127,7 @@ class Operacion {
             //and
             else if (this.operador == 'AND')
             {
-                if (typeof(op1==="boolean") && typeof(op2==="boolean"))
+                if (typeof(op1)==="boolean" && typeof(op2)==="boolean")
                 {
                     if (op1 && op2)
                     {
@@ -141,7 +145,7 @@ class Operacion {
             //or
             else if (this.operador == 'OR')
             {
-                if (typeof(op1==="boolean") && typeof(op2==="boolean"))
+                if (typeof(op1)==="boolean" && typeof(op2)==="boolean")
                 {
                     if (op1 || op2)
                     {
@@ -176,7 +180,7 @@ class Operacion {
             //mayor o igual que
             else if (this.operador == 'MAYOR_IGUA_QUE')
             {
-                if (typeof(op1==="number") && typeof(op2==="number"))
+                if (typeof(op1)==="number" && typeof(op2)==="number")
                 {
                     if (op1 >= op2)
                     {
@@ -193,7 +197,7 @@ class Operacion {
             //mayor que
             else if (this.operador == 'MAYOR_QUE')
             {
-                if (typeof(op1==="number") && typeof(op2==="number"))
+                if (typeof(op1)==="number" && typeof(op2)==="number")
                 {
                     if (op1 > op2)
                     {
@@ -210,7 +214,7 @@ class Operacion {
             //menor o igual que
             else if (this.operador == 'MENOR_IGUA_QUE')
             {
-                if (typeof(op1==="number") && typeof(op2==="number"))
+                if (typeof(op1)==="number" && typeof(op2)==="number")
                 {
                     if (op1 <= op2)
                     {
@@ -227,7 +231,7 @@ class Operacion {
             //menor que
             else if (this.operador == 'MENOR_QUE')
             {
-                if (typeof(op1==="number") && typeof(op2==="number"))
+                if (typeof(op1)==="number" && typeof(op2)==="number")
                 {
                     if (op1 < op2)
                     {
@@ -244,7 +248,7 @@ class Operacion {
             //concatenacion
             else if (this.operador == 'CONCAT')
             {
-                if (typeof(op1==="string") && typeof(op2==="string"))
+                if (typeof(op1)==="string" && typeof(op2)==="string")
                 {
                     return op1 + op2;
                 }
@@ -257,7 +261,7 @@ class Operacion {
             //repeticion
             else if (this.operador == 'REPET')
             {
-                if (typeof(op1==="string") && typeof(op2==="number"))
+                if (typeof(op1)==="string" && typeof(op2)==="number")
                 {
                     return op1.repeat(op2);
                 }
@@ -274,7 +278,7 @@ class Operacion {
             let op1 = this.op_izquierda.getValorImplicito(ent, arbol);
             if (this.operador == 'MENOS_UNARIO')
             {
-                if (typeof(op1==="number"))
+                if (typeof(op1)==="number")
                 {
                     return -1* op1;
                 }
@@ -286,7 +290,7 @@ class Operacion {
             }
             else
             {
-                if (typeof(op1==="boolean"))
+                if (typeof(op1)==="boolean")
                 {
                     return !op1;
                 }
