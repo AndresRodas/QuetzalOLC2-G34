@@ -42,8 +42,8 @@ charliteral                         \'{stringsingle}\'
 "+"                     return 'mas'
 "-"                     return 'menos'
 "*"                     return 'por'
-"/"                   return 'div' 
-"%"                   return 'mod'
+"/"                     return 'div' 
+"%"                     return 'mod'
 
 /* RELATIONAL OPERATOR */
 "=="                   return 'igual'
@@ -71,10 +71,10 @@ charliteral                         \'{stringsingle}\'
 ";"                     return 'pyc'
 ","                     return 'coma'
 "="                     return 'eq'
-"&"                     return 'and'
-"^"                     return 'exp'
 "?"                     return 'quest'
 "#"                     return 'copy'
+"&"                     return 'concat'
+"^"                     return 'repet'
 
 /* TYPES */
 "null"                  return 'Tnull'
@@ -146,10 +146,12 @@ charliteral                         \'{stringsingle}\'
 /lex
 
 // DEFINIMOS PRESEDENCIA DE OPERADORES
+%left 'quest'
 %left 'lor' 
 %left 'land'
 %left 'igual' 'dif' 'men_que' 'men_ig' 'may_que' 'may_ig'
 %left 'mas' 'menos'
+%left 'concat' 'repet'
 %left 'por' 'div'
 %left 'mod'
 %right 'lnot'
@@ -162,8 +164,8 @@ charliteral                         \'{stringsingle}\'
 /******************************SINTACTICO***************************************/ 
 
 BEGIN: GLOBAL EOF { 
-                $$ = $1 
-                return $$ 
+                        $$ = $1;
+                        return $$;
                 }          
 ;
 
@@ -180,12 +182,12 @@ GLOBAL : GLOBAL STRUCTS
 MAIN : Tvoid Rmain p_abre p_cierra l_abre ACCIONES l_cierra { $$ = $6 }
 ;
 
-ACCIONES : ACCIONES ACCION
-        | ACCION { $$ = $1 }
+ACCIONES : ACCIONES ACCION { $1.push($2); $$ = $1; }
+        | ACCION { $$ = [$1] }
 ;
 
 ACCION : EXPRESION pyc { $$ = $1 }
-        | INSTRUCCION pyc
+        | INSTRUCCION { $$ = $1 }
 ;
 
 EXPRESION : OPERACION { $$ = $1 }
@@ -205,15 +207,29 @@ OPERACION : EXPRESION mas EXPRESION     { $$ = new Operacion($1,$3,'SUMA', @1.fi
         | EXPRESION may_que EXPRESION   { $$ = new Operacion($1,$3,'MAYOR_QUE', @1.first_line, @1.first_column); }
         | EXPRESION men_ig EXPRESION    { $$ = new Operacion($1,$3,'MENOR_IGUA_QUE', @1.first_line, @1.first_column); }
         | EXPRESION men_que EXPRESION   { $$ = new Operacion($1,$3,'MENOR_QUE', @1.first_line, @1.first_column); }
+        | EXPRESION concat EXPRESION    { $$ = new Operacion($1,$3,'CONCAT', @1.first_line, @1.first_column); }
+        | EXPRESION repet EXPRESION     { $$ = new Operacion($1,$3,'REPET', @1.first_line, @1.first_column); }
         | menos EXPRESION %prec UMINUS  { $$ = new Operacion($1,$3,'MENOS_UNARIO', @1.first_line, @1.first_column); }
+        | lnot EXPRESION %prec UMINUS   { $$ = new Operacion($2,'','NOT', @1.first_line, @1.first_column); }
+        | EXPRESION quest EXPRESION d_puntos EXPRESION { $$ = new Ternario($1, $3, $5, @1.first_line, @1.first_column); }
+        | CALL
         | p_abre EXPRESION p_cierra     { $$ = $2 }
 ;
 
 PRIMITIVA : num         { $$ = new Primitivo(Number($1), @1.first_line, @1.first_column); }
-        | StringLiteral { $$ = new Primitivo($1, @1.first_line, @1.first_column); }
-        | CharLiteral   { $$ = new Primitivo($1, @1.first_line, @1.first_column); }
+        | StringLiteral { $$ = new Primitivo($1.split("\"")[1], @1.first_line, @1.first_column); }
+        | CharLiteral   { $$ = new Primitivo($1.split("\'")[1], @1.first_line, @1.first_column); }
         | Tnull         { $$ = new Primitivo(null, @1.first_line, @1.first_column); }
         | Rtrue         { $$ = new Primitivo(true, @1.first_line, @1.first_column); }
         | Rfalse        { $$ = new Primitivo(false, @1.first_line, @1.first_column); }
+        | id
 ;
 
+INSTRUCCION : IMPRESION { $$ = $1 }
+        | CONDICION
+        | CICLO
+;
+
+IMPRESION : println p_abre EXPRESION p_cierra pyc{ $$ = new Print( $3, @1.first_line, @1.first_column, true) }
+        | print p_abre EXPRESION p_cierra pyc{ $$ = new Print( $3, @1.first_line, @1.first_column, false) }
+;

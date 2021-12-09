@@ -1,15 +1,14 @@
 void main(){
-	65+54*5/4-61+2;
-	4+5;
-	9+7*94; //comentario 526+65
-	5+(2*2)-(3);
-	"hola";
-	'm'+"juas";
-	12+7/8;
-	/* comentario
-	multilinea
-	jeje*/
-	99+961;
+	println(( 5 <= 3 ) || (false && true)  );
+    println(56+54);
+	println(!(false || true));
+	println("conche"+" la"+" lora");
+	println("ja"^5+" que risa bro");
+	println(60 >= 50 ? "Puede vacunarse" : "No puede vacunarse");   
+    print("salto de linea: ");
+    print("Esto sale en la misma linea");
+    println(", ultima frase");
+    println("esto ya es otra linea");
 }
 
 int a,b,c,d;

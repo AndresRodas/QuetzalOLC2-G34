@@ -1,8 +1,7 @@
+
 let errorTableXml, symbolTableXml;
 let errorTableXpath, tokenTableXpath;
 let xmlEditor, xpathEditor, consoleResult, grammarReport;
-let GlobalSymbolTable = {};
-let GlobalTree = {};
 
 let dotStringCst = "", dotStringAst = '', count_temp = 0;
 
@@ -18,9 +17,9 @@ $(document).ready(function () {
   $("select").formSelect();
   $('.tooltipped').tooltip();
 
-  xmlEditor = editor('xml__editor', 'xml');
-  xpathEditor = editor('xpath__editor', 'xquery');
-  consoleResult = editor('console__result', '', false, true, false);
+  xmlEditor = editor('xml__editor', 'java');
+  consoleResult = editor('console__result', 'java');
+  //consoleResult = editor('console__result', '', false, true, false);
   grammarReport = editor('grammar__report__editor', 'xml', false, true, false);
 });
 
@@ -118,18 +117,30 @@ const cleanEditor = (editor) => {
  * ANALIZADOR QUETZAL
  */
 const AnalyzeQtzl = () => {
-
+  var Output = ''
   console.log('Analizador Ascendente')
   var texto = xmlEditor.getValue();
   console.log(texto)
 
-
   //creacion del arbol
   console.log(grammar)
-  const arbol = grammar.parse(texto);
+  var arbol = grammar.parse(texto);
 
-  console.log(arbol)
+
+  // 1era pasada - guardando variables globales
+  //arbol.forEach(element => element.ejecutar(null, null))
+
+  // 2da pasada - ejecutando intrucciones
+  arbol.forEach(element => 
+    Output += element.ejecutar(null, null)
+    )
   
+  console.log('SALIDA: ')
+  console.log(Output)
+
+  console.log(consoleResult)
+  console.log(xmlEditor)
+
  /*  //cargando datos a tabla de simbolos
   symbolTableXml.destroy();
   symbolTableXml = newDataTable('#symbolTableXml',
@@ -149,6 +160,7 @@ const AnalyzeQtzl = () => {
  */
 const TranslateQtzl = () => {
   console.log('Codigo de 3 direcciones')
+
 }
 
 /**

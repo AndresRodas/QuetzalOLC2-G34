@@ -1,2 +1,8 @@
-"use strict";
-// Object.defineProperty(exports, "__esModule", { value: true });
+
+class Instruccion{
+     linea;
+     columna;
+     
+     ejecutar(ent, arbol){}
+     traducir(ent, arbol){}
+}

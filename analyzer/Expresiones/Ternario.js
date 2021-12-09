@@ -1,14 +1,18 @@
-class Primitivo {
+class Ternario {
     linea;
     columna;
-    valor;
+    exp_true;
+    exp_false;
+    expresion;
 
-    constructor(valor, linea, columna){
+    constructor(expresion, exp_true, exp_false, linea, columna){
         this.linea = linea;
         this.columna = columna;
-        this.valor = valor;
+        this.exp_true = exp_true;
+        this.exp_false = exp_false;
+        this.expresion = expresion;
     }
-    
+
     traducir(ent, arbol) {
         throw new Error("Method not implemented.");
     }
@@ -36,13 +40,20 @@ class Primitivo {
             
         return 'VOID';
     }
-
+    
     getValorImplicito(ent, arbol) {
-        return this.valor;
+        if (this.expresion.getTipo() === "BOOL"){
+            if (this.expresion.getValorImplicito()){
+                return this.exp_true.getValorImplicito()
+            }
+            return this.exp_false.getValorImplicito()
+        }
+        console.log('Error en expresion ternaria')
+        return null
+        
     }
 
     isInt(n){
         return Number(n) === n && n % 1 === 0;
     }
-    
 }

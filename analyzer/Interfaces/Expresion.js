@@ -1,2 +1,8 @@
-"use strict";
-// Object.defineProperty(exports, "__esModule", { value: true });
+class Expresion{
+    linea;
+    columna;
+    
+    getTipo(ent, arbol){}
+    getValorImplicito(ent, arbol){}
+    traducir(ent, arbol){}
+}
