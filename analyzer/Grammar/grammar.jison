@@ -83,7 +83,6 @@ charliteral                         \'{stringsingle}\'
 "boolean"               return 'Tboolean'
 "char"                  return 'Tchar'
 "String"                return 'Tstring'
-"boolean"               return 'Tboolean'
 "struct"                return 'Tstruct'
 "float"                 return 'Tfloat'
 "void"                  return 'Tvoid'
@@ -94,6 +93,7 @@ charliteral                         \'{stringsingle}\'
 "sin"                   return 'sin'
 "cos"                   return 'cos'
 "tan"                   return 'tan'
+"log10"                 return 'log'
 "println"               return 'println'
 "print"                 return 'print'
 "caracterOfPosition"    return 'posstr'
@@ -146,6 +146,7 @@ charliteral                         \'{stringsingle}\'
 /lex
 
 // DEFINIMOS PRESEDENCIA DE OPERADORES
+%left 'punto'
 %left 'quest'
 %left 'lor' 
 %left 'land'
@@ -169,17 +170,17 @@ BEGIN: GLOBAL EOF {
                 }          
 ;
 
-GLOBAL : GLOBAL STRUCTS
+GLOBAL : GLOBAL STRUCTS 
         | GLOBAL DECLARACION
         | GLOBAL METODOS
         | GLOBAL MAIN
         | STRUCTS
-        | DECLARACION
+        | DECLARACION { $$ = $1 }
         | METODOS
         | MAIN { $$ = $1 }
 ;
 
-MAIN : Tvoid Rmain p_abre p_cierra l_abre ACCIONES l_cierra { $$ = $6 }
+MAIN : Tvoid Rmain p_abre p_cierra l_abre ACCIONES Rreturn pyc l_cierra { $$ = $6 }
 ;
 
 ACCIONES : ACCIONES ACCION { $1.push($2); $$ = $1; }
@@ -192,6 +193,14 @@ ACCION : EXPRESION pyc { $$ = $1 }
 
 EXPRESION : OPERACION { $$ = $1 }
         | PRIMITIVA { $$ = $1 }
+;
+
+INSTRUCCION : IMPRESION { $$ = $1 }
+        | DECLARACION   { $$ = $1 }
+        | ASIGNACION    { $$ = $1 }
+        | CONDICION     { $$ = $1 }
+        | FUNCION       { $$ = $1 }
+        | CICLO         { $$ = $1 }
 ;
 
 OPERACION : EXPRESION mas EXPRESION     { $$ = new Operacion($1,$3,'SUMA', @1.first_line, @1.first_column); }
@@ -212,7 +221,6 @@ OPERACION : EXPRESION mas EXPRESION     { $$ = new Operacion($1,$3,'SUMA', @1.fi
         | menos EXPRESION %prec UMINUS  { $$ = new Operacion($1,$3,'MENOS_UNARIO', @1.first_line, @1.first_column); }
         | lnot EXPRESION %prec UMINUS   { $$ = new Operacion($2,'','NOT', @1.first_line, @1.first_column); }
         | EXPRESION quest EXPRESION d_puntos EXPRESION { $$ = new Ternario($1, $3, $5, @1.first_line, @1.first_column); }
-        | CALL
         | p_abre EXPRESION p_cierra     { $$ = $2 }
 ;
 
@@ -224,16 +232,118 @@ PRIMITIVA : num                         { $$ = new Primitivo(Number($1), @1.firs
         | Rfalse                        { $$ = new Primitivo(false, @1.first_line, @1.first_column); }
         | c_abre ARRAY c_cierra         { $$ = new Primitivo($1, @1.first_line, @1.first_column); }
         | id
+        | CALL                          { $$ = $1 }
 ;
-
-ARRAY : ARRAY EXPRESION { $1.push($2); $$ = $1; }
+//ToDo: reparar array
+ARRAY : ARRAY coma EXPRESION { $1.push($3); $$ = $1; }
         | EXPRESION     { $$ = [$1] } 
 ;
 
-INSTRUCCION : IMPRESION { $$ = $1 }
-        | CONDICION
-        | CICLO
+DECLARACION : TIPO id eq EXPRESION pyc
+        | TIPO  LISTA_ID pyc
 ;
+
+LISTA_ID : LISTA_ID coma id
+        | id
+;
+
+TIPO : Tint             { $$ = $1 }
+        | Tdouble       { $$ = $1 }
+        | Tboolean      { $$ = $1 }
+        | Tchar         { $$ = $1 }
+        | Tstring       { $$ = $1 }
+        | Tfloat        { $$ = $1 }
+;
+
+ASIGNACION : id eq EXPRESION pyc
+;
+
+CALL : DERIVADA         { $$ = $1 }
+        | NATIVA        { $$ = $1 }
+;
+
+DERIVADA : id p_abre LISTA_PARAMETROS p_cierra pyc
+;
+
+LISTA_PARAMETROS : LISTA_PARAMETROS coma id
+                | LISTA_PARAMETROS coma TIPO id
+                | id
+                | TIPO id
+                |
+;
+
+NATIVA : POW            { $$ = $1 }
+        | SQRT          { $$ = $1 }
+        | SIN           { $$ = $1 }
+        | COS           { $$ = $1 }
+        | TAN           { $$ = $1 }
+        | LOG           { $$ = $1 }
+        | PARSE         { $$ = $1 }
+        | TO_INT        { $$ = $1 }
+        | TO_DOUBLE     { $$ = $1 }
+        | TO_STRING     { $$ = $1 }
+        | TYPEOF        { $$ = $1 }
+        | POS_STR       { $$ = $1 }
+        | SUB_STR       { $$ = $1 }
+        | LENGTH        { $$ = $1 }
+        | TO_UPPER      { $$ = $1 }
+        | TO_LOWER      { $$ = $1 }
+;
+
+POW : pow p_abre EXPRESION coma EXPRESION p_cierra      { $$ = new Pow($3, $5, @1.first_line, @1.first_column) }
+;
+
+SQRT : sqrt p_abre EXPRESION p_cierra                   { $$ = new Sqrt($3, @1.first_line, @1.first_column) }
+;
+
+SIN : sin p_abre EXPRESION p_cierra
+;
+
+COS : cos p_abre EXPRESION p_cierra
+;
+
+TAN : tan p_abre EXPRESION p_cierra
+;
+
+LOG : log p_abre EXPRESION p_cierra
+;
+
+PARSE : TIPO punto parse p_abre StringLiteral p_cierra
+;
+
+TO_INT : toint p_abre num p_cierra
+;
+
+TO_DOUBLE : todouble p_abre num p_cierra
+;
+
+TO_STRING : str p_abre EXPRESION p_cierra
+;
+
+TYPEOF : typeof p_abre EXPRESION p_cierra
+;
+
+POS_STR : EXPRESION punto posstr p_abre EXPRESION p_cierra
+;
+
+SUB_STR : EXPRESION punto substr p_abre EXPRESION coma EXPRESION p_cierra
+;
+
+LENGTH : EXPRESION punto length p_abre p_cierra
+;
+
+TO_UPPER : EXPRESION punto upper p_abre p_cierra
+;
+
+TO_LOWER : EXPRESION punto lower p_abre p_cierra
+;
+
+FUNCION : TIPO id p_abre LISTA_PARAMETROS p_cierra c_abre ACCIONES c_cierra
+;
+
+
+
+
 
 IMPRESION : println p_abre EXPRESION p_cierra pyc{ $$ = new Print( $3, @1.first_line, @1.first_column, true) }
         | print p_abre EXPRESION p_cierra pyc{ $$ = new Print( $3, @1.first_line, @1.first_column, false) }
