@@ -296,16 +296,16 @@ POW : pow p_abre EXPRESION coma EXPRESION p_cierra      { $$ = new Pow($3, $5, @
 SQRT : sqrt p_abre EXPRESION p_cierra                   { $$ = new Sqrt($3, @1.first_line, @1.first_column) }
 ;
 
-SIN : sin p_abre EXPRESION p_cierra
+SIN : sin p_abre EXPRESION p_cierra                     { $$ = new Sin($3, @1.first_line, @1.first_column) }
 ;
 
-COS : cos p_abre EXPRESION p_cierra
+COS : cos p_abre EXPRESION p_cierra                     { $$ = new Cos($3, @1.first_line, @1.first_column) }
 ;
 
-TAN : tan p_abre EXPRESION p_cierra
+TAN : tan p_abre EXPRESION p_cierra                     { $$ = new Tan($3, @1.first_line, @1.first_column) }
 ;
 
-LOG : log p_abre EXPRESION p_cierra
+LOG : log p_abre EXPRESION p_cierra                     { $$ = new Log($3, @1.first_line, @1.first_column) }
 ;
 
 PARSE : TIPO punto parse p_abre StringLiteral p_cierra

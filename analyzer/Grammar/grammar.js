@@ -188,6 +188,18 @@ break;
 case 89:
  this.$ = new Sqrt($$[$0-1], _$[$0-3].first_line, _$[$0-3].first_column) 
 break;
+case 90:
+ this.$ = new Sin($$[$0-1], _$[$0-3].first_line, _$[$0-3].first_column) 
+break;
+case 91:
+ this.$ = new Cos($$[$0-1], _$[$0-3].first_line, _$[$0-3].first_column) 
+break;
+case 92:
+ this.$ = new Tan($$[$0-1], _$[$0-3].first_line, _$[$0-3].first_column) 
+break;
+case 93:
+ this.$ = new Log($$[$0-1], _$[$0-3].first_line, _$[$0-3].first_column) 
+break;
 case 105:
  this.$ = new Print( $$[$0-2], _$[$0-4].first_line, _$[$0-4].first_column, true) 
 break;
