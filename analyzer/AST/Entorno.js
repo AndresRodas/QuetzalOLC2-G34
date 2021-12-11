@@ -53,7 +53,7 @@ class Entorno{
         id = id.toLowerCase();
         for (let e = this; e != null; e = e.anterior)
         {
-            if (e.tabla[id]!==undefined)
+            if (e.tabla[id]!=undefined)
             {
                 return e.tabla[id];
             }

@@ -239,20 +239,20 @@ ARRAY : ARRAY coma EXPRESION { $1.push($3); $$ = $1; }
         | EXPRESION     { $$ = [$1] } 
 ;
 
-DECLARACION : TIPO id eq EXPRESION pyc
-        | TIPO  LISTA_ID pyc
+DECLARACION : TIPO LISTA_ID eq EXPRESION pyc    { $$ = new Declaracion($1, $2, $4, @1.first_line, @1.first_column) }
+        | TIPO LISTA_ID pyc                    { $$ = new Declaracion($1, $2, null, @1.first_line, @1.first_column) }
 ;
 
-LISTA_ID : LISTA_ID coma id
-        | id
+LISTA_ID : LISTA_ID coma id             { $1.push($3); $$ = $1 }
+        | id                            { $$ = [$1] }
 ;
 
-TIPO : Tint             { $$ = $1 }
-        | Tdouble       { $$ = $1 }
-        | Tboolean      { $$ = $1 }
-        | Tchar         { $$ = $1 }
-        | Tstring       { $$ = $1 }
-        | Tfloat        { $$ = $1 }
+TIPO : Tint             { $$ = 'INT' }
+        | Tdouble       { $$ = 'DOUBLE' }
+        | Tboolean      { $$ = 'BOOL' }
+        | Tchar         { $$ = 'STRING' }
+        | Tstring       { $$ = 'STRING' }
+        | Tfloat        { $$ = 'DOUBLE' }
 ;
 
 ASIGNACION : id eq EXPRESION pyc
@@ -279,10 +279,9 @@ NATIVA : POW            { $$ = $1 }
         | TAN           { $$ = $1 }
         | LOG           { $$ = $1 }
         | PARSE         { $$ = $1 }
-        | TO_INT        { $$ = $1 }
-        | TO_DOUBLE     { $$ = $1 }
-        | TO_STRING     { $$ = $1 }
-        | TYPEOF        { $$ = $1 }
+
+        | TO_NATIVE     { $$ = $1 }
+
         | POS_STR       { $$ = $1 }
         | SUB_STR       { $$ = $1 }
         | LENGTH        { $$ = $1 }
@@ -308,35 +307,31 @@ TAN : tan p_abre EXPRESION p_cierra                     { $$ = new Tan($3, @1.fi
 LOG : log p_abre EXPRESION p_cierra                     { $$ = new Log($3, @1.first_line, @1.first_column) }
 ;
 
-PARSE : TIPO punto parse p_abre StringLiteral p_cierra
+PARSE : TIPO punto parse p_abre EXPRESION p_cierra      { $$ = new Parse( $1, $5, @1.first_line, @1.first_column) }
 ;
 
-TO_INT : toint p_abre num p_cierra
+TO_NATIVE : toint p_abre EXPRESION p_cierra             { $$ = new ToNative( $1, $3, @1.first_line, @1.first_column ) }
+        | todouble p_abre EXPRESION p_cierra            { $$ = new ToNative( $1, $3, @1.first_line, @1.first_column ) }
+        | str p_abre EXPRESION p_cierra                 { $$ = new ToNative( $1, $3, @1.first_line, @1.first_column ) }
+        | typeof p_abre EXPRESION p_cierra              { $$ = new ToNative( $1, $3, @1.first_line, @1.first_column ) }
 ;
 
-TO_DOUBLE : todouble p_abre num p_cierra
+POS_STR : EXPRESION punto posstr p_abre EXPRESION p_cierra { $$ = new PositionStr( $1, $5, @1.first_line, @1.first_column) }
 ;
 
-TO_STRING : str p_abre EXPRESION p_cierra
+SUB_STR : EXPRESION punto substr p_abre EXPRESION coma EXPRESION p_cierra { $$ = new SubStr($1, $5, $7, @1.first_line, @1.first_column) }
 ;
 
-TYPEOF : typeof p_abre EXPRESION p_cierra
+LENGTH : EXPRESION punto length p_abre p_cierra         { $$ = new Length( $1, @1.first_line, @1.first_column ) }
 ;
 
-POS_STR : EXPRESION punto posstr p_abre EXPRESION p_cierra
+TO_UPPER : EXPRESION punto upper p_abre p_cierra        { $$ = new Upper( $1, @1.first_line, @1.first_column ) }
 ;
 
-SUB_STR : EXPRESION punto substr p_abre EXPRESION coma EXPRESION p_cierra
+TO_LOWER : EXPRESION punto lower p_abre p_cierra        { $$ = new Lower( $1, @1.first_line, @1.first_column ) }
 ;
 
-LENGTH : EXPRESION punto length p_abre p_cierra
-;
 
-TO_UPPER : EXPRESION punto upper p_abre p_cierra
-;
-
-TO_LOWER : EXPRESION punto lower p_abre p_cierra
-;
 
 FUNCION : TIPO id p_abre LISTA_PARAMETROS p_cierra c_abre ACCIONES c_cierra
 ;

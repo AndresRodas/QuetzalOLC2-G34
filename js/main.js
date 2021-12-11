@@ -123,20 +123,24 @@ const AnalyzeQtzl = () => {
   console.log(texto)
 
   //creacion del arbol
-  console.log(grammar)
-  var arbol = grammar.parse(texto);
+  var instrucciones = grammar.parse(texto);
 
+  //creacion ast
+  var ast = new AST(instrucciones)
+
+  //creacion entorno global
+  var entorno = new Entorno(null)
 
   // 1era pasada - guardando variables globales
   //arbol.forEach(element => element.ejecutar(null, null))
 
   // 2da pasada - ejecutando intrucciones
-  arbol.forEach(element => 
-    Output += element.ejecutar(null, null)
-    )
+  instrucciones.forEach(element => 
+    Output += element.ejecutar(entorno, ast)
+  )
   
   console.log(Output)
-
+  console.log(entorno)
   consoleResult.setValue(Output)
 
  /*  //cargando datos a tabla de simbolos

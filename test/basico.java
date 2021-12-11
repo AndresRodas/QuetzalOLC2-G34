@@ -9,7 +9,22 @@ void main(){
     print("Esto sale en la misma linea");
     println(", ultima frase");
     println("esto ya es otra linea");
+	println(log10(5));
+	println(int.parse("1")+1);
+	println(double.parse("1.5")+1);
+	println(boolean.parse("sdasdasd") && true);
+	println(toInt(4.9999));
+	println(toDouble("4.9999"));
+	println(string(5)^3);
+	println(typeof(true));
+	println("Tigre".caracterOfPosition(3-1));
+	println("Tigre".subString(2,4));
+	println("Tigre".length());
+	println("Tigre".toUppercase());
+	println("Tigre".toLowercase());
+	return;
 }
+
 
 int a,b,c,d;
 print("Valor default variable 0 = ");

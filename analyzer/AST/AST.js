@@ -1,5 +1,4 @@
 class AST{
-    
     instrucciones
     structs
     funciones
