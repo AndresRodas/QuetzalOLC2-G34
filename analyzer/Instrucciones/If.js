@@ -23,6 +23,8 @@ class If{
         if(this.expresion.getTipo(ent, arbol) === 'BOOL'){
             //valor de salida
             var Output = ''
+
+
             //si es verdadero
             if(this.expresion.getValorImplicito(ent, arbol)){
                 this.acciones.forEach(element => {
@@ -31,31 +33,34 @@ class If{
                       Output += salida
                     }
                 })
+                return Output;
             }
             //si es falso se valida si hay elseif
-            if (this.else_if !== null){
+            else if (this.else_if !== null){
                 //para cada elseif
-                this.else_if.forEach(element => {
+
+                for (let element of this.else_if) {
                     salida = element.ejecutar(ent, arbol)
-                    if(typeof salida !== 'undefined') {
-                      Output += salida
+                    if (salida !== true){
+                        if(typeof salida !== 'undefined') {
+                            Output += salida
+                        }
+                        return Output;
                     }
-                })
+                }
+
+                // this.else_if.forEach(element => { })
             }
             //si es falso se valida si hay else
             if(this.else_ins !== null){
-
-                this.else_ins.forEach(element => {
-                    salida = element.ejecutar(ent, arbol)
-                    if(typeof salida !== 'undefined') {
-                        Output += salida
-                    }
-                })
+                console.log("entra al esle")
+                Output += this.else_ins.ejecutar(ent, arbol)
+                return Output
             } 
-            return Output;
+            
         }
         else{
-            onsole.log("Expresión incorrecta para una instruccion condicional")
+            console.log("Expresión incorrecta para una instruccion condicional")
             return {err: 'Expresión incorrecta para una instruccion condicional'}
         }
     }

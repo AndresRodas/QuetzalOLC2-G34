@@ -29,11 +29,10 @@ class Elseif{
                 })
                 return Output;
             }
-            return undefined
-
+            return true
         }
         else{
-            onsole.log("Expresión incorrecta para una instruccion condicional")
+            console.log("Expresión incorrecta para una instruccion condicional")
             return {err: 'Expresión incorrecta para una instruccion condicional'}
         }
     }

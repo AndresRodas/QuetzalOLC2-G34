@@ -345,8 +345,7 @@ ELSE_IF : ELSE_IF Relseif p_abre EXPRESION p_cierra l_abre ACCIONES l_cierra    
         | Relseif p_abre EXPRESION p_cierra l_abre ACCIONES l_cierra            { $$ = [new Elseif( $3, $6, @1.first_line, @1.first_column)] }
 ;       
 
-ELSE : ELSE Relse l_abre ACCIONES l_cierra              { $1.push(new Else( $4, @1.first_line, @1.first_column )); $$ = $1 }
-        | Relse l_abre ACCIONES l_cierra                { $$ = [new Else( $3, @1.first_line, @1.first_column )] }
+ELSE : Relse l_abre ACCIONES l_cierra              { $$ = new Else($3, @1.first_line, @1.first_column) }
 ;
 
 TO_CONTINUE : Rcontinue                                                    { $$ = new Continue(@1.first_line, @1.first_column)}
