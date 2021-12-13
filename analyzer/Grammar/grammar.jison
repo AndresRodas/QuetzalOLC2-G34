@@ -353,6 +353,9 @@ TO_CONTINUE : Rcontinue                                                    { $$ 
 
 ;
 
+CICLO : WHILE { $$ = $1 }
+;
+
 WHILE : Rwhile p_abre EXPRESION p_cierra l_abre ACCIONES l_cierra              {$$ = new While($3,$6,@1.first_line, @1.first_column)}
 ;             
 

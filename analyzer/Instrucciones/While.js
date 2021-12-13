@@ -16,29 +16,27 @@ class While{
     }
 
     ejecutar(ent, arbol) {
-
-        while (true) {
-
-            if(this.condicion.getTipo(ent, arbol) === 'BOOL'){              //VERIFICA SI ES VERDADERA LA CONDICION
-                //valor de salida
-                var Output = ''
+        if(this.condicion.getTipo(ent, arbol) === 'BOOL'){              //VERIFICA SI ES VERDADERA LA CONDICION
+            //valor de salida
+            var Output = ''
+            while (true) {
                 //si es verdadero
                 if(this.condicion.getValorImplicito(ent, arbol)){
                     this.instruccion.forEach(element => {
                         salida = element.ejecutar(ent, arbol)
                         if(typeof salida !== 'undefined') {
-                          Output += salida
+                        Output += salida
                         }
                     })
                 }else{
                     break
-                }
-            }
-            else{
-                console.log("Expresión incorrecta para una instruccion condicional")
-                return {err: 'Expresión incorrecta para una instruccion condicional'}
+                }      
             }
             
+        }
+        else{
+            console.log("Expresión incorrecta para una instruccion condicional")
+            return {err: 'Expresión incorrecta para una instruccion condicional'}
         }
     }
 
