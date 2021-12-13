@@ -1,4 +1,4 @@
-class While{
+class DoWhile{
     linea;
     columna;
     condicion;
