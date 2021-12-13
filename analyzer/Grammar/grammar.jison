@@ -183,13 +183,16 @@ EXPRESION : OPERACION { $$ = $1 }
         | PRIMITIVA { $$ = $1 }
 ;
 
-INSTRUCCION : IMPRESION { $$ = $1 }
-        | DECLARACION   { $$ = $1 }
-        | ASIGNACION    { $$ = $1 }
-        | CONDICION     { $$ = $1 }
-        | FUNCION       { $$ = $1 }
-        | CICLO         { $$ = $1 }
-        | TO_CONTINUE   { $$ = $1 }
+INSTRUCCION : IMPRESION         { $$ = $1 }
+        | PRE_DECLARACION       { $$ = $1 }
+        | CONDICION             { $$ = $1 }
+        | FUNCION               { $$ = $1 }
+        | CICLO                 { $$ = $1 }
+        | TO_CONTINUE           { $$ = $1 }
+;
+
+PRE_DECLARACION : DECLARACION   { $$ = $1 }
+                | ASIGNACION    { $$ = $1 }
 ;
 
 OPERACION : EXPRESION mas EXPRESION     { $$ = new Operacion($1,$3,'SUMA', @1.first_line, @1.first_column); }
@@ -373,8 +376,13 @@ DOWHILE : Rdo  l_abre ACCIONES l_cierra Rwhile p_abre EXPRESION p_cierra     {$$
 ;
 
 
+PREFOR : Rfor p_abre PRE_DECLARACION pyc EXPRESION pyc ACCIONES p_cierra l_abre ACCIONES l_cierra {$$ = new PFOR($3,$5,$7,$10,@1.first_line, @1.first_column)}
+;
+
 FUNCION : TIPO id p_abre LISTA_PARAMETROS p_cierra c_abre ACCIONES c_cierra
 ;
+
+
 
 
 
