@@ -201,6 +201,7 @@ INSTRUCCION : IMPRESION { $$ = $1 }
         | CONDICION     { $$ = $1 }
         | FUNCION       { $$ = $1 }
         | CICLO         { $$ = $1 }
+        | TO_CONTINUE   { $$ = $1 }
 ;
 
 OPERACION : EXPRESION mas EXPRESION     { $$ = new Operacion($1,$3,'SUMA', @1.first_line, @1.first_column); }
@@ -348,6 +349,9 @@ ELSE : ELSE Relse l_abre ACCIONES l_cierra              { $1.push(new Else( $4, 
         | Relse l_abre ACCIONES l_cierra                { $$ = [new Else( $3, @1.first_line, @1.first_column )] }
 ;
 
+TO_CONTINUE : Rcontinue                                                    { $$ = new Continue(@1.first_line, @1.first_column)}
+
+;
 
 
 FUNCION : TIPO id p_abre LISTA_PARAMETROS p_cierra c_abre ACCIONES c_cierra

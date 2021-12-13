@@ -1,5 +1,5 @@
 
-class Primitivos{
+class Continue{
     fila;
     columna;
 
