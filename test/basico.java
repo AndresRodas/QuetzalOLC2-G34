@@ -22,6 +22,28 @@ void main(){
 	println("Tigre".length());
 	println("Tigre".toUppercase());
 	println("Tigre".toLowercase());
+	int numero = 22;
+    if(false){
+    	println("if");
+        
+    }
+    else if(false){
+    	println("else if 1");
+    }
+    else if(true){
+    	println("else if 2");
+        if(false){
+        	println("if en else");
+        }
+        else if(true){
+			println("else if anidado");
+        }else{
+        	println("else en else");
+        }
+    }
+    else{
+    	println("else");
+    }
 	return;
 }
 

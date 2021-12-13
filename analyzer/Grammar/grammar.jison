@@ -1,18 +1,6 @@
 /******************************EXPORTACIONES*******************************/
 %{
-    // /*****************EXPRESIONES**********************/
-    // const { Primitivo } = require ('../Expresiones/Primitivo')
-    //const { Operacion, Operador } = require ('../Expresiones/Operacion')
-    // const { Path } = require ('./Expresiones/Path')
-    // const { SourcePath } = require ('./Expresiones/SourcePath')
-    // const { Variable } = require ('./Expresiones/Variable')
-    // const { If } = require ('./Expresiones/If')
-    // const { Call } = require ('./Expresiones/Call')
-    // const { Substring } = require ('./Expresiones/Substring')
-    // const { UpperCase } = require ('./Expresiones/UpperCase')
-    // const { LowerCase } = require ('./Expresiones/LowerCase')
-    // const { ToString } = require ('./Expresiones/ToString')
-    // const { ToNumber } = require ('./Expresiones/ToNumber') 
+  
 
 %}
  
@@ -348,9 +336,40 @@ ELSE_IF : ELSE_IF Relseif p_abre EXPRESION p_cierra l_abre ACCIONES l_cierra    
 ELSE : Relse l_abre ACCIONES l_cierra              { $$ = new Else($3, @1.first_line, @1.first_column) }
 ;
 
-TO_CONTINUE : Rcontinue                                                    { $$ = new Continue(@1.first_line, @1.first_column)}
+
+SWITCH : Rswitch p_abre EXPRESION p_cierra l_abre LISTA_CASE DEFAULT_CASE l_cierra      { $$ = new Switch( $3, $6, $7, @1.first_line, @1.first_column ) }
+;
+
+LISTA_CASE : LISTA_CASE Rcase EXPRESION d_puntos ACCIONES Rbreak pyc    { $1.push(new Case( $3, $5, true, @1.first_line, @1.first_column)); $$ = $1; }
+        | LISTA_CASE Rcase EXPRESION d_puntos ACCIONES                  { $1.push(new Case( $3, $5, false, @1.first_line, @1.first_column)); $$ = $1; }
+        | Rcase EXPRESION d_puntos ACCIONES Rbreak pyc                  { $$ = [new Case( $2, $4, true, @1.first_line, @1.first_column)] }
+        | Rcase EXPRESION d_puntos ACCIONES                             { $$ = [new Case( $2, $4, false, @1.first_line, @1.first_column)] }
+;
+
+DEFAULT_CASE : Rdefault d_puntos ACCIONES       { $$ = $3 }
+        |                                       { $$ = null }
+; 
+
+
+
+
+
+
+
+
+TO_CONTINUE : Rcontinue                            { $$ = new Continue(@1.first_line, @1.first_column)}
 
 ;
+
+CICLO : WHILE           { $$ = $1}
+      | DOWHILE         { $$ = $1}
+;
+
+DOWHILE : Rdo  l_abre ACCIONES l_cierra Rwhile p_abre EXPRESIONES p_cierra     {$$ = new DoWhile($7,$3,@1.first_line, @1.first_column)}
+;
+
+WHILE : Rwhile p_abre EXPRESION p_cierra l_abre ACCIONES l_cierra              {$$ = new While($3,$6,@1.first_line, @1.first_column)}
+;             
 
 
 FUNCION : TIPO id p_abre LISTA_PARAMETROS p_cierra c_abre ACCIONES c_cierra
