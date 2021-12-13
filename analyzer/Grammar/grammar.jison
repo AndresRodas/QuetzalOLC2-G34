@@ -362,14 +362,15 @@ TO_CONTINUE : Rcontinue                            { $$ = new Continue(@1.first_
 ;
 
 CICLO : WHILE           { $$ = $1}
-      | DOWHILE         { $$ = $1}
+      | DOWHILE pyc        { $$ = $1}
 ;
 
-DOWHILE : Rdo  l_abre ACCIONES l_cierra Rwhile p_abre EXPRESIONES p_cierra     {$$ = new DoWhile($7,$3,@1.first_line, @1.first_column)}
-;
 
 WHILE : Rwhile p_abre EXPRESION p_cierra l_abre ACCIONES l_cierra              {$$ = new While($3,$6,@1.first_line, @1.first_column)}
-;             
+;    
+
+DOWHILE : Rdo  l_abre ACCIONES l_cierra Rwhile p_abre EXPRESION p_cierra     {$$ = new DoWhile($7,$3,@1.first_line, @1.first_column)}
+;
 
 
 FUNCION : TIPO id p_abre LISTA_PARAMETROS p_cierra c_abre ACCIONES c_cierra
