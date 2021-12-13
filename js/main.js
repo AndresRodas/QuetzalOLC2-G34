@@ -135,8 +135,12 @@ const AnalyzeQtzl = () => {
   //arbol.forEach(element => element.ejecutar(null, null))
 
   // 2da pasada - ejecutando intrucciones
-  instrucciones.forEach(element => 
-    Output += element.ejecutar(entorno, ast)
+  instrucciones.forEach(element => {
+    salida = element.ejecutar(entorno, ast)
+    if(typeof salida !== 'undefined') {
+      Output += salida
+      }
+    } 
   )
   
   console.log(Output)

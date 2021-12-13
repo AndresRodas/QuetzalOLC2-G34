@@ -111,8 +111,8 @@ charliteral                         \'{stringsingle}\'
 "function"              return 'Rfunction'
 "return"                return 'Rreturn'
 "if"                    return 'Rif'
+"else if"               return 'Relseif'
 "else"                  return 'Relse'
-"elseif"                return 'Relseif'
 "switch"                return 'Rswitch'
 "case"                  return 'Rcase'
 "break"                 return 'Rbreak'
@@ -231,7 +231,7 @@ PRIMITIVA : num                         { $$ = new Primitivo(Number($1), @1.firs
         | Rtrue                         { $$ = new Primitivo(true, @1.first_line, @1.first_column); }
         | Rfalse                        { $$ = new Primitivo(false, @1.first_line, @1.first_column); }
         | c_abre ARRAY c_cierra         { $$ = new Primitivo($1, @1.first_line, @1.first_column); }
-        | id
+        | id                            { $$ = new Acceso($1, @1.first_line, @1.first_column); }
         | CALL                          { $$ = $1 }
 ;
 //ToDo: reparar array
@@ -240,7 +240,7 @@ ARRAY : ARRAY coma EXPRESION { $1.push($3); $$ = $1; }
 ;
 
 DECLARACION : TIPO LISTA_ID eq EXPRESION pyc    { $$ = new Declaracion($1, $2, $4, @1.first_line, @1.first_column) }
-        | TIPO LISTA_ID pyc                    { $$ = new Declaracion($1, $2, null, @1.first_line, @1.first_column) }
+        | TIPO LISTA_ID pyc                     { $$ = new Declaracion($1, $2, null, @1.first_line, @1.first_column) }
 ;
 
 LISTA_ID : LISTA_ID coma id             { $1.push($3); $$ = $1 }
@@ -255,7 +255,7 @@ TIPO : Tint             { $$ = 'INT' }
         | Tfloat        { $$ = 'DOUBLE' }
 ;
 
-ASIGNACION : id eq EXPRESION pyc
+ASIGNACION : id eq EXPRESION pyc        { $$ = new Asignacion($1, $3, null, @1.first_line, @1.first_column) }
 ;
 
 CALL : DERIVADA         { $$ = $1 }
@@ -279,9 +279,7 @@ NATIVA : POW            { $$ = $1 }
         | TAN           { $$ = $1 }
         | LOG           { $$ = $1 }
         | PARSE         { $$ = $1 }
-
         | TO_NATIVE     { $$ = $1 }
-
         | POS_STR       { $$ = $1 }
         | SUB_STR       { $$ = $1 }
         | LENGTH        { $$ = $1 }
@@ -329,6 +327,25 @@ TO_UPPER : EXPRESION punto upper p_abre p_cierra        { $$ = new Upper( $1, @1
 ;
 
 TO_LOWER : EXPRESION punto lower p_abre p_cierra        { $$ = new Lower( $1, @1.first_line, @1.first_column ) }
+;
+
+CONDICION : IF          { $$ = $1 }
+        | SWITCH        { $$ = $1 }
+;
+
+IF :    Rif p_abre EXPRESION p_cierra l_abre ACCIONES l_cierra ELSE_IF ELSE     { $$ = new If( $3, $6, $8, $9, @1.first_line, @1.first_column ) }
+        | Rif p_abre EXPRESION p_cierra l_abre ACCIONES l_cierra ELSE_IF        { $$ = new If( $3, $6, $8, null, @1.first_line, @1.first_column ) }
+        | Rif p_abre EXPRESION p_cierra l_abre ACCIONES l_cierra ELSE           { $$ = new If( $3, $6, null, $8, @1.first_line, @1.first_column ) }
+        | Rif p_abre EXPRESION p_cierra l_abre ACCIONES l_cierra                { $$ = new If( $3, $6, null, null, @1.first_line, @1.first_column ) }
+        | Rif p_abre EXPRESION p_cierra ACCION                                  { $$ = new If( $3, $5, null, null, @1.first_line, @1.first_column ) }
+;
+
+ELSE_IF : ELSE_IF Relseif p_abre EXPRESION p_cierra l_abre ACCIONES l_cierra    { $1.push(new Elseif( $4, $7, @1.first_line, @1.first_column)); $$ = $1 }   
+        | Relseif p_abre EXPRESION p_cierra l_abre ACCIONES l_cierra            { $$ = [new Elseif( $3, $6, @1.first_line, @1.first_column)] }
+;       
+
+ELSE : ELSE Relse l_abre ACCIONES l_cierra              { $1.push(new Else( $4, @1.first_line, @1.first_column )); $$ = $1 }
+        | Relse l_abre ACCIONES l_cierra                { $$ = [new Else( $3, @1.first_line, @1.first_column )] }
 ;
 
 
