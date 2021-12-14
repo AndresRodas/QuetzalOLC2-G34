@@ -48,12 +48,25 @@ class PositionStr {
 
             var position = this.exp1.getValorImplicito(ent, arbol)[this.exp2.getValorImplicito(ent, arbol)]
             if (typeof(position) === 'undefined'){
-                return { err: 'La posicion de la cadena no es válida' } 
+                arbol.setError({
+                    err: 'La posición de la cadena es invalida',
+                    type: 'Semántico',
+                    amb: ent.identificador,
+                    line: this.linea,
+                    col: this.columna
+                  })
+                return null
             }
             return position
         }
-        console.log("Error de tipos de datos no permitidos realizando una posicion");
-        return { err: 'Tipos de datos no permitidos realizando una posicion' }
+        arbol.setError({
+            err: 'Tipo de dato '+this.exp1.getTipo(ent, arbol)+', '+this.exp2.getTipo(ent, arbol)+' incompatible para una posición',
+            type: 'Semántico',
+            amb: ent.identificador,
+            line: this.linea,
+            col: this.columna
+          })
+        return null
     }
 
     isInt(n){

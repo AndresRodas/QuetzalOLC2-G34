@@ -31,15 +31,25 @@ class Declaracion{
                         ent.agregar(id, simbolo)
                     }
                     else{
-                        console.log("Los tipos de dato no coinciden");
-                        return { err: 'Los tipos de dato no coinciden' }
+                        arbol.setError({
+                            err: 'No se puede asignar una variable tipo '+this.expresion.getTipo(ent, arbol)+' a una tipo '+this.tipo,
+                            type: 'Semántico',
+                            amb: ent.identificador,
+                            line: this.linea,
+                            col: this.columna
+                          })
                     }
                     
                 }
             }
             else{
-                console.log("Ya existe una variable con ese nombre");
-                return { err: 'Ya existe una variable con ese nombre' }
+                arbol.setError({
+                    err: 'Ya existe una variable llamada '+id,
+                    type: 'Semántico',
+                    amb: ent.identificador,
+                    line: this.linea,
+                    col: this.columna
+                  })
             }
         }
     }

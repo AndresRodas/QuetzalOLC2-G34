@@ -47,8 +47,15 @@ class Pow {
         if ((this.exp1.getTipo(ent, arbol) === 'INT' || this.exp1.getTipo(ent, arbol) === 'DOUBLE') && ( this.exp2.getTipo(ent, arbol) === 'INT' || this.exp2.getTipo(ent, arbol) === 'DOUBLE' )){
             return this.exp1.getValorImplicito(ent,arbol) ** this.exp2.getValorImplicito(ent, arbol)
         }
-        console.log("Error de tipos de datos no permitidos realizando un pow");
-        return { err: 'Tipos de datos no permitidos realizando un pow' }
+        
+        arbol.setError({
+            err: 'Tipos de dato '+this.exp1.getTipo(ent, arbol)+', '+this.exp2.getTipo(ent, arbol)+' incompatibles para un pow',
+            type: 'Semántico',
+            amb: ent.identificador,
+            line: this.linea,
+            col: this.columna
+          })
+        return null
     }
 
     isInt(n){

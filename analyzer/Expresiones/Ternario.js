@@ -52,9 +52,14 @@ class Ternario {
             }
             return this.exp_false.getValorImplicito()
         }
-        console.log('Expresion ternaria incorrecta')
-        return { err: 'Expresion ternaria incorrecta' }
-        
+        arbol.setError({
+            err: 'Tipo de dato '+this.expresion.getTipo()+' incorrecto para una expresión ternaria',
+            type: 'Semántico',
+            amb: ent.identificador,
+            line: this.linea,
+            col: this.columna
+          })
+        return null        
     }
 
     isInt(n){

@@ -1,10 +1,12 @@
 class Entorno{
     anterior;
     tabla;
+    identificador;
 
-    constructor(anterior){
+    constructor(anterior, identificador){
         this.tabla = {};
         this.anterior = anterior;
+        this.identificador = identificador;
     }
 
     agregar(id, simbolo){

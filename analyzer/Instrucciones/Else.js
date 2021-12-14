@@ -14,16 +14,14 @@ class Else{
     }
 
     ejecutar(ent, arbol) {
-        //valor de salida
-        var Output = ''
 
         this.acciones.forEach(element => {
-            salida = element.ejecutar(ent, arbol)
-            if(typeof salida !== 'undefined') {
-                Output += salida
+            var salida = element.ejecutar(ent, arbol)
+            if(salida !== undefined) {
+                if(salida.retorno !== undefined) return salida
             }
         })
-        return Output;
+        return undefined
     }
 
 }

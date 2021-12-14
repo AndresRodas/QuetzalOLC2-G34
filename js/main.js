@@ -117,7 +117,6 @@ const cleanEditor = (editor) => {
  * ANALIZADOR QUETZAL
  */
 const AnalyzeQtzl = () => {
-  var Output = ''
   console.log('Analizador Ascendente')
   var texto = xmlEditor.getValue();
   console.log(texto)
@@ -129,23 +128,16 @@ const AnalyzeQtzl = () => {
   var ast = new AST(instrucciones)
 
   //creacion entorno global
-  var entorno = new Entorno(null)
+  var entorno = new Entorno(null, 'GLOBAL')
 
-  // 1era pasada - guardando variables globales
-  //arbol.forEach(element => element.ejecutar(null, null))
-
-  // 2da pasada - ejecutando intrucciones
+  //ejecutando intrucciones
   instrucciones.forEach(element => {
-    salida = element.ejecutar(entorno, ast)
-    if(typeof salida !== 'undefined') {
-      Output += salida
-      }
-    } 
-  )
+    element.ejecutar(entorno, ast)
+  })
   
-  console.log(Output)
   console.log(entorno)
-  consoleResult.setValue(Output)
+  console.log(ast)
+  consoleResult.setValue(ast.getPrints())
 
  /*  //cargando datos a tabla de simbolos
   symbolTableXml.destroy();

@@ -46,8 +46,14 @@ class Upper {
         if (this.exp.getTipo(ent, arbol) === 'STRING'){
            return this.exp.getValorImplicito(ent, arbol).toUpperCase()
         }
-        console.log("Error de tipos de datos no permitidos realizando un upper case");
-        return { err: 'Tipos de datos no permitidos realizando un upper case' }
+        arbol.setError({
+            err: 'El tipo de dato '+this.exp.getTipo(ent, arbol)+' es incompatible para un uppercase',
+            type: 'Semántico',
+            amb: ent.identificador,
+            line: this.linea,
+            col: this.columna
+          })
+        return null
     }
 
     isInt(n){

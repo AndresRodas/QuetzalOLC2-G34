@@ -19,9 +19,6 @@ class Switch{
 
     ejecutar(ent, arbol) {
 
-        //valor de salida
-        var Output = ''
-
         //recorrer los case
         for (let case_u of this.lista_case) {
 
@@ -29,22 +26,22 @@ class Switch{
                 
                 for (let accion of case_u.acciones){
                     var salida = accion.ejecutar(ent, arbol)
-                    if(typeof salida !== 'undefined') {
-                      Output += salida
+                    if(salida !== undefined) {
+                        if(salida.retorno !== undefined) return salida
                     }
                 }
-                if (case_u.break_flag) return Output;
+                if (case_u.break_flag) return undefined;
             }
         }
         if(this.default_case !== null){
             for (let default_u of this.default_case){
                 var salida = default_u.ejecutar(ent, arbol)
-                if(typeof salida !== 'undefined') {
-                  Output += salida
+                if(salida !== undefined) {
+                    if(salida.retorno !== undefined) return salida
                 }
             }
         }
-        return Output
+        return undefined
     }
 
 }

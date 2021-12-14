@@ -46,8 +46,14 @@ class Lower {
         if (this.exp.getTipo(ent, arbol) === 'STRING'){
            return this.exp.getValorImplicito(ent, arbol).toLowerCase()
         }
-        console.log("Error de tipos de datos no permitidos realizando un lower case");
-        return { err: 'Tipos de datos no permitidos realizando un lower case' }
+        arbol.setError({
+            err: 'El tipo de dato '+this.exp.getTipo(ent, arbol)+' es incompatible para un lowercase',
+            type: 'Semántico',
+            amb: ent.identificador,
+            line: this.linea,
+            col: this.columna
+          })
+        return null
     }
 
     isInt(n){

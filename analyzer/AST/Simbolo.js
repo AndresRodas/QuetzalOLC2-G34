@@ -9,7 +9,7 @@ class Simbolo {
         this.indentificador = id;
         this.linea = linea;
         this.columna = columna;
-        this.tipo = tipo;
+        this.tipo = tipo;   
         this.valor = valor;
     }
     

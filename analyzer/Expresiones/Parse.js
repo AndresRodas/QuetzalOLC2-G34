@@ -58,12 +58,25 @@ class Parse {
                     }
                     return false
                 default:
-                    console.log("Error de tipos de datos no permitidos realizando un parseo");
-                    return { err: 'Tipos de datos no permitidos realizando un parseo' }
+                    arbol.setError({
+                        err: 'Tipo de dato '+this.tipo+' incompatible para un parseo',
+                        type: 'Semántico',
+                        amb: ent.identificador,
+                        line: this.linea,
+                        col: this.columna
+                      })
+                    return null
+                    
             }
         }
-        console.log("Error de tipos de datos no permitidos realizando un parseo");
-        return { err: 'Tipos de datos no permitidos realizando un parseo' }
+        arbol.setError({
+            err: 'Tipo de dato '+this.tipo+' incompatible para un parseo',
+            type: 'Semántico',
+            amb: ent.identificador,
+            line: this.linea,
+            col: this.columna
+          })
+        return null
     }
 
     isInt(n){

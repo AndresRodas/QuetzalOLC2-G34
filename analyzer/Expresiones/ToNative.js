@@ -48,13 +48,13 @@ class ToNative {
             case 'toInt':
                 let toint = parseInt(this.exp.getValorImplicito(ent, arbol))
                 if(isNaN(toint)){
-                    return 'null'
+                    return null
                 }
                 return toint
             case 'toDouble':
                 let todouble = parseFloat(this.exp.getValorImplicito(ent, arbol))
                 if(isNaN(todouble)){
-                    return 'null'
+                    return null
                 }
                 return todouble
             case 'string':
@@ -62,8 +62,15 @@ class ToNative {
             case 'typeof':
                 return this.exp.getTipo(ent, arbol)
             default:
-                console.log("Error de tipos de datos no permitidos realizando una funcion nativa");
-                return { err: 'Tipos de datos no permitidos realizando una funcion nativa' }
+                arbol.setError({
+                    err: 'El tipo de dato '+this.func+' es incompatible para una funcion nativa',
+                    type: 'Semántico',
+                    amb: ent.identificador,
+                    line: this.linea,
+                    col: this.columna
+                  })
+                return null
+     
         }
     }
 

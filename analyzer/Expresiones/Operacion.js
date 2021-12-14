@@ -60,8 +60,14 @@ class Operacion {
                 }
                 else
                 {
-                    console.log("Error de tipos de datos no permitidos realizando una suma");
-                    return { err: 'Tipos de datos no permitidos realizando una suma' }
+                    arbol.setError({
+                        err: 'Tipos de dato '+typeof(op1)+', '+typeof(op2)+' incompatibles para una suma',
+                        type: 'Semántico',
+                        amb: ent.identificador,
+                        line: this.linea,
+                        col: this.columna
+                      })
+                    return null
                 }
             }
             //resta
@@ -73,8 +79,14 @@ class Operacion {
                 }
                 else
                 {
-                    console.log("Error de tipos de datos no permitidos realizando una resta");
-                    return { err: 'Tipos de datos no permitidos realizando una resta' }
+                    arbol.setError({
+                        err: 'Tipos de dato '+typeof(op1)+', '+typeof(op2)+' incompatibles para una resta',
+                        type: 'Semántico',
+                        amb: ent.identificador,
+                        line: this.linea,
+                        col: this.columna
+                      })
+                    return null
                 }
             }
             //multiplicación
@@ -86,8 +98,14 @@ class Operacion {
                 }
                 else
                 {
-                    console.log("Error de tipos de datos no permitidos realizando una multiplicación");
-                    return { err: 'Tipos de datos no permitidos realizando una multiplicación' }
+                    arbol.setError({
+                        err: 'Tipos de dato '+typeof(op1)+', '+typeof(op2)+' incompatibles para una multiplicación',
+                        type: 'Semántico',
+                        amb: ent.identificador,
+                        line: this.linea,
+                        col: this.columna
+                      })
+                    return null
                 }
             }
             //division
@@ -96,15 +114,27 @@ class Operacion {
                 if (typeof(op1)==="number" && typeof(op2)==="number")
                 {
                     if(op2===0){
-                        console.log("Resultado indefinido, no puede ejecutarse división sobre cero");
-                        return { err: 'Resultado indefinido, no puede ejecutarse división sobre cero' }
+                        arbol.setError({
+                            err: 'Resultado indefinido, no se puede dividir sobre cero',
+                            type: 'Semántico',
+                            amb: ent.identificador,
+                            line: this.linea,
+                            col: this.columna
+                          })
+                        return null
                     }
                     return op1 / op2;
                 }
                 else
                 {
-                    console.log("Error de tipos de datos no permitidos realizando una división");
-                    return { err: 'Tipos de datos no permitidos realizando una división' }
+                    arbol.setError({
+                        err: 'Tipos de dato '+typeof(op1)+', '+typeof(op2)+' incompatibles para una división',
+                        type: 'Semántico',
+                        amb: ent.identificador,
+                        line: this.linea,
+                        col: this.columna
+                      })
+                    return null
                 }
             }
             //modulo
@@ -113,15 +143,27 @@ class Operacion {
                 if (typeof(op1)==="number" && typeof(op2)==="number")
                 {
                     if(op2===0){
-                        console.log("Resultado indefinido, no puede ejecutarse operación sobre cero.");
-                        return { err: 'Resultado indefinido, no puede ejecutarse operación sobre cero' }
+                        arbol.setError({
+                            err: 'Resultado indefinido, no se puede calcular modulo sobre cero',
+                            type: 'Semántico',
+                            amb: ent.identificador,
+                            line: this.linea,
+                            col: this.columna
+                          })
+                        return null
                     }
                     return op1 % op2;
                 }
                 else
                 {
-                    console.log("Error de tipos de datos no permitidos realizando un modulo");
-                    return { err: 'Tipos de datos no permitidos realizando un modulo' }
+                    arbol.setError({
+                        err: 'Tipos de dato '+typeof(op1)+', '+typeof(op2)+' incompatibles para un módulo',
+                        type: 'Semántico',
+                        amb: ent.identificador,
+                        line: this.linea,
+                        col: this.columna
+                      })
+                    return null
                 }
             }
             //and
@@ -137,8 +179,14 @@ class Operacion {
                 }
                 else
                 {
-                    console.log("Error de tipos de datos no permitidos realizando un and");
-                    return { err: 'Tipos de datos no permitidos realizando un and' }
+                    arbol.setError({
+                        err: 'Tipos de dato '+typeof(op1)+', '+typeof(op2)+' incompatibles para un and',
+                        type: 'Semántico',
+                        amb: ent.identificador,
+                        line: this.linea,
+                        col: this.columna
+                      })
+                    return null
                 }
                 
             }
@@ -155,8 +203,14 @@ class Operacion {
                 }
                 else
                 {
-                    console.log("Error de tipos de datos no permitidos realizando un or");
-                    return { err: 'Tipos de datos no permitidos realizando un or' }
+                    arbol.setError({
+                        err: 'Tipos de dato '+typeof(op1)+', '+typeof(op2)+' incompatibles para un or',
+                        type: 'Semántico',
+                        amb: ent.identificador,
+                        line: this.linea,
+                        col: this.columna
+                      })
+                    return null
                 }   
             }
             //igual
@@ -190,8 +244,14 @@ class Operacion {
                     }
                 else
                 {
-                    console.log("Error de tipos de datos no permitidos");
-                    return { err: 'Tipos de datos no permitidos realizando un >=' }
+                    arbol.setError({
+                        err: 'Tipos de dato '+typeof(op1)+', '+typeof(op2)+' incompatibles para un >=',
+                        type: 'Semántico',
+                        amb: ent.identificador,
+                        line: this.linea,
+                        col: this.columna
+                      })
+                    return null
                 }
             }
             //mayor que
@@ -207,8 +267,14 @@ class Operacion {
                     }
                 else
                 {
-                    console.log("Error de tipos de datos no permitidos");
-                    return { err: 'Tipos de datos no permitidos realizando un >' }
+                    arbol.setError({
+                        err: 'Tipos de dato '+typeof(op1)+', '+typeof(op2)+' incompatibles para un >',
+                        type: 'Semántico',
+                        amb: ent.identificador,
+                        line: this.linea,
+                        col: this.columna
+                      })
+                    return null
                 }
             }
             //menor o igual que
@@ -224,8 +290,14 @@ class Operacion {
                     }
                 else
                 {
-                    console.log("Error de tipos de datos no permitidos");
-                    return { err: 'Tipos de datos no permitidos realizando un <=' }
+                    arbol.setError({
+                        err: 'Tipos de dato '+typeof(op1)+', '+typeof(op2)+' incompatibles para un <=',
+                        type: 'Semántico',
+                        amb: ent.identificador,
+                        line: this.linea,
+                        col: this.columna
+                      })
+                    return null
                 }
             }
             //menor que
@@ -241,8 +313,14 @@ class Operacion {
                     }
                 else
                 {
-                    console.log("Error de tipos de datos no permitidos");
-                    return { err: 'Tipos de datos no permitidos realizando un <' }
+                    arbol.setError({
+                        err: 'Tipos de dato '+typeof(op1)+', '+typeof(op2)+' incompatibles para un <',
+                        type: 'Semántico',
+                        amb: ent.identificador,
+                        line: this.linea,
+                        col: this.columna
+                      })
+                    return null
                 }
             }
             //concatenacion
@@ -254,8 +332,14 @@ class Operacion {
                 }
                 else
                 {
-                    console.log("Error de tipos de datos no permitidos realizando una concatenación");
-                    return { err: 'Tipos de datos no permitidos realizando una concatenación' }
+                    arbol.setError({
+                        err: 'Tipos de dato '+typeof(op1)+', '+typeof(op2)+' incompatibles para una concatenación',
+                        type: 'Semántico',
+                        amb: ent.identificador,
+                        line: this.linea,
+                        col: this.columna
+                      })
+                    return null
                 }
             }
             //repeticion
@@ -267,13 +351,17 @@ class Operacion {
                 }
                 else
                 {
-                    console.log("Error de tipos de datos no permitidos realizando una repetición");
-                    return { err: 'Tipos de datos no permitidos realizando una repetición' }
+                    arbol.setError({
+                        err: 'Tipos de dato '+typeof(op1)+', '+typeof(op2)+' incompatibles para una repetición',
+                        type: 'Semántico',
+                        amb: ent.identificador,
+                        line: this.linea,
+                        col: this.columna
+                      })
+                    return null
                 }
             }
             
-            
-
         }else{
             let op1 = this.op_izquierda.getValorImplicito(ent, arbol);
             if (this.operador == 'MENOS_UNARIO')
@@ -284,8 +372,14 @@ class Operacion {
                 }
                 else
                 {
-                    console.log("Error de tipos de datos no permitidos realizando una operación unaria");
-                    return { err: 'Tipos de datos no permitidos realizando una operación unaria' }
+                    arbol.setError({
+                        err: 'Tipo de dato '+typeof(op1)+' incompatible para una operacion unaria',
+                        type: 'Semántico',
+                        amb: ent.identificador,
+                        line: this.linea,
+                        col: this.columna
+                      })
+                    return null
                 }
             }
             else
@@ -296,8 +390,14 @@ class Operacion {
                 }
                 else
                 {
-                    console.log("Error de tipos de datos no permitidos realizando una operación unaria");
-                    return { err: 'Tipos de datos no permitidos realizando una operación unaria' }
+                    arbol.setError({
+                        err: 'Tipo de dato '+typeof(op1)+' incompatible para una operacion unaria',
+                        type: 'Semántico',
+                        amb: ent.identificador,
+                        line: this.linea,
+                        col: this.columna
+                      })
+                    return null
                 }
             }
         }

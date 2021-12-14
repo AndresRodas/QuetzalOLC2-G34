@@ -18,7 +18,7 @@ class Case{
     }
 
     ejecutar(ent, arbol) {
-        
+        throw new Error("Method not implemented.");
     }
 
 }

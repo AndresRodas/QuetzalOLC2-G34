@@ -45,8 +45,14 @@ class Cos {
         if (this.exp.getTipo(ent, arbol) === 'INT' || this.exp.getTipo(ent, arbol) === 'DOUBLE'){
             return Math.cos(this.exp.getValorImplicito(ent,arbol))
         }
-        console.log("Error de tipos de datos no permitidos realizando un coseno");
-        return { err: 'Tipos de datos no permitidos realizando un coseno' }
+        arbol.setError({
+            err: 'El tipo de dato '+this.exp.getTipo(ent, arbol)+' es incompatible para un coseno',
+            type: 'Semántico',
+            amb: ent.identificador,
+            line: this.linea,
+            col: this.columna
+          })
+        return null
     }
 
     isInt(n){

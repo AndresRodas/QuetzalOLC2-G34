@@ -45,8 +45,14 @@ class Log {
         if (this.exp.getTipo(ent, arbol) === 'INT' || this.exp.getTipo(ent, arbol) === 'DOUBLE'){
             return Math.log10(this.exp.getValorImplicito(ent,arbol))
         }
-        console.log("Error de tipos de datos no permitidos realizando un logaritmo base 10");
-        return { err: 'Tipos de datos no permitidos realizando un logaritmo base 10' }
+        arbol.setError({
+            err: 'El tipo de dato '+this.exp.getTipo(ent, arbol)+' es incompatible para un logaritmo',
+            type: 'Semántico',
+            amb: ent.identificador,
+            line: this.linea,
+            col: this.columna
+          })
+        return null
     }
 
     isInt(n){

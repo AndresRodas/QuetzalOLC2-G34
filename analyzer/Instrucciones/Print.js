@@ -17,16 +17,6 @@ class Print{
 
     ejecutar(ent, arbol) {
         const valor = this.expresion.getValorImplicito(ent, arbol);
-
-        if(valor.err !== undefined){
-            console.log('>> Error, no se pueden imprimir valores nulos');
-            return '>> Error: ' + valor.err
-        }
-        if(this.salto){
-            return valor.toString()+'\n'
-        }
-        return valor.toString()
-
+        if (valor !== null && valor !== undefined) arbol.setPrints(valor.toString(), this.salto)
     }
-
 }

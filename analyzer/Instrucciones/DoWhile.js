@@ -17,28 +17,31 @@ class DoWhile{
 
     ejecutar(ent, arbol) {
         if(this.condicion.getTipo(ent, arbol) === 'BOOL'){              //VERIFICA SI ES VERDADERA LA CONDICION
-            //valor de salida
-            var Output = ''
+
             while (true) {
                 //si es verdadero
                 if(this.condicion.getValorImplicito(ent, arbol)){
-                    this.instruccion.forEach(element => {
-                        salida = element.ejecutar(ent, arbol)
-                        if(typeof salida !== 'undefined') {
-                        Output += salida
+                    for (let inst of this.instruccion) {
+                        var salida = inst.ejecutar(ent, arbol)
+                        if(salida !== undefined) {
+                            if(salida.retorno !== undefined) return salida
                         }
-                    })
-                }else{
+                    }
+                }
+                else{
                     break
                 }      
             }
-
-            return Output
-            
+            return undefined
         }
         else{
-            console.log("Expresión incorrecta para una instruccion condicional")
-            return {err: 'Expresión incorrecta para una instruccion condicional'}
+            arbol.setError({
+                err: 'El tipo '+this.condicion.getTipo(ent, arbol)+' es incorrecto para un do while',
+                type: 'Semántico',
+                amb: ent.identificador,
+                line: this.linea,
+                col: this.columna
+              })
         }
     }
 

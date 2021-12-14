@@ -25,14 +25,24 @@ class Asignacion{
                 ent.reemplazar(this.identificador, simbolo)
             }
             else{
-                console.log("El tipo no coincide con la variable");
-                return { err: 'El tipo no coincide con la variable' }
+                arbol.setError({
+                    err: 'No se puede asignar una variable tipo '+this.expresion.getTipo(ent, arbol)+' a una tipo '+simbolo.getTipo(ent, arbol),
+                    type: 'Semántico',
+                    amb: ent.identificador,
+                    line: this.linea,
+                    col: this.columna
+                  })
             }
 
         }
         else{
-            console.log("La variable no existe");
-            return { err: 'La variable no existe' }
+            arbol.setError({
+                err: 'La variable '+this.identificador+' no existe en el entorno actual',
+                type: 'Semántico',
+                amb: ent.identificador,
+                line: this.linea,
+                col: this.columna
+              })
         }
     }
 }

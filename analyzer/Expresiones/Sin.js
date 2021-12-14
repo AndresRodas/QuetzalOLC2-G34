@@ -45,8 +45,15 @@ class Sin {
         if (this.exp.getTipo(ent, arbol) === 'INT' || this.exp.getTipo(ent, arbol) === 'DOUBLE'){
             return Math.sin(this.exp.getValorImplicito(ent,arbol))
         }
-        console.log("Error de tipos de datos no permitidos realizando un seno");
-        return { err: 'Tipos de datos no permitidos realizando un seno' }
+        arbol.setError({
+            err: 'Tipo de dato '+this.exp.getTipo(ent, arbol)+' incompatible para la función seno',
+            type: 'Semántico',
+            amb: ent.identificador,
+            line: this.linea,
+            col: this.columna
+          })
+        return null
+
     }
 
     isInt(n){

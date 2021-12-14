@@ -190,6 +190,7 @@ INSTRUCCION : IMPRESION { $$ = $1 }
         | FUNCION       { $$ = $1 }
         | CICLO         { $$ = $1 }
         | TO_CONTINUE   { $$ = $1 }
+        | RETURN        { $$ = $1 }
 ;
 
 OPERACION : EXPRESION mas EXPRESION     { $$ = new Operacion($1,$3,'SUMA', @1.first_line, @1.first_column); }
@@ -251,14 +252,17 @@ CALL : DERIVADA         { $$ = $1 }
         | NATIVA        { $$ = $1 }
 ;
 
-DERIVADA : id p_abre LISTA_PARAMETROS p_cierra pyc
+DERIVADA : id p_abre LISTA_EXP p_cierra                 { $$ = new Call($1, $3, @1.first_line, @1.first_column) }
 ;
 
-LISTA_PARAMETROS : LISTA_PARAMETROS coma id
-                | LISTA_PARAMETROS coma TIPO id
-                | id
-                | TIPO id
-                |
+LISTA_EXP : LISTA_EXP coma EXPRESION                    { $1.push($3); $$ = $1 }
+        | EXPRESION                                     { $$ = [$1] }
+        |                                               { $$ = [] }
+;
+
+LISTA_PARAMETROS : LISTA_PARAMETROS coma TIPO id        { $1.push( { tipo: $3, id: $4 } ); $$ = $1 }
+                | TIPO id                               { $$ = [ { tipo: $1, id: $2 } ] }
+                |                                       { $$ = [] }
 ;
 
 NATIVA : POW            { $$ = $1 }
@@ -350,13 +354,6 @@ DEFAULT_CASE : Rdefault d_puntos ACCIONES       { $$ = $3 }
         |                                       { $$ = null }
 ; 
 
-
-
-
-
-
-
-
 TO_CONTINUE : Rcontinue                            { $$ = new Continue(@1.first_line, @1.first_column)}
 
 ;
@@ -372,9 +369,14 @@ WHILE : Rwhile p_abre EXPRESION p_cierra l_abre ACCIONES l_cierra              {
 ;             
 
 
-FUNCION : TIPO id p_abre LISTA_PARAMETROS p_cierra c_abre ACCIONES c_cierra
+
+
+FUNCION : TIPO id p_abre LISTA_PARAMETROS p_cierra l_abre ACCIONES l_cierra     { $$ = new Function($1, $2, $4, $7, @1.first_line, @1.first_column) } 
 ;
 
+RETURN : Rreturn EXPRESION pyc          { $$ = new Return($2,@1.first_line, @1.first_column) }
+        | Rreturn pyc                   { $$ = new Return(null,@1.first_line, @1.first_column) }
+;
 
 
 

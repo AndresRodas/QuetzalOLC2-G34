@@ -46,8 +46,14 @@ class Acceso {
             var simbolo = ent.getSimbolo(this.identificador)
             return simbolo.valor
         }
-        console.log("La variable no existe");
-        return { err: 'La variable no existe' }
+        arbol.setError({
+            err: 'La variable '+this.identificador+' no existe',
+            type: 'Semántico',
+            amb: ent.identificador,
+            line: this.linea,
+            col: this.columna
+          })
+        return null
     }
 
     isInt(n){

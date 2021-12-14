@@ -18,22 +18,27 @@ class Elseif{
     ejecutar(ent, arbol) {
         if(this.expresion.getTipo(ent, arbol) === 'BOOL'){
             //valor de salida
-            var Output = ''
+            // var Output = ''
 
             if(this.expresion.getValorImplicito(ent, arbol)){
                 this.acciones.forEach(element => {
-                    salida = element.ejecutar(ent, arbol)
-                    if(typeof salida !== 'undefined') {
-                      Output += salida
+                    var salida = element.ejecutar(ent, arbol)
+                    if(salida !== undefined) {
+                        if(salida.retorno !== undefined) return salida
                     }
                 })
-                return Output;
+                return true
             }
-            return true
+            return false
         }
         else{
-            console.log("Expresión incorrecta para una instruccion condicional")
-            return {err: 'Expresión incorrecta para una instruccion condicional'}
+            arbol.setError({
+                err: 'El tipo '+this.expresion.getTipo(ent, arbol)+' es incorrecto para una condicional',
+                type: 'Semántico',
+                amb: ent.identificador,
+                line: this.linea,
+                col: this.columna
+              })
         }
     }
 

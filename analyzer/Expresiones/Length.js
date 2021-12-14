@@ -46,8 +46,14 @@ class Length {
         if (this.exp.getTipo(ent, arbol) === 'STRING' || this.exp.getTipo(ent, arbol) === 'ARRAY'){
            return this.exp.getValorImplicito(ent, arbol).length 
         }
-        console.log("Error de tipos de datos no permitidos realizando un length");
-        return { err: 'Tipos de datos no permitidos realizando un length' }
+        arbol.setError({
+            err: 'El tipo de dato '+this.exp.getTipo(ent, arbol)+' es incompatible para un length',
+            type: 'Semántico',
+            amb: ent.identificador,
+            line: this.linea,
+            col: this.columna
+          })
+        return null
     }
 
     isInt(n){

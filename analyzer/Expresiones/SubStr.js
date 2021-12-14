@@ -53,8 +53,14 @@ class SubStr {
             var sub_str = ''
 
             if( num1 < 0 || num1 >= chain.length || num2 < 0 || num2 >= chain.length || num1 >= num2){
-                console.log("Indices fuera del rango");
-                return { err: 'Indices fuera del rango' }
+                arbol.setError({
+                    err: 'Indices '+num1+', '+num2+' fuera de rango',
+                    type: 'Semántico',
+                    amb: ent.identificador,
+                    line: this.linea,
+                    col: this.columna
+                  })
+                return null
             }
  
             for (let index = num1; index <= num2; index++) {
@@ -63,8 +69,14 @@ class SubStr {
             return sub_str
             
         }
-        console.log("Error de tipos de datos no permitidos realizando un substring");
-        return { err: 'Tipos de datos no permitidos realizando un substring' }
+        arbol.setError({
+            err: 'Tipos de dato '+this.exp1.getTipo(ent, arbol)+', '+this.exp2.getTipo(ent, arbol)+' y '+this.exp3.getTipo(ent, arbol)+' incompatibles para la función substring',
+            type: 'Semántico',
+            amb: ent.identificador,
+            line: this.linea,
+            col: this.columna
+          })
+        return null
     }
 
     isInt(n){

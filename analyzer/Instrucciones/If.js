@@ -21,47 +21,47 @@ class If{
 
     ejecutar(ent, arbol) {
         if(this.expresion.getTipo(ent, arbol) === 'BOOL'){
-            //valor de salida
-            var Output = ''
-
 
             //si es verdadero
             if(this.expresion.getValorImplicito(ent, arbol)){
-                this.acciones.forEach(element => {
-                    salida = element.ejecutar(ent, arbol)
-                    if(typeof salida !== 'undefined') {
-                      Output += salida
+
+                for(let acci of this.acciones){
+                    var salida = acci.ejecutar(ent, arbol)
+                    if(salida !== undefined) {
+                        if(salida.retorno !== undefined) return salida
                     }
-                })
-                return Output;
+                }
+                return undefined
             }
             //si es falso se valida si hay elseif
             else if (this.else_if !== null){
                 //para cada elseif
-
                 for (let element of this.else_if) {
-                    salida = element.ejecutar(ent, arbol)
-                    if (salida !== true){
-                        if(typeof salida !== 'undefined') {
-                            Output += salida
-                        }
-                        return Output;
+                    var salida = element.ejecutar(ent, arbol)
+                    if(salida !== undefined) {
+                        if(salida.retorno !== undefined) return salida
+                        else if(salida === true) return undefined     
                     }
                 }
 
-                // this.else_if.forEach(element => { })
             }
             //si es falso se valida si hay else
             if(this.else_ins !== null){
-                console.log("entra al esle")
-                Output += this.else_ins.ejecutar(ent, arbol)
-                return Output
+                var salida = this.else_ins.ejecutar(ent, arbol)
+                if(salida !== undefined) {
+                    if(salida.retorno !== undefined) return salida
+                }
             } 
             
         }
         else{
-            console.log("Expresión incorrecta para una instruccion condicional")
-            return {err: 'Expresión incorrecta para una instruccion condicional'}
+            arbol.setError({
+                err: 'El tipo '+this.expresion.getTipo(ent, arbol)+' es incorrecto para una condicional',
+                type: 'Semántico',
+                amb: ent.identificador,
+                line: this.linea,
+                col: this.columna
+              })
         }
     }
 

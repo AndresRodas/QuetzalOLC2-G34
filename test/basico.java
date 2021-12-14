@@ -1,13 +1,14 @@
+
 void main(){
+	String saludo = "holas";
 	println(( 5 <= 3 ) || (false && true)  );
     println(56+54);
 	println(!(false || true));
-	println("conche"+" la"+" lora");
-	println("ja"^5+" que risa bro");
+	println("conche"&" la"&" lora");
+	println("ja"^5 &" que risa bro");
 	println(60 >= 50 ? "Puede vacunarse" : "No puede vacunarse");   
     print("salto de linea: ");
-    print("Esto sale en la misma linea");
-    println(", ultima frase");
+    println("Esto sale en la misma linea");
     println("esto ya es otra linea");
 	println(log10(5));
 	println(int.parse("1")+1);
@@ -24,8 +25,7 @@ void main(){
 	println("Tigre".toLowercase());
 	int numero = 22;
     if(false){
-    	println("if");
-        
+    	println("if");   
     }
     else if(false){
     	println("else if 1");
@@ -44,29 +44,34 @@ void main(){
     else{
     	println("else");
     }
-	return;
-}
 
+	switch (2+2){
+    	case 1:
+        	println("2+2 = 1");
+		break;
+        case 2:
+        	println("2+2 = 2");
+        break;
+        case 3:
+        	println("2+2 = 3");
+        break;
+        case 4:
+        	println("2+2 = 4 " & saludo);
+        break;
+        default:
+        	println("operacion imposible");
+    }
 
-int a,b,c,d;
-print("Valor default variable 0 = ");
-println(a);
-int edad = 20;
-print("Valor edad declarado 20 = ");
-println(edad);
-print("Valor edad asignado 30 = ");
-edad = 30;
-println(edad);
-println(1);
-println(true);
-println("hola mundo");
+	int suma(int num1, int num2){
+    	println(num1);
+        println(num2);
+        if(num1 > num2){
+        	return "num1 es mayor que num2";
+        }
+        return suma(num1 + 1, num2);
+    }
+    println(suma(2,3));
     
-
-if(edad==20){
-	int edad = 25;
-	print("Valor edad declarado 25 = ");
-	println(edad);
-	print("Valor edad asignado 45 = ");
-	edad = 45;
-	println(edad);
+  
+	return;
 }
