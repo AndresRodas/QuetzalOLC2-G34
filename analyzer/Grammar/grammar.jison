@@ -32,6 +32,8 @@ charliteral                         \'{stringsingle}\'
 "*"                     return 'por'
 "/"                     return 'div' 
 "%"                     return 'mod'
+"++"                    return 'masmas'
+"--"                    return 'menosmenos'        
 
 /* RELATIONAL OPERATOR */
 "=="                   return 'igual'
@@ -143,6 +145,8 @@ charliteral                         \'{stringsingle}\'
 %left 'concat' 'repet'
 %left 'por' 'div'
 %left 'mod'
+%left 'masmas'
+%left 'menosmenos'
 %right 'lnot'
 %left UMINUS
 
@@ -183,14 +187,18 @@ EXPRESION : OPERACION { $$ = $1 }
         | PRIMITIVA { $$ = $1 }
 ;
 
-INSTRUCCION : IMPRESION { $$ = $1 }
-        | DECLARACION   { $$ = $1 }
-        | ASIGNACION    { $$ = $1 }
-        | CONDICION     { $$ = $1 }
-        | FUNCION       { $$ = $1 }
-        | CICLO         { $$ = $1 }
-        | TO_CONTINUE   { $$ = $1 }
+INSTRUCCION : IMPRESION         { $$ = $1 }
+        | PRE_DECLARACION       { $$ = $1 }
+        | CONDICION             { $$ = $1 }
+        | FUNCION               { $$ = $1 }
+        | CICLO                 { $$ = $1 }
+        | TO_CONTINUE           { $$ = $1 }
+        | INC_DECRE_INSTR       { $$ = $1 }
         | RETURN        { $$ = $1 }
+;
+
+PRE_DECLARACION : DECLARACION   { $$ = $1 }
+                | ASIGNACION    { $$ = $1 }
 ;
 
 OPERACION : EXPRESION mas EXPRESION     { $$ = new Operacion($1,$3,'SUMA', @1.first_line, @1.first_column); }
@@ -354,29 +362,39 @@ DEFAULT_CASE : Rdefault d_puntos ACCIONES       { $$ = $3 }
         |                                       { $$ = null }
 ; 
 
+
+INC_DECRE_INSTR:  id masmas             {$$ = new OperacionTwo($1,"SUMASUMA",@1.first_line, @1.first_column)}
+                | id menosmenos         {$$ = new OperacionTwo($1,"RESTARESTA",@1.first_line, @1.first_column)}
+;
+
+
 TO_CONTINUE : Rcontinue                            { $$ = new Continue(@1.first_line, @1.first_column)}
 
 ;
 
 CICLO : WHILE           { $$ = $1}
-      | DOWHILE         { $$ = $1}
+      | DOWHILE pyc        { $$ = $1}
 ;
 
-DOWHILE : Rdo  l_abre ACCIONES l_cierra Rwhile p_abre EXPRESIONES p_cierra     {$$ = new DoWhile($7,$3,@1.first_line, @1.first_column)}
-;
 
 WHILE : Rwhile p_abre EXPRESION p_cierra l_abre ACCIONES l_cierra              {$$ = new While($3,$6,@1.first_line, @1.first_column)}
-;             
+;    
+
+DOWHILE : Rdo  l_abre ACCIONES l_cierra Rwhile p_abre EXPRESION p_cierra     {$$ = new DoWhile($7,$3,@1.first_line, @1.first_column)}
+;
 
 
+PREFOR : Rfor p_abre PRE_DECLARACION pyc EXPRESION pyc ACCIONES p_cierra l_abre ACCIONES l_cierra {$$ = new PFOR($3,$5,$7,$10,@1.first_line, @1.first_column)}
+;
 
-
-FUNCION : TIPO id p_abre LISTA_PARAMETROS p_cierra l_abre ACCIONES l_cierra     { $$ = new Function($1, $2, $4, $7, @1.first_line, @1.first_column) } 
+FUNCION : TIPO id p_abre LISTA_PARAMETROS p_cierra l_abre ACCIONES l_abre       { $$ = new Function($1, $2, $4, $7, @1.first_line, @1.first_column) }
 ;
 
 RETURN : Rreturn EXPRESION pyc          { $$ = new Return($2,@1.first_line, @1.first_column) }
         | Rreturn pyc                   { $$ = new Return(null,@1.first_line, @1.first_column) }
 ;
+
+
 
 
 
