@@ -27,13 +27,13 @@ charliteral                         \'{stringsingle}\'
 [/][*][^*]*[*]+([^/*][^*]*[*]+)*[/] // comentario multiple líneas
 
 /* ARITHMETIC OPERATOR */
+"++"                    return 'masmas'
+"--"                    return 'menosmenos'  
 "+"                     return 'mas'
 "-"                     return 'menos'
 "*"                     return 'por'
 "/"                     return 'div' 
-"%"                     return 'mod'
-"++"                    return 'masmas'
-"--"                    return 'menosmenos'        
+"%"                     return 'mod'      
 
 /* RELATIONAL OPERATOR */
 "=="                   return 'igual'
@@ -193,7 +193,7 @@ INSTRUCCION : IMPRESION         { $$ = $1 }
         | FUNCION               { $$ = $1 }
         | CICLO                 { $$ = $1 }
         | TO_CONTINUE           { $$ = $1 }
-        | INC_DECRE_INSTR       { $$ = $1 }
+        | INC_DECRE_INSTR  pyc { $$ = $1 }
         | RETURN        { $$ = $1 }
 ;
 
@@ -363,7 +363,7 @@ DEFAULT_CASE : Rdefault d_puntos ACCIONES       { $$ = $3 }
 ; 
 
 
-INC_DECRE_INSTR:  id masmas             {$$ = new OperacionTwo($1,"SUMASUMA",@1.first_line, @1.first_column)}
+INC_DECRE_INSTR: id masmas             {$$ = new OperacionTwo($1,"SUMASUMA",@1.first_line, @1.first_column)}
                 | id menosmenos         {$$ = new OperacionTwo($1,"RESTARESTA",@1.first_line, @1.first_column)}
 ;
 
