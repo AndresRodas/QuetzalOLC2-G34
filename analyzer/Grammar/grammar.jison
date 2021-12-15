@@ -141,9 +141,8 @@ charliteral                         \'{stringsingle}\'
 %left 'lor' 
 %left 'land'
 %left 'igual' 'dif' 'men_que' 'men_ig' 'may_que' 'may_ig'
-%left 'mas' 'menos'
-%left 'concat' 'repet'
-%left 'por' 'div'
+%left 'mas' 'menos' 'concat'
+%left 'por' 'div' 'repet'
 %left 'mod'
 %left 'masmas'
 %left 'menosmenos'
@@ -194,7 +193,7 @@ INSTRUCCION : IMPRESION         { $$ = $1 }
         | CICLO                 { $$ = $1 }
         | TO_CONTINUE           { $$ = $1 }
         | INC_DECRE_INSTR       { $$ = $1 }
-        | RETURN        { $$ = $1 }
+        | RETURN                { $$ = $1 }
 ;
 
 PRE_DECLARACION : DECLARACION   { $$ = $1 }
@@ -387,18 +386,17 @@ DOWHILE : Rdo  l_abre ACCIONES l_cierra Rwhile p_abre EXPRESION p_cierra     {$$
 PREFOR : Rfor p_abre PRE_DECLARACION pyc EXPRESION pyc ACCIONES p_cierra l_abre ACCIONES l_cierra {$$ = new PFOR($3,$5,$7,$10,@1.first_line, @1.first_column)}
 ;
 
-FUNCION : TIPO id p_abre LISTA_PARAMETROS p_cierra l_abre ACCIONES l_abre       { $$ = new Function($1, $2, $4, $7, @1.first_line, @1.first_column) }
+FUNCION : TIPO id p_abre LISTA_PARAMETROS p_cierra l_abre ACCIONES l_cierra       { $$ = new Function($1, $2, $4, $7, @1.first_line, @1.first_column) }
 ;
 
 RETURN : Rreturn EXPRESION pyc          { $$ = new Return($2,@1.first_line, @1.first_column) }
         | Rreturn pyc                   { $$ = new Return(null,@1.first_line, @1.first_column) }
 ;
 
+IMPRESION : println p_abre CONTENIDO_PRINT p_cierra pyc         { $$ = new Print( $3, @1.first_line, @1.first_column, true) }
+        | print p_abre CONTENIDO_PRINT p_cierra pyc             { $$ = new Print( $3, @1.first_line, @1.first_column, false) }
+;
 
-
-
-
-
-IMPRESION : println p_abre EXPRESION p_cierra pyc{ $$ = new Print( $3, @1.first_line, @1.first_column, true) }
-        | print p_abre EXPRESION p_cierra pyc{ $$ = new Print( $3, @1.first_line, @1.first_column, false) }
+CONTENIDO_PRINT : CONTENIDO_PRINT coma EXPRESION                { $1.push($3); $$ = $1 }
+                | EXPRESION                                     { $$ = [$1] }
 ;

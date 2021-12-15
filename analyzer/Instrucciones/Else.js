@@ -15,12 +15,12 @@ class Else{
 
     ejecutar(ent, arbol) {
 
-        this.acciones.forEach(element => {
-            var salida = element.ejecutar(ent, arbol)
+        for(let inst of this.acciones){
+            var salida = inst.ejecutar(ent, arbol)
             if(salida !== undefined) {
                 if(salida.retorno !== undefined) return salida
             }
-        })
+        }
         return undefined
     }
 

@@ -44,7 +44,6 @@ class Call {
     }
 
     getValorImplicito(ent, arbol) {
-        console.log('hola mundis')
         //crear entorno
         var new_ent = new Entorno(ent, this.identificador)
         

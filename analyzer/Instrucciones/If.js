@@ -24,9 +24,10 @@ class If{
 
             //si es verdadero
             if(this.expresion.getValorImplicito(ent, arbol)){
-
+                //crear entorno
+                var new_ent = new Entorno(ent, 'IF')
                 for(let acci of this.acciones){
-                    var salida = acci.ejecutar(ent, arbol)
+                    var salida = acci.ejecutar(new_ent, arbol)
                     if(salida !== undefined) {
                         if(salida.retorno !== undefined) return salida
                     }
@@ -35,9 +36,11 @@ class If{
             }
             //si es falso se valida si hay elseif
             else if (this.else_if !== null){
+                //crear entorno
+                var new_ent = new Entorno(ent, 'ELSE IF')
                 //para cada elseif
                 for (let element of this.else_if) {
-                    var salida = element.ejecutar(ent, arbol)
+                    var salida = element.ejecutar(new_ent, arbol)
                     if(salida !== undefined) {
                         if(salida.retorno !== undefined) return salida
                         else if(salida === true) return undefined     
@@ -47,7 +50,10 @@ class If{
             }
             //si es falso se valida si hay else
             if(this.else_ins !== null){
-                var salida = this.else_ins.ejecutar(ent, arbol)
+                //crear entorno
+                var new_ent = new Entorno(ent, 'ELSE')
+
+                var salida = this.else_ins.ejecutar(new_ent, arbol)
                 if(salida !== undefined) {
                     if(salida.retorno !== undefined) return salida
                 }

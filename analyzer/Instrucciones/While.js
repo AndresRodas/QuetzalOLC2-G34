@@ -21,13 +21,17 @@ class While{
             while (true) {
                 //si es verdadero
                 if(this.condicion.getValorImplicito(ent, arbol)){
-                    this.instruccion.forEach(element => {
-                        var salida = element.ejecutar(ent, arbol)
+                    //crear entorno
+                    var new_ent = new Entorno(ent, 'WHILE')
+
+                    for(let inst of this.instruccion){
+                        var salida = inst.ejecutar(new_ent, arbol)
                         if(salida !== undefined) {
                             if(salida.retorno !== undefined) return salida
                         }
-                    })
-                }else{
+                    }
+                }
+                else{
                     break
                 }      
             }

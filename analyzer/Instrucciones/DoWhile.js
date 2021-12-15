@@ -21,8 +21,11 @@ class DoWhile{
             while (true) {
                 //si es verdadero
                 if(this.condicion.getValorImplicito(ent, arbol)){
+                    //crear entorno
+                    var new_ent = new Entorno(ent, 'DO WHILE')
+
                     for (let inst of this.instruccion) {
-                        var salida = inst.ejecutar(ent, arbol)
+                        var salida = inst.ejecutar(new_ent, arbol)
                         if(salida !== undefined) {
                             if(salida.retorno !== undefined) return salida
                         }

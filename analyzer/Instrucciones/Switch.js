@@ -24,8 +24,11 @@ class Switch{
 
             if(case_u.expresion.getValorImplicito(ent, arbol) === this.expresion.getValorImplicito(ent, arbol)){
                 
+                //crear entorno
+                var new_ent = new Entorno(ent, 'SWITCH-CASE')
+
                 for (let accion of case_u.acciones){
-                    var salida = accion.ejecutar(ent, arbol)
+                    var salida = accion.ejecutar(new_ent, arbol)
                     if(salida !== undefined) {
                         if(salida.retorno !== undefined) return salida
                     }
@@ -34,8 +37,11 @@ class Switch{
             }
         }
         if(this.default_case !== null){
+            //crear entorno
+            var new_ent = new Entorno(ent, 'SWITCH-DEFAULT')
+
             for (let default_u of this.default_case){
-                var salida = default_u.ejecutar(ent, arbol)
+                var salida = default_u.ejecutar(new_ent, arbol)
                 if(salida !== undefined) {
                     if(salida.retorno !== undefined) return salida
                 }

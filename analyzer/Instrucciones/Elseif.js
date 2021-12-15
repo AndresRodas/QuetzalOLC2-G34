@@ -21,12 +21,13 @@ class Elseif{
             // var Output = ''
 
             if(this.expresion.getValorImplicito(ent, arbol)){
-                this.acciones.forEach(element => {
-                    var salida = element.ejecutar(ent, arbol)
+
+                for(let ins of this.acciones){
+                    var salida = ins.ejecutar(ent, arbol)
                     if(salida !== undefined) {
                         if(salida.retorno !== undefined) return salida
                     }
-                })
+                }
                 return true
             }
             return false
