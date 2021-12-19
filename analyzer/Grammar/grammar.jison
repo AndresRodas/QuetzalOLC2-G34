@@ -37,13 +37,13 @@ charliteral                         \'{stringsingle}\'
 [/][*][^*]*[*]+([^/*][^*]*[*]+)*[/] // comentario multiple líneas
 
 /* ARITHMETIC OPERATOR */
+"++"                    return 'masmas'
+"--"                    return 'menosmenos'  
 "+"                     return 'mas'
 "-"                     return 'menos'
 "*"                     return 'por'
 "/"                     return 'div' 
-"%"                     return 'mod'
-"++"                    return 'masmas'
-"--"                    return 'menosmenos'        
+"%"                     return 'mod'      
 
 /* RELATIONAL OPERATOR */
 "=="                   return 'igual'
@@ -504,7 +504,7 @@ DEFAULT_CASE : Rdefault d_puntos ACCIONES       { $$ = $3 }
 ; 
 
 
-INC_DECRE_INSTR:  id masmas             {$$ = new OperacionTwo($1,"SUMASUMA",@1.first_line, @1.first_column)}
+INC_DECRE_INSTR: id masmas             {$$ = new OperacionTwo($1,"SUMASUMA",@1.first_line, @1.first_column)}
                 | id menosmenos         {$$ = new OperacionTwo($1,"RESTARESTA",@1.first_line, @1.first_column)}
 ;
 
