@@ -110,10 +110,11 @@
                 <table id="errorTableXml" class="display responsive nowrap ">
                     <thead>
                         <tr>
-                            <th>Error Typer</th>
+                            <th>Error</th>
+                            <th>Type</th>
+                            <th>Environment</th>
                             <th>Row</th>
                             <th>Column</th>
-                            <th>Description</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -121,10 +122,11 @@
                     </tbody>
                     <tfoot>
                         <tr>
-                            <th>Error Typer</th>
+                            <th>Error</th>
+                            <th>Type</th>
+                            <th>Environment</th>
                             <th>Row</th>
                             <th>Column</th>
-                            <th>Description</th>
                         </tr>
                     </tfoot>
                 </table>
@@ -136,10 +138,10 @@
                         <tr>
                             <th>Identifier</th>
                             <th>Type</th>
+                            <th>Environment</th>
                             <th>Value</th>
                             <th>Row</th>
                             <th>Column</th>
-                            <th>Environment</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -149,10 +151,10 @@
                         <tr>
                             <th>Identifier</th>
                             <th>Type</th>
+                            <th>Environment</th>
                             <th>Value</th>
                             <th>Row</th>
                             <th>Column</th>
-                            <th>Environment</th>
                         </tr>
                     </tfoot>
                 </table>
@@ -205,8 +207,9 @@
     <script type="text/javascript" src="analyzer/Expresiones/Upper.js"></script>
     <script type="text/javascript" src="analyzer/Expresiones/Acceso.js"></script>
     <script type="text/javascript" src="analyzer/Expresiones/Call.js"></script>
-
-
+    <script type="text/javascript" src="analyzer/Expresiones/AccesoStruct.js"></script>
+    <script type="text/javascript" src="analyzer/Expresiones/AccesoArr.js"></script>
+    <script type="text/javascript" src="analyzer/Expresiones/Pop.js"></script>
 
     <!-- ============================= INSTRUCTIONS ============================== -->
     <script type="text/javascript" src="analyzer/Instrucciones/Print.js"></script>
@@ -223,6 +226,14 @@
     <script type="text/javascript" src="analyzer/Instrucciones/Case.js"></script>
     <script type="text/javascript" src="analyzer/Instrucciones/Function.js"></script>
     <script type="text/javascript" src="analyzer/Instrucciones/Return.js"></script>
+    <script type="text/javascript" src="analyzer/Instrucciones/Main.js"></script>
+    <script type="text/javascript" src="analyzer/Instrucciones/DeclaracionStruct.js"></script>
+    <script type="text/javascript" src="analyzer/Instrucciones/DecVarStruct.js"></script>
+    <script type="text/javascript" src="analyzer/Instrucciones/AsignacionStruct.js"></script>
+    <script type="text/javascript" src="analyzer/Instrucciones/DeclaracionArr.js"></script>
+    <script type="text/javascript" src="analyzer/Instrucciones/AsignacionArr.js"></script>
+    <script type="text/javascript" src="analyzer/Instrucciones/Push.js"></script>
+
 
 </body>
 </html>

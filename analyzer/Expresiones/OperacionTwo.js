@@ -1,4 +1,4 @@
-class Operacion {
+class OperacionTwo {
     linea;
     columna;
     op_izquierda;

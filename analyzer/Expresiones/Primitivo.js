@@ -3,14 +3,28 @@ class Primitivo {
     columna;
     valor;
 
+    tmp;
+    c3d;
+    lv;
+    lf;
+
     constructor(valor, linea, columna){
         this.linea = linea;
         this.columna = columna;
         this.valor = valor;
+
+        this.tmp = ''
+        this.c3d = ''
+        this.lv = ''
+        this.lf = ''
     }
     
-    traducir(ent, arbol) {
-        throw new Error("Method not implemented.");
+    
+    traducir(tmp, c3d, lv, lf) {        
+        this.tmp = tmp;
+        this.c3d = c3d
+        this.lv = lv
+        this.lf = lf
     }
 
     getTipo(ent, arbol) {

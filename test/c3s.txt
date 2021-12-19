@@ -1,0 +1,98 @@
+S → LI { print(LI.C3D) }
+--
+LI → LI I { LI.C3D = LI1.C3D + I.C3D }
+LI → I    { LI.C3D = I.C3D}
+--
+I → id = E
+    { I.C3D = E.C3D
+            + id.val_lex + "=" + E.TMP
+    }
+--
+I → if ( O ) "{" LI "}"
+    { I.C3D = O.C3D
+            + O.LV + ":"
+            + LI.C3D
+			+ O.LF + ":"
+    }
+--	
+I → do "{" LI "}" while ( O );
+    { I.C3D = O.LV + ":"
+            + LI.C3D
+            + O.C3D
+			+ O.LF + ":"
+    }
+--	
+I → while( O )"{" LI "}" 
+    { I.LR=new_label()
+      I.C3D = I.LR + ":"
+            + O.C3D 
+            + O.LV + ":"
+            + LI.C3D 
+            + "goto" + I.LR
+            + O.LF + ":"
+    }
+--
+O → O or A { O.LV  = O1.LV + "," + A.LV
+             O.LF  = A.LF
+             O.C3D = O1.C3D
+                   + O1.LF + ":"
+				   + A.C3D }
+O → A { O.LV  = A.LV
+        O.LF  = A.LF
+        O.C3D = A.C3D }
+--
+A → A and N { A.LV  = N.LV
+              A.LF  = A1.LF + "," + N.LF
+              A.C3D = A1.C3D
+			        + A1.LV + ":"
+					+  N.C3D }
+A → N { A.LV  = N.LV
+        A.LF  = N.LF
+        A.C3D = N.C3D }
+--
+N → not R { N.LV  = R.LF
+            N.LF  = R.LV
+            N.C3D = R.C3D }
+N → R { N.LV  = R.LV
+        N.LF  = R.LF
+        N.C3D = R.C3D }
+--
+R → E > E { R.LV  = new_label()
+            R.LF  = new_label()
+            R.C3D = E1.C3D
+			      + E2.C3D
+				  + "if" + E1.TMP + ">" + E2.TMP + "goto" + R.LV
+                  + "goto" + R.LF }
+R → E < E { R.LV  = new_label()
+            R.LF  = new_label()
+            R.C3D = "if" + E1.TMP + "<" + E2.TMP + "goto" + R.LV
+                  + "goto" + R.LF }
+--
+E → E + T { E.TMP = new_temp()
+            E.C3D = E1.C3D 
+                  +  T.C3D
+				  +  E.TMP + "=" + E1.TMP + "+" + T.TMP }
+E → E – T { E.TMP = new_temp()
+            E.C3D = E1.C3D 
+                  +  T.C3D
+				  +  E.TMP + "=" + E1.TMP + "-" + T.TMP }
+E → T     { E.TMP = T.TMP
+            E.C3D = T.C3D }
+--
+T → T * F { T.TMP = new_temp()
+            T.C3D = T1.C3D 
+                  +  F.C3D
+				  +  T.TMP + "=" + T1.TMP + "*" + F.TMP }
+T → T / F { T.TMP = new_temp()
+            T.C3D = T1.C3D 
+                  +  F.C3D
+				  +  T.TMP + "=" + T1.TMP + "/" + F.TMP }
+T → F     { T.TMP = F.TMP
+            T.C3D = F.C3D }
+--
+F → (E)   { F.TMP = E.TMP
+            F.C3D = E.C3D }
+F → id    { F.TMP = id.val_lex 
+            F.C3D = "" }
+F → num   { F.TMP = id.val_lex 
+            F.C3D = "" }

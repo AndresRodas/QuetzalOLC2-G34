@@ -1,4 +1,4 @@
-class Acceso {
+class Pop{
     linea;
     columna;
     identificador;
@@ -41,32 +41,34 @@ class Acceso {
         return 'VOID';
     }
 
+    ejecutar(ent, arbol){
+        this.getValorImplicito(ent, arbol)
+    }
+
     getValorImplicito(ent, arbol) {
-        if (ent.existe(this.identificador)) {
+        if(ent.existe(this.identificador)){
             var simbolo = ent.getSimbolo(this.identificador)
-            if(Entorno.prototype.isPrototypeOf(simbolo.valor)){
-                var struct = simbolo.valor.identificador+'\('
-                var list_vals = Object.values(simbolo.valor.tabla)
-                for (let index = 0; index < list_vals.length; index++) {
-                    if (index === list_vals.length-1) struct += list_vals[index].valor.toString()+'\)'
-                    else struct += list_vals[index].valor.toString()+', '
-                }
-                return struct
+            if(typeof(simbolo.valor) === 'object'){
+                return simbolo.valor.pop()
             }
-            return simbolo.valor
+            else{
+                arbol.setError({
+                    err: 'El tipo '+simbolo.tipo+' no es compatible con la funcion Pop',
+                    type: 'Semántico',
+                    amb: ent.identificador,
+                    line: this.linea,
+                    col: this.columna
+                  })
+                  return null
+            } 
         }
         arbol.setError({
-            err: 'La variable '+this.identificador+' no existe',
+            err: 'El array '+this.identificador+' no existe en el entorno actual',
             type: 'Semántico',
             amb: ent.identificador,
             line: this.linea,
             col: this.columna
           })
-        return null
+          return null
     }
-
-    isInt(n){
-        return Number(n) === n && n % 1 === 0;
-    }
-    
 }

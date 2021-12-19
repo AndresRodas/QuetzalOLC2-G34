@@ -17,6 +17,7 @@ class Return{
         if (this.expresion !== null){
             return { retorno: this.expresion.getValorImplicito(ent,arbol)}
         }
+        return null;
     }
 
 }

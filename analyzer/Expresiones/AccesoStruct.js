@@ -1,4 +1,4 @@
-class Acceso {
+class AccesoStruct {
     linea;
     columna;
     identificador;
@@ -42,26 +42,28 @@ class Acceso {
     }
 
     getValorImplicito(ent, arbol) {
-        if (ent.existe(this.identificador)) {
-            var simbolo = ent.getSimbolo(this.identificador)
-            if(Entorno.prototype.isPrototypeOf(simbolo.valor)){
-                var struct = simbolo.valor.identificador+'\('
-                var list_vals = Object.values(simbolo.valor.tabla)
-                for (let index = 0; index < list_vals.length; index++) {
-                    if (index === list_vals.length-1) struct += list_vals[index].valor.toString()+'\)'
-                    else struct += list_vals[index].valor.toString()+', '
+        var ent_val = ent
+            for( let id of this.identificador){
+                if (ent_val.existe(id)) {
+                    var simbolo = ent_val.getSimbolo(id)
+                    //si el valor es un entorno
+                    if ( Entorno.prototype.isPrototypeOf(simbolo.valor)     ){
+                        ent_val = simbolo.valor
+                    }
+                    else{
+                        return simbolo.valor
+                    }
                 }
-                return struct
+                else{
+                    arbol.setError({
+                        err: 'La variable '+id+' no existe en el Struct actual',
+                        type: 'Semántico',
+                        amb: ent.identificador,
+                        line: this.linea,
+                        col: this.columna
+                      })
+                }
             }
-            return simbolo.valor
-        }
-        arbol.setError({
-            err: 'La variable '+this.identificador+' no existe',
-            type: 'Semántico',
-            amb: ent.identificador,
-            line: this.linea,
-            col: this.columna
-          })
         return null
     }
 

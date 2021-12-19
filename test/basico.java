@@ -1,6 +1,8 @@
+int numero = 22;
+String saludo = "holas";
+String[] arr = ["H","O","L","A"];
 
 void main(){
-	String saludo = "holas";
     println(2,true,"jajaja",5, saludo);
 	println(( 5 <= 3 ) || (false && true)  );
     println(56+54);
@@ -24,7 +26,7 @@ void main(){
 	println("Tigre".length());
 	println("Tigre".toUppercase());
 	println("Tigre".toLowercase());
-	int numero = 22;
+	
     if(false){
     	println("if");   
     }
@@ -46,44 +48,26 @@ void main(){
     	println("else");
     }
 
-	switch (2+2){
+	switch (numero-20){
     	case 1:
-        	println("2+2 = 1");
+        	println("22-20 = 1 ");
 		break;
         case 2:
-        	println("2+2 = 2");
+        	println("22-20 = 2 "&saludo);
         break;
         case 3:
-        	println("2+2 = 3");
+        	println("22-20 = 3 ");
         break;
         case 4:
-        	println("2+2 = 4 " & saludo);
+        	println("22-20 = 4 ");
         break;
         default:
         	println("operacion imposible");
     }
 
-	int suma(int num1, int num2){
-    	println(num1);
-        println(num2);
-        if(num1 > num2){
-        	return "num1 es mayor que num2";
-        }
-        return suma(num1 + 1, num2);
-    }
+    println("**************SUMA**************");
     println(suma(2,3));
 
-	int fibonacci(int num){
-        if(num == 0){
-        	return 0;
-        }
-        else if (num == 1){
-        	return 1;
-        }
-        else{
-        	return fibonacci(num - 1) + fibonacci(num - 2);
-        }
-    }	 
     println("**************FIBONACCI**************");
    	print(string(fibonacci(0))&", ");
     print(string(fibonacci(1))&", ");
@@ -95,7 +79,57 @@ void main(){
     print(string(fibonacci(7))&", ");
     print(string(fibonacci(8))&", ");
     print(string(fibonacci(9))&", ");
-	print(string(fibonacci(10)));
+	println(string(fibonacci(10)));
+
+    Casa MyHouse = Casa("Zona 6, mixco", 200000, true);
+    println(MyHouse);
+    MyHouse.disponible = false;
+    println(MyHouse);
+
+    println(arr);
+    arr[2] = "Oooooo";
+    println(arr);
+    println(arr[2] & " my gash");
+    arr[2] = "l".toUppercase();
+    println(arr[begin:end]);
+    println(arr[1:end]);
+    println(arr[begin:2]);
+    println(arr[2:3]);
+    arr.push("!");
+    arr.push("!");
+    println(arr);
+    println(arr.pop());
+    println(arr);
+    arr.pop();
+    println(arr);
 
 	return;
 }
+
+int suma(int num1, int num2){
+    	println(num1);
+        println(num2);
+        if(num1 > num2){
+        	return "num1 es mayor que num2";
+        }
+        return suma(num1 + 1, num2);
+    }
+
+int fibonacci(int num){
+        if(num == 0){
+        	return 0;
+        }
+        else if (num == 1){
+        	return 1;
+        }
+        else{
+        	return fibonacci(num - 1) + fibonacci(num - 2);
+        }
+    }
+
+struct Casa{
+	String direccion;
+    int costo;
+    boolean disponible;
+};
+

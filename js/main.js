@@ -1,7 +1,7 @@
 
 let errorTableXml, symbolTableXml;
 let errorTableXpath, tokenTableXpath;
-let xmlEditor, xpathEditor, consoleResult, grammarReport;
+let QuetzalEditor, xpathEditor, consoleResult, grammarReport;
 
 let dotStringCst = "", dotStringAst = '', count_temp = 0;
 
@@ -17,10 +17,9 @@ $(document).ready(function () {
   $("select").formSelect();
   $('.tooltipped').tooltip();
 
-  xmlEditor = editor('xml__editor', 'java');
-  //consoleResult = editor('console__result', 'java');
-  consoleResult = editor('console__result', 'java', false, true, false);
-  grammarReport = editor('grammar__report__editor', 'xml', false, true, false);
+  QuetzalEditor = editor('xml__editor');
+  consoleResult = consola('console__result');
+  c3dResult = consola('c3d__result')
 });
 
 /**
@@ -33,16 +32,28 @@ $(document).ready(function () {
  * @returns  new instance of CodeMirror
  */
 
-function editor(id, language, lineNumbers = true, readOnly = false, styleActiveLine = true) {
+function editor(id) {
   return CodeMirror.fromTextArea(document.getElementById(id), {
-    lineNumbers,
-    mode: language,
-    styleActiveLine,
-    readOnly,
+    lineNumbers: true,
+    mode: "text/x-java",
+    styleActiveLine: true,
+    readOnly: false,
     theme: "material-ocean", //"yonce",
-    setSize: ("100%", "95%"),
+    setSize: ("100%", "100%"),
+    autofocus: true
   });
+}
 
+function consola(id) {
+  return CodeMirror.fromTextArea(document.getElementById(id), {
+    lineNumbers: true,
+    mode: "text/x-java",
+    styleActiveLine: true,
+    readOnly: true,
+    theme: "material-ocean", //"yonce",
+    setSize: ("100%", "100%"),
+    autofocus: false
+  });
 }
 /**
  * Open a text file
@@ -118,38 +129,39 @@ const cleanEditor = (editor) => {
  */
 const AnalyzeQtzl = () => {
   console.log('Analizador Ascendente')
-  var texto = xmlEditor.getValue();
+  var texto = QuetzalEditor.getValue();
   console.log(texto)
 
   //creacion del arbol
-  var instrucciones = grammar.parse(texto);
-
-  //creacion ast
-  var ast = new AST(instrucciones)
+  var Ast = grammar.parse(texto);
 
   //creacion entorno global
   var entorno = new Entorno(null, 'GLOBAL')
 
   //ejecutando intrucciones
-  instrucciones.forEach(element => {
-    element.ejecutar(entorno, ast)
+  Ast.instrucciones.forEach(element => {
+    element.ejecutar(entorno, Ast)
   })
+  //ejecutando main
+  Ast.main.ejecutar(entorno, Ast)
   
-  console.log(entorno)
-  console.log(ast)
-  consoleResult.setValue(ast.getPrints())
+  
+  console.log(Ast)
 
- /*  //cargando datos a tabla de simbolos
+  //imprimiendo consola
+  consoleResult.setValue(Ast.getPrints())
+
+ //cargando datos a tabla de simbolos
   symbolTableXml.destroy();
   symbolTableXml = newDataTable('#symbolTableXml',
-    [{ data: "Idientifier" }, { data: "Type" }, { data: "Value" }, { data: "Row" }, { data: "Column" }, { data: "Environment" }],
-    TablaSimbolos);
+    [{ data: "id" }, { data: "type" }, { data: "env" }, { data: "val" }, { data: "row" }, { data: "col" }],
+    Ast.getTable());
+
   //cargando datos a tabla de errores
   errorTableXml.destroy();
   errorTableXml = newDataTable('#errorTableXml',
-    [{ data: "Error Type" }, { data: "Row" }, { data: "Column" }, { data: "Description" }],
-    raiz_arbol.errores); */
-
+    [{ data: "err" }, { data: "type" }, { data: "amb" }, { data: "line" }, { data: "col" }],
+    Ast.getErrors());
 
 }
 
@@ -161,143 +173,6 @@ const TranslateQtzl = () => {
 
 }
 
-/**
- * Necessary Functions 
- */
-function CrearTabla(objeto) {
-  //validando si existe el nodo
-  if (objeto != undefined) {
-    //definiendo valores
-    let id = objeto.identificador;
-    let tipo = 'etiqueta'
-    let valor = objeto.texto;
-    let linea = objeto.linea;
-    let columna = objeto.columna;
-    //creando el simbolo (entorno)
-    let entorno = new Simbolo(id, tipo, valor, linea, columna, [])
-
-    //creando entornos hijos
-    if (objeto.listaAtributos != undefined) {
-      objeto.listaAtributos.forEach(atr => {
-        //definiendo valores
-        let id = atr.identificador;
-        let tipo = 'atributo'
-        let valor = atr.valor;
-        let linea = atr.linea;
-        let columna = atr.columna;
-        //creando el simbolo (entorno)
-        let entorno_new = new Simbolo(id, tipo, valor, linea, columna, [])
-        //agregando el entorno nuevo
-        entorno.entorno.push(entorno_new)
-      });
-    }
-    //recursividad hijos
-    objeto.listaObjetos.forEach(obj => {
-      //llamado recursivo
-      entorno.entorno.push(CrearTabla(obj));
-    });
-    //retornando valor
-    return entorno;
-  }
-}
-
-function ReporteTabla(objeto, entorno, tabla) {
-  //validando si existe el nodo
-  if (objeto != undefined) {
-    //definiendo valores
-    let simbolo = {
-      'Idientifier': objeto.id,
-      'Type': objeto.tipo,
-      'Value': objeto.valor,
-      'Row': objeto.linea,
-      'Column': objeto.columna,
-      'Environment': entorno
-    }
-    tabla.push(simbolo);
-    //recursividad entornos
-    objeto.entorno.forEach(obj => {
-      //llamado recursivo
-      tabla = ReporteTabla(obj, objeto.id, tabla);
-    });
-    return tabla;
-  }
-}
-
-function CST_XML(objeto) {
-  var text = ''
-  text += CrearCST(objeto, 1, text + 'digraph G {\n')
-  text += '}'
-  count_temp = 0;
-  return text;
-}
-
-function CrearCST(objeto, count, node) {
-  //validando si existe el nodo
-  if (objeto != undefined) {
-    //creando contador temporal 
-    count_temp = count + 1;
-    //creando nodo
-    node += count + '[label="' + objeto.identificador + '"];\n';
-    //creando nodos si contiene atributos
-    if (objeto.listaAtributos.length > 0) {
-      objeto.listaAtributos.forEach(atr => {
-        node += count_temp + '[label="' + atr.identificador + '"];\n';
-        node += count + '--' + count_temp + ';\n';
-        count_temp++;
-      });
-    }
-    if (objeto.listaObjetos.length > 0) {
-      objeto.listaObjetos.forEach(obj => {
-        node += count + '--' + count_temp + ';\n';
-        // let node_temp = CrearCST(obj, count_temp2, '');
-        let node_temp = CrearCST(obj, count_temp, '');
-        node += node_temp
-
-        count_temp++;
-      });
-    }
-
-    //retornando nodo
-    count++;
-    return node;
-  }
-}
-
-function Encoding(cadena) {
-  //encoding
-  for (let enc of GlobalTree.config) {
-    if (enc.identificador.toLowerCase() == 'encoding') {
-      switch (enc.valor.toLowerCase()) {
-        case 'utf-8':
-          cadena = utf8(cadena);
-          break;
-        case 'ascii':
-          cadena = ascii(cadena);
-          break;
-        default:
-          console.log('No se encontro codificacion valida')
-          break;
-      }
-    }
-  }
-  return cadena;
-}
-
-function utf8(s) {
-  return unescape(encodeURIComponent(s));
-}
-
-function ascii(s) {
-  var salida = ''
-  for (let cha of s) {
-    salida += cha.charCodeAt(0) + ' ';
-  }
-  return salida;
-}
-
-function iso(s) {
-  return decodeURIComponent(escape(s));
-}
 
 
 
@@ -339,12 +214,7 @@ btnOpenXml.addEventListener('click', () => openFile(xmlEditor));
 btnSaveXml.addEventListener('click', () => saveFile("database", "xml", xmlEditor));
 btnCleanXml.addEventListener('click', () => cleanEditor(xmlEditor));
 btnShowCst.addEventListener('click', () => localStorage.setItem("dot", dotStringCst));
-// btnDescXml.addEventListener('click', () => analysDescXml());
-// btnAscXml.addEventListener('click', () => analysAscXml());
 
-// btnOpenXpath.addEventListener('click', () => openFile(xpathEditor));
-// btnSaveXpath.addEventListener('click', () => saveFile("query", "txt", xpathEditor));
-// btnCleanXpath.addEventListener('click', () => cleanEditor(xpathEditor));
 btnShowAst.addEventListener('click', () => localStorage.setItem("dot", dotStringAst));
 btnRun.addEventListener('click', () => AnalyzeQtzl());
 btnC3d.addEventListener('click', () => TranslateQtzl());

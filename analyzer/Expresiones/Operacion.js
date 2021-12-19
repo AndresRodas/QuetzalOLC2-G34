@@ -5,6 +5,11 @@ class Operacion {
     op_derecha;
     operador;
 
+    tmp;
+    c3d;
+    lv;
+    lf;
+
     constructor(op_izquierda,op_derecha, operacion, linea, columna){
 
         this.linea = linea;
@@ -12,9 +17,17 @@ class Operacion {
         this.op_izquierda = op_izquierda;
         this.op_derecha = op_derecha;
         this.operador = operacion;
+
+        this.tmp = ''
+        this.c3d = ''
+        this.lv = ''
+        this.lf = ''
     }
-    traducir(ent, arbol) {
-        throw new Error("Method not implemented.");
+    traducir(tmp, c3d, lv, lf) {
+        this.tmp = tmp
+        this.c3d = c3d
+        this.lv = lv
+        this.lf = lf
     }
 
     getTipo(ent, arbol) {
@@ -226,7 +239,7 @@ class Operacion {
             else if (this.operador == 'DIFERENTE_QUE')
             {
                 if (op1 != op2)
-                {
+                {   
                     return true;
                 }
                 return false

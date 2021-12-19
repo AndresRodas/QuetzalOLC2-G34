@@ -12,6 +12,7 @@ class Print{
     }
 
     traducir(ent, arbol) {
+        //aqui se va a realizar la impresion en 3d
         throw new Error("Method not implemented.");
     }
 
@@ -22,7 +23,6 @@ class Print{
             if (valor !== null && valor !== undefined) out_string += valor.toString() + ' '
         }
         arbol.setPrints(out_string, this.salto)
-        console.log('ENTORNO')
         console.log(ent)
     }
 }

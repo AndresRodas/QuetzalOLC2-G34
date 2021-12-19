@@ -1,6 +1,16 @@
 /******************************EXPORTACIONES*******************************/
 %{
-  
+//metodos codigo tres direcciones
+var cont_t = 0, cont_l = 0, heap = 0, stack = 0;
+
+function new_temp(){
+        cont_t += 1
+        return 't'+String(cont_t)
+}
+function new_label(){
+        cont_l += 1
+        return 'L'+String(cont_l)
+}
 
 %}
  
@@ -136,6 +146,7 @@ charliteral                         \'{stringsingle}\'
 /lex
 
 // DEFINIMOS PRESEDENCIA DE OPERADORES
+%left 'id'
 %left 'punto'
 %left 'quest'
 %left 'lor' 
@@ -155,31 +166,36 @@ charliteral                         \'{stringsingle}\'
 
 /******************************SINTACTICO***************************************/ 
 
-BEGIN: GLOBAL EOF { 
-                        $$ = $1;
-                        return $$;
+BEGIN: CODE EOF { 
+                        //creacion ast
+                        var Ast = new AST($1.main, $1.global)
+                        //seteo de variables
+                        cont_t = 0;
+                        cont_l = 0;
+                        return Ast;
                 }          
 ;
 
-GLOBAL : GLOBAL STRUCTS 
-        | GLOBAL DECLARACION
-        | GLOBAL METODOS
-        | GLOBAL MAIN
-        | STRUCTS
-        | DECLARACION { $$ = $1 }
-        | METODOS
-        | MAIN { $$ = $1 }
+CODE : GLOBAL_ENV MAIN GLOBAL_ENV       { $$ = { global: $1.concat($3), main: $2 } }
+        | GLOBAL_ENV MAIN               { $$ = { global: $1, main: $2 } }
+        | MAIN GLOBAL_ENV               { $$ = { global: $2, main: $1 } }
+        | MAIN                          { $$ = { global: [], main: $1 } }
 ;
 
-MAIN : Tvoid Rmain p_abre p_cierra l_abre ACCIONES Rreturn pyc l_cierra { $$ = $6 }
+GLOBAL_ENV : GLOBAL_ENV DECLARACION     { $1.push($2); $$ = $1 }
+        | GLOBAL_ENV FUNCION            { $1.push($2); $$ = $1 }
+        | DECLARACION                   { $$ = [$1] }
+        | FUNCION                       { $$ = [$1] }
+;
+
+MAIN : Tvoid Rmain p_abre p_cierra l_abre ACCIONES l_cierra { $$ = new Main($6, @1.first_line, @1.first_column) }
 ;
 
 ACCIONES : ACCIONES ACCION { $1.push($2); $$ = $1; }
         | ACCION { $$ = [$1] }
 ;
 
-ACCION : EXPRESION pyc { $$ = $1 }
-        | INSTRUCCION { $$ = $1 }
+ACCION : INSTRUCCION { $$ = $1 }
 ;
 
 EXPRESION : OPERACION { $$ = $1 }
@@ -189,55 +205,156 @@ EXPRESION : OPERACION { $$ = $1 }
 INSTRUCCION : IMPRESION         { $$ = $1 }
         | PRE_DECLARACION       { $$ = $1 }
         | CONDICION             { $$ = $1 }
-        | FUNCION               { $$ = $1 }
         | CICLO                 { $$ = $1 }
         | TO_CONTINUE           { $$ = $1 }
         | INC_DECRE_INSTR       { $$ = $1 }
         | RETURN                { $$ = $1 }
+        | PUSH                  { $$ = $1 }
+        | POP pyc               { $$ = $1 } 
 ;
 
 PRE_DECLARACION : DECLARACION   { $$ = $1 }
                 | ASIGNACION    { $$ = $1 }
 ;
 
-OPERACION : EXPRESION mas EXPRESION     { $$ = new Operacion($1,$3,'SUMA', @1.first_line, @1.first_column); }
-        | EXPRESION menos EXPRESION     { $$ = new Operacion($1,$3,'RESTA', @1.first_line, @1.first_column); }
-        | EXPRESION por EXPRESION       { $$ = new Operacion($1,$3,'MULTIPLICACION', @1.first_line, @1.first_column); }
-        | EXPRESION div EXPRESION       { $$ = new Operacion($1,$3,'DIVISION', @1.first_line, @1.first_column); }
-        | EXPRESION mod EXPRESION       { $$ = new Operacion($1,$3,'MODULO', @1.first_line, @1.first_column); }
-        | EXPRESION land EXPRESION      { $$ = new Operacion($1,$3,'AND', @1.first_line, @1.first_column); }
-        | EXPRESION lor EXPRESION       { $$ = new Operacion($1,$3,'OR', @1.first_line, @1.first_column); }
-        | EXPRESION igual EXPRESION     { $$ = new Operacion($1,$3,'IGUAL_IGUAL', @1.first_line, @1.first_column); }
-        | EXPRESION dif EXPRESION       { $$ = new Operacion($1,$3,'DIRENTE_QUE', @1.first_line, @1.first_column); }
-        | EXPRESION may_ig EXPRESION    { $$ = new Operacion($1,$3,'MAYOR_IGUA_QUE', @1.first_line, @1.first_column); }
-        | EXPRESION may_que EXPRESION   { $$ = new Operacion($1,$3,'MAYOR_QUE', @1.first_line, @1.first_column); }
-        | EXPRESION men_ig EXPRESION    { $$ = new Operacion($1,$3,'MENOR_IGUA_QUE', @1.first_line, @1.first_column); }
-        | EXPRESION men_que EXPRESION   { $$ = new Operacion($1,$3,'MENOR_QUE', @1.first_line, @1.first_column); }
-        | EXPRESION concat EXPRESION    { $$ = new Operacion($1,$3,'CONCAT', @1.first_line, @1.first_column); }
-        | EXPRESION repet EXPRESION     { $$ = new Operacion($1,$3,'REPET', @1.first_line, @1.first_column); }
-        | menos EXPRESION %prec UMINUS  { $$ = new Operacion($1,$3,'MENOS_UNARIO', @1.first_line, @1.first_column); }
-        | lnot EXPRESION %prec UMINUS   { $$ = new Operacion($2,'','NOT', @1.first_line, @1.first_column); }
-        | EXPRESION quest EXPRESION d_puntos EXPRESION { $$ = new Ternario($1, $3, $5, @1.first_line, @1.first_column); }
+OPERACION : EXPRESION mas EXPRESION             {       
+                                                $$ = new Operacion($1,$3,'SUMA', @1.first_line, @1.first_column); 
+                                                var new_tmp = new_temp(), c3d = '';
+                                                c3d = $1.c3d+$3.c3d+new_tmp+'='+$1.tmp+'+'+$3.tmp+'\n'
+                                                $$.traducir(new_tmp,c3d,'','');
+                                                }
+        | EXPRESION menos EXPRESION             { 
+                                                $$ = new Operacion($1,$3,'RESTA', @1.first_line, @1.first_column); 
+                                                var new_tmp = new_temp(), c3d = '';
+                                                c3d = $1.c3d+$3.c3d+new_tmp+'='+$1.tmp+'-'+$3.tmp+'\n'
+                                                $$.traducir(new_tmp,c3d,'','');
+                                                }
+        | EXPRESION por EXPRESION               { 
+                                                $$ = new Operacion($1,$3,'MULTIPLICACION', @1.first_line, @1.first_column);
+                                                var new_tmp = new_temp(), c3d = '';
+                                                c3d = $1.c3d+$3.c3d+new_tmp+'='+$1.tmp+'*'+$3.tmp+'\n'
+                                                $$.traducir(new_tmp,c3d,'','');
+                                                }
+        | EXPRESION div EXPRESION               { 
+                                                $$ = new Operacion($1,$3,'DIVISION', @1.first_line, @1.first_column); 
+                                                var new_tmp = new_temp(), c3d = '';
+                                                c3d = $1.c3d+$3.c3d+new_tmp+'='+$1.tmp+'/'+$3.tmp+'\n'
+                                                $$.traducir(new_tmp,c3d,'','');  
+                                                }
+        | EXPRESION mod EXPRESION               { 
+                                                $$ = new Operacion($1,$3,'MODULO', @1.first_line, @1.first_column); 
+                                                }
+        | EXPRESION land EXPRESION              { 
+                                                $$ = new Operacion($1,$3,'AND', @1.first_line, @1.first_column); 
+                                                var c3d = $1.c3d + $1.lv + ':\n' + $3.c3d
+                                                var lv = $3.lv
+                                                var lf = $1.lf + ',' + $3.lf
+                                                $$.traducir('', c3d, lv, lf);
+                                                }
+        | EXPRESION lor EXPRESION               { 
+                                                $$ = new Operacion($1,$3,'OR', @1.first_line, @1.first_column); 
+                                                var c3d = $1.c3d + $1.lf + ':\n' + $3.c3d
+                                                var lv = $1.lv + ',' + $3.lv
+                                                var lf = $3.lf
+                                                $$.traducir('', c3d, lv, lf);
+                                                }
+        | EXPRESION igual EXPRESION             { 
+                                                $$ = new Operacion($1,$3,'IGUAL_IGUAL', @1.first_line, @1.first_column); 
+                                                var lv = new_label(), lf = new_label(),c3d = '';
+                                                c3d = $1.c3d + $3.c3d + 'if '+$1.tmp + '==' + $3.tmp + ' goto '+ lv + '\n' + 'goto '+ lf +'\n'                                              
+                                                $$.traducir('', c3d, lv, lf);
+                                                }
+        | EXPRESION dif EXPRESION               {       
+                                                $$ = new Operacion($1,$3,'DIFERENTE_QUE', @1.first_line, @1.first_column); 
+                                                var lv = new_label(), lf = new_label(),c3d = '';
+                                                c3d = $1.c3d + $3.c3d + 'if '+$1.tmp + '!=' + $3.tmp + ' goto '+ lv + '\n' + 'goto '+ lf +'\n'                                              
+                                                $$.traducir('', c3d, lv, lf);
+                                                }
+        | EXPRESION may_ig EXPRESION            { 
+                                                $$ = new Operacion($1,$3,'MAYOR_IGUA_QUE', @1.first_line, @1.first_column); 
+                                                var lv = new_label(), lf = new_label(), c3d = '';
+                                                c3d = $1.c3d + $3.c3d + 'if ' + $1.tmp+ '>=' + $3.tmp + ' goto '+ lv +'\n' + 'goto '+ lf + '\n' 
+                                                $$.traducir('', c3d, lv, lf)
+                                                }
+        | EXPRESION may_que EXPRESION           { 
+                                                $$ = new Operacion($1,$3,'MAYOR_QUE', @1.first_line, @1.first_column); 
+                                                var lv = new_label(), lf = new_label(), c3d = '';
+                                                c3d = $1.c3d + $3.c3d + 'if ' + $1.tmp+ '>' + $3.tmp + ' goto '+ lv +'\n' + 'goto '+ lf + '\n' 
+                                                $$.traducir('', c3d, lv, lf)
+                                                }
+        | EXPRESION men_ig EXPRESION            { 
+                                                $$ = new Operacion($1,$3,'MENOR_IGUA_QUE', @1.first_line, @1.first_column); 
+                                                var lv = new_label(), lf = new_label(), c3d = '';
+                                                c3d = $1.c3d + $3.c3d + 'if ' + $1.tmp+ '<=' + $3.tmp + ' goto '+ lv +'\n' + 'goto '+ lf + '\n' 
+                                                $$.traducir('', c3d, lv, lf)
+                                                }
+        | EXPRESION men_que EXPRESION           { 
+                                                $$ = new Operacion($1,$3,'MENOR_QUE', @1.first_line, @1.first_column); 
+                                                var lv = new_label(), lf = new_label(), c3d = '';
+                                                c3d = $1.c3d + $3.c3d + 'if ' + $1.tmp+ '<' + $3.tmp + ' goto '+ lv +'\n' + 'goto '+ lf + '\n' 
+                                                $$.traducir('', c3d, lv, lf)
+                                                }
+        | EXPRESION concat EXPRESION            { 
+                                                $$ = new Operacion($1,$3,'CONCAT', @1.first_line, @1.first_column); 
+                                                }
+        | EXPRESION repet EXPRESION             { 
+                                                $$ = new Operacion($1,$3,'REPET', @1.first_line, @1.first_column); 
+                                                }
+        | menos EXPRESION %prec UMINUS          { 
+                                                $$ = new Operacion($1,$3,'MENOS_UNARIO', @1.first_line, @1.first_column); 
+                                                var new_tmp = new_temp(), c3d = '';
+                                                c3d = $2.c3d + new_tmp +'='+'0'+'-'+ $2.tmp + '\n'
+                                                $$.traducir(new_tmp,c3d,'','');
+                                                }
+        | lnot EXPRESION %prec UMINUS           { 
+                                                $$ = new Operacion($2,'','NOT', @1.first_line, @1.first_column); 
+                                                $$.traducir($2.tmp, $2.c3d, $2.lf, $2.lv);
+                                                }
+        | EXPRESION quest EXPRESION d_puntos EXPRESION { 
+                                                $$ = new Ternario($1, $3, $5, @1.first_line, @1.first_column); 
+                                                }
         | p_abre EXPRESION p_cierra     { $$ = $2 }
 ;
 
-PRIMITIVA : num                         { $$ = new Primitivo(Number($1), @1.first_line, @1.first_column); }
-        | StringLiteral                 { $$ = new Primitivo($1.split("\"")[1], @1.first_line, @1.first_column); }
-        | CharLiteral                   { $$ = new Primitivo($1.split("\'")[1], @1.first_line, @1.first_column); }
-        | Tnull                         { $$ = new Primitivo(null, @1.first_line, @1.first_column); }
-        | Rtrue                         { $$ = new Primitivo(true, @1.first_line, @1.first_column); }
-        | Rfalse                        { $$ = new Primitivo(false, @1.first_line, @1.first_column); }
-        | c_abre ARRAY c_cierra         { $$ = new Primitivo($1, @1.first_line, @1.first_column); }
+PRIMITIVA : num                         { $$ = new Primitivo(Number($1), @1.first_line, @1.first_column); $$.traducir($1,'','','') }
+        | StringLiteral                 { 
+                                        $$ = new Primitivo($1.split("\"")[1], @1.first_line, @1.first_column); 
+                                        var c3d = '//generando un string y guardandolo en el heap\n', str = $1.split("\"")[1], ascii_vals = [], tmp = new_temp();
+                                        for(let val of str){ ascii_vals.push(val.charCodeAt(0)) }
+                                        c3d += tmp + '= H;\n'
+                                        for(let asc of ascii_vals){
+                                                c3d += 'heap[H] = ' + asc.toString() + ';\n'
+                                                c3d += 'H = H + 1;\n'
+                                                heap += 1
+                                        }
+                                        c3d += 'heap[H] = -1;\nH = H + 1;\n\n'
+                                        heap += 1
+                                        $$.traducir(tmp, c3d, '', '')
+                                        }
+        | CharLiteral                   { $$ = new Primitivo($1.split("\'")[1], @1.first_line, @1.first_column); $$.traducir($1,'','','') }
+        | Tnull                         { $$ = new Primitivo(null, @1.first_line, @1.first_column); $$.traducir($1,'','','')}
+        | Rtrue                         { $$ = new Primitivo(true, @1.first_line, @1.first_column); $$.traducir($1,'','','')}
+        | Rfalse                        { $$ = new Primitivo(false, @1.first_line, @1.first_column); $$.traducir($1,'','','')}
         | id                            { $$ = new Acceso($1, @1.first_line, @1.first_column); }
         | CALL                          { $$ = $1 }
-;
-//ToDo: reparar array
-ARRAY : ARRAY coma EXPRESION { $1.push($3); $$ = $1; }
-        | EXPRESION     { $$ = [$1] } 
+        | ACCESO_ID id                  {
+                                        $1.push($2)
+                                        $$ = new AccesoStruct($1, @1.first_line, @1.first_column);
+                                        }
+        | ACCESO_ARR                    { $$ = $1 }
 ;
 
-DECLARACION : TIPO LISTA_ID eq EXPRESION pyc    { $$ = new Declaracion($1, $2, $4, @1.first_line, @1.first_column) }
-        | TIPO LISTA_ID pyc                     { $$ = new Declaracion($1, $2, null, @1.first_line, @1.first_column) }
+DECLARACION : TIPO LISTA_ID eq EXPRESION pyc                            { $$ = new Declaracion($1, $2, $4, @1.first_line, @1.first_column) }
+        | TIPO LISTA_ID pyc                                             { $$ = new Declaracion($1, $2, null, @1.first_line, @1.first_column) }
+        | Tstruct id l_abre LISTA_ATR l_cierra pyc                      { $$ = new DeclaracionStruct($2, $4, @1.first_line, @1.first_column) }
+        | id id eq id p_abre LISTA_EXP p_cierra pyc                     { $$ = new DecVarStruct($1, $2, $4, $6, @1.first_line, @1.first_column) }
+        | TIPO c_abre c_cierra id eq c_abre LISTA_EXP c_cierra pyc      { $$ = new DeclaracionArr($1, $4, $7, @1.first_line, @1.first_column) }
+;
+
+LISTA_ATR : LISTA_ATR DECLARACION               { $1.push($2); $$ = $1 }
+        | LISTA_ATR id id pyc                   { $1.push(new Declaracion($2, [$3], null, @1.first_line, @1.first_column)); $$ = $1 }
+        | DECLARACION                           { $$ = [$1] }
+        | id id pyc                             { $$ = [new Declaracion($1, [$2], null, @1.first_line, @1.first_column)] }
 ;
 
 LISTA_ID : LISTA_ID coma id             { $1.push($3); $$ = $1 }
@@ -252,7 +369,16 @@ TIPO : Tint             { $$ = 'INT' }
         | Tfloat        { $$ = 'DOUBLE' }
 ;
 
-ASIGNACION : id eq EXPRESION pyc        { $$ = new Asignacion($1, $3, null, @1.first_line, @1.first_column) }
+ASIGNACION : id eq EXPRESION pyc                                { $$ = new Asignacion($1, $3, @1.first_line, @1.first_column) }
+        | ACCESO_ID id eq EXPRESION pyc                         {
+                                                                $1.push($2) 
+                                                                $$ = new AsignacionStruct($1, $4, @1.first_line, @1.first_column) 
+                                                                }
+        | id c_abre EXPRESION c_cierra eq EXPRESION pyc         { $$ = new AsignacionArr($1, $3, $6, @1.first_line, @1.first_column) }
+;
+
+ACCESO_ID : ACCESO_ID id punto               { $1.push($2); $$ = $1 }
+        | id punto                           { $$ = [$1] }
 ;
 
 CALL : DERIVADA         { $$ = $1 }
@@ -272,7 +398,14 @@ LISTA_PARAMETROS : LISTA_PARAMETROS coma TIPO id        { $1.push( { tipo: $3, i
                 |                                       { $$ = [] }
 ;
 
-NATIVA : POW            { $$ = $1 }
+ACCESO_ARR : id c_abre EXPRESION c_cierra                       { $$ = new AccesoArr($1, $3, null, @1.first_line, @1.first_column) }
+        | id c_abre EXPRESION d_puntos EXPRESION c_cierra       { $$ = new AccesoArr($1, $3, $5, @1.first_line, @1.first_column) }
+        | id c_abre Rbegin d_puntos EXPRESION c_cierra          { $$ = new AccesoArr($1, $3, $5, @1.first_line, @1.first_column) }
+        | id c_abre EXPRESION d_puntos Rend c_cierra            { $$ = new AccesoArr($1, $3, $5, @1.first_line, @1.first_column) }
+        | id c_abre Rbegin d_puntos Rend c_cierra               { $$ = new AccesoArr($1, $3, $5, @1.first_line, @1.first_column) }
+;
+
+NATIVA : POW           { $$ = $1 }
         | SQRT          { $$ = $1 }
         | SIN           { $$ = $1 }
         | COS           { $$ = $1 }
@@ -285,6 +418,8 @@ NATIVA : POW            { $$ = $1 }
         | LENGTH        { $$ = $1 }
         | TO_UPPER      { $$ = $1 }
         | TO_LOWER      { $$ = $1 }
+        | POP           { $$ = $1 }
+
 ;
 
 POW : pow p_abre EXPRESION coma EXPRESION p_cierra      { $$ = new Pow($3, $5, @1.first_line, @1.first_column) }
@@ -328,6 +463,13 @@ TO_UPPER : EXPRESION punto upper p_abre p_cierra        { $$ = new Upper( $1, @1
 
 TO_LOWER : EXPRESION punto lower p_abre p_cierra        { $$ = new Lower( $1, @1.first_line, @1.first_column ) }
 ;
+
+PUSH : id punto Rpush p_abre EXPRESION p_cierra pyc     { $$ = new Push( $1, $5, @1.first_line, @1.first_column ) }
+;
+
+POP : id punto Rpop p_abre p_cierra                     { $$ = new Pop( $1, @1.first_line, @1.first_column ) }
+;
+
 
 CONDICION : IF          { $$ = $1 }
         | SWITCH        { $$ = $1 }

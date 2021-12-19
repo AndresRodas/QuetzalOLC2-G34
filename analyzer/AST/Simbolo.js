@@ -1,12 +1,12 @@
 class Simbolo {
-    indentificador;
+    identificador;
     valor;
     tipo;
     linea;
     columna;
 
-    constructor(tipo, id, linea, columna, valor){
-        this.indentificador = id;
+    constructor(tipo, identificador, linea, columna, valor){
+        this.identificador = identificador;
         this.linea = linea;
         this.columna = columna;
         this.tipo = tipo;   

@@ -44,5 +44,6 @@ class Asignacion{
                 col: this.columna
               })
         }
+
     }
 }

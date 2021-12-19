@@ -60,6 +60,16 @@ class Call {
                     const simbolo = new Simbolo(func.valor.parametros[index].tipo, func.valor.parametros[index].id, this.linea, this.columna, this.parametros[index].getValorImplicito(ent, arbol))
                     new_ent.agregar(func.valor.parametros[index].id, simbolo)
 
+                    /**********SYMBOL_TABLE*************/
+                    arbol.setTable({
+                        id: simbolo.identificador,
+                        type: simbolo.tipo,
+                        env: new_ent.identificador,
+                        val: simbolo.valor,
+                        row: simbolo.linea,
+                        col: simbolo.columna
+                    })
+
                 }else{
                     arbol.setError({
                         err: 'El tipo de dato '+this.parametros[index].getTipo(ent, arbol)+' y '+func.valor.parametros[index].tipo+' no coinciden',
@@ -67,7 +77,7 @@ class Call {
                         amb: ent.identificador,
                         line: this.linea,
                         col: this.columna
-                      })
+                    })
                 }
             }
 

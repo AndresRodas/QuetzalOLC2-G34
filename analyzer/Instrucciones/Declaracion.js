@@ -24,11 +24,30 @@ class Declaracion{
                 if(this.expresion === null){
                     const simbolo = new Simbolo(this.tipo, id, this.linea, this.columna, this.getValorDefault())
                     ent.agregar(id, simbolo)
+                    /**********SYMBOL_TABLE*************/
+                    arbol.setTable({
+                        id: simbolo.identificador,
+                        type: simbolo.tipo,
+                        env: ent.identificador,
+                        val: simbolo.valor,
+                        row: simbolo.linea,
+                        col: simbolo.columna
+                    })
                 }
                 else{
                     if(this.tipo === this.expresion.getTipo(ent,arbol)){
                         const simbolo = new Simbolo(this.tipo, id, this.linea, this.columna, this.expresion.getValorImplicito(ent,arbol))
                         ent.agregar(id, simbolo)
+                        
+                        /**********SYMBOL_TABLE*************/
+                        arbol.setTable({
+                            id: simbolo.identificador,
+                            type: simbolo.tipo,
+                            env: ent.identificador,
+                            val: simbolo.valor,
+                            row: simbolo.linea,
+                            col: simbolo.columna
+                        })
                     }
                     else{
                         arbol.setError({
