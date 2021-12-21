@@ -2,19 +2,25 @@ class Else{
     linea;
     columna;
     acciones;
+
+    hijos;
+    ast_name;
+    ast_id;
                 
     constructor(acciones, linea, columna){
         this.linea = linea;
         this.columna = columna;
         this.acciones = acciones;
+        this.ast_id = 0
+        this.ast_name = 'Else'
+        this.hijos = acciones
     }
 
     traducir(ent, arbol) {
-        throw new Error("Method not implemented.");
+
     }
 
     ejecutar(ent, arbol) {
-
         for(let inst of this.acciones){
             var salida = inst.ejecutar(ent, arbol)
             if(salida !== undefined) {

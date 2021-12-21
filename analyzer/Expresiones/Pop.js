@@ -2,15 +2,21 @@ class Pop{
     linea;
     columna;
     identificador;
+    hijos;
+    ast_name;
+    ast_id;
 
     constructor(identificador, linea, columna){
         this.linea = linea;
         this.columna = columna;
         this.identificador = identificador;
+        this.ast_id = 0
+        this.ast_name = 'Pop()'
+        this.hijos = [{ast_id: 0, ast_name: identificador, hijos: [] }]
     }
     
     traducir(ent, arbol) {
-        throw new Error("Method not implemented.");
+
     }
 
     getTipo(ent, arbol) {
@@ -41,11 +47,16 @@ class Pop{
         return 'VOID';
     }
 
+    isInt(n){
+        return Number(n) === n && n % 1 === 0;
+    }
+
     ejecutar(ent, arbol){
         this.getValorImplicito(ent, arbol)
     }
 
     getValorImplicito(ent, arbol) {
+
         if(ent.existe(this.identificador)){
             var simbolo = ent.getSimbolo(this.identificador)
             if(typeof(simbolo.valor) === 'object'){
@@ -58,8 +69,8 @@ class Pop{
                     amb: ent.identificador,
                     line: this.linea,
                     col: this.columna
-                  })
-                  return null
+                    })
+                    return null
             } 
         }
         arbol.setError({
@@ -68,7 +79,9 @@ class Pop{
             amb: ent.identificador,
             line: this.linea,
             col: this.columna
-          })
-          return null
+        })
+        
+    
+        return null
     }
 }

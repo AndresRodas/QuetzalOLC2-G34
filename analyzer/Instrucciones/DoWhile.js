@@ -4,15 +4,22 @@ class DoWhile{
     condicion;
     instruccion;
 
+    hijos;
+    ast_name;
+    ast_id;
+
     constructor(condicion, instruccion, linea, columna){
         this.linea = linea;
         this.columna = columna;
         this.condicion = condicion;
         this.instruccion = instruccion;
+        this.ast_id = 0
+        this.ast_name = 'DoWhile'
+        this.hijos = [condicion].concat(instruccion)
     }
 
     traducir(ent, arbol) {
-        throw new Error("Method not implemented.");
+
     }
 
     ejecutar(ent, arbol) {

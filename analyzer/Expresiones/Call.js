@@ -4,15 +4,21 @@ class Call {
     identificador;
     parametros;
 
+    hijos;
+    ast_name;
+    ast_id;
+
     constructor(identificador, parametros, linea, columna){
         this.linea = linea;
         this.columna = columna;
         this.identificador = identificador;
         this.parametros = parametros;
+        this.ast_id = 0
+        this.ast_name = 'Llamada()'
+        this.hijos = [{ast_name: identificador, ast_id: 0, hijos: []}].concat(parametros)
     }
     
     traducir(ent, arbol) {
-        throw new Error("Method not implemented.");
     }
 
     getTipo(ent, arbol) {

@@ -16,7 +16,7 @@ class PFOR{
     }
 
     traducir(ent, arbol) {
-        throw new Error("Method not implemented.");
+
     }
 
     ejecutar(ent, arbol) {

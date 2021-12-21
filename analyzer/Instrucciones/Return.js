@@ -2,15 +2,28 @@ class Return{
     linea;
     columna;
     expresion;
-                
+
+    hijos;
+    ast_name;
+    ast_id;
+
     constructor(expresion, linea, columna){
         this.linea = linea;
         this.columna = columna;
         this.expresion = expresion;
+        this.ast_id = 0
+        this.ast_name = 'Return'
+        if (expresion !== null){
+            this.hijos = [expresion]
+        }
+        else{
+            this.hijos = []
+        }
+        
     }
 
     traducir(ent, arbol) {
-        throw new Error("Method not implemented.");
+
     }
 
     ejecutar(ent, arbol) {

@@ -2,15 +2,23 @@ class AccesoStruct {
     linea;
     columna;
     identificador;
+    hijos;
+    ast_name;
+    ast_id;
 
     constructor(identificador, linea, columna){
         this.linea = linea;
         this.columna = columna;
         this.identificador = identificador;
+        this.ast_id = 0
+        this.ast_name = 'AccessStruct'
+        for(let id of identificador){
+            this.hijos.push({ast_name: id, ast_id: 0, hijos: []})
+            this.hijos.push({ast_name: '.', ast_id: 0, hijos: []})
+        }
     }
     
     traducir(ent, arbol) {
-        throw new Error("Method not implemented.");
     }
 
     getTipo(ent, arbol) {

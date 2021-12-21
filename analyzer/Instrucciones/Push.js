@@ -4,18 +4,26 @@ class Push{
     identificador;
     valor;
 
+    hijos;
+    ast_name;
+    ast_id;
+
     constructor(identificador, valor, linea, columna){
         this.linea = linea;
         this.columna = columna;
         this.identificador = identificador;
         this.valor = valor;
+        this.ast_id = 0
+        this.ast_name = 'Push()'
+        this.hijos = [{ast_name: identificador, ast_id: 0, hijos: []}, valor]
     }
     
     traducir(ent, arbol) {
-        throw new Error("Method not implemented.");
+
     }
 
     ejecutar(ent, arbol) {
+
         if(ent.existe(this.identificador)){
             var simbolo = ent.getSimbolo(this.identificador)
             if(typeof(simbolo.valor) === 'object'){
@@ -31,7 +39,7 @@ class Push{
                         amb: ent.identificador,
                         line: this.linea,
                         col: this.columna
-                      })
+                        })
                 }    
             }
             else{
@@ -41,7 +49,7 @@ class Push{
                     amb: ent.identificador,
                     line: this.linea,
                     col: this.columna
-                  })
+                    })
             } 
         }
         else{
@@ -51,7 +59,7 @@ class Push{
                 amb: ent.identificador,
                 line: this.linea,
                 col: this.columna
-              })
-        } 
+                })
+        }    
     }
 }

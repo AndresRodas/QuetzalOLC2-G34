@@ -4,6 +4,10 @@ class AsignacionArr{
     identificador;
     index;
     expresion;
+
+    hijos;
+    ast_name;
+    ast_id;
                 
     constructor(identificador, index, expresion, linea, columna){
         this.linea = linea;
@@ -11,11 +15,13 @@ class AsignacionArr{
         this.identificador = identificador;
         this.index = index;
         this.expresion = expresion;
-        
+        this.ast_id = 0
+        this.ast_name = 'AsigArray'
+        this.hijos = [{ast_name: identificador, ast_id: 0, hijos: []}, index, {ast_name: '=', ast_id: 0, hijos: []}, expresion]
     }
 
     traducir(ent, arbol) {
-        throw new Error("Method not implemented.");
+
     }
 
     ejecutar(ent, arbol) {

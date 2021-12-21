@@ -4,15 +4,22 @@ class PositionStr {
     exp1;
     exp2;
 
+    hijos;
+    ast_name;
+    ast_id;
+
     constructor(exp1, exp2, linea, columna){
         this.linea = linea;
         this.columna = columna;
         this.exp1 = exp1;
         this.exp2 = exp2;
+        this.ast_id = 0
+        this.ast_name = 'PositionStr()'
+        this.hijos = [exp1, exp2]
     }
     
     traducir(ent, arbol) {
-        throw new Error("Method not implemented.");
+
     }
 
     getTipo(ent, arbol) {

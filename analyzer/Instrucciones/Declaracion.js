@@ -4,6 +4,10 @@ class Declaracion{
     tipo;
     lista_id;
     expresion;
+
+    hijos;
+    ast_id;
+    ast_name;
                 
     constructor(tipo, lista_id, expresion, linea, columna){
         this.linea = linea;
@@ -11,11 +15,17 @@ class Declaracion{
         this.tipo = tipo;
         this.lista_id = lista_id;
         this.expresion = expresion;
-        
+        this.hijos = [{ast_name: tipo, ast_id: 0, hijos: []}]
+        for(let id of this.lista_id){
+            this.hijos.push({ast_name: id, ast_id: 0, hijos: []})
+        }
+        if(expresion != null) this.hijos.push(expresion)
+        this.ast_id = 0
+        this.ast_name = 'Declaracion'
     }
 
     traducir(ent, arbol) {
-        throw new Error("Method not implemented.");
+
     }
 
     ejecutar(ent, arbol) {

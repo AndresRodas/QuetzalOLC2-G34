@@ -5,16 +5,28 @@ class AccesoArr {
     exp1;
     exp2;
 
+    hijos;
+    ast_name;
+    ast_id;
+
     constructor(identificador, exp1, exp2, linea, columna){
         this.linea = linea;
         this.columna = columna;
         this.identificador = identificador;
         this.exp1 = exp1;
         this.exp2 = exp2;
+        this.hijos = [
+            {ast_name: identificador, ast_id: 0, hijos: []},
+            {ast_name: '[', ast_id: 0, hijos: []},
+        ]
+        this.hijos.push(exp1)
+        if (exp2 != null) this.hijos.push(exp2)
+        this.hijos.push({ast_name: ']', ast_id: 0, hijos: []})
+        this.ast_name = 'AccessArray'
+        this.ast_id = 0
     }
     
     traducir(ent, arbol) {
-        throw new Error("Method not implemented.");
     }
 
     getTipo(ent, arbol) {

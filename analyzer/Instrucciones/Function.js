@@ -5,6 +5,10 @@ class Function{
     identificador;
     parametros;
     acciones;
+
+    hijos;
+    ast_name;
+    ast_id;
                 
     constructor(tipo, identificador, parametros, acciones, linea, columna){
         this.linea = linea;
@@ -13,10 +17,16 @@ class Function{
         this.identificador = identificador
         this.parametros = parametros
         this.acciones = acciones
+        this.ast_id = 0
+        this.ast_name = 'Function'
+        this.hijos = [
+            {ast_name: tipo, ast_id: 0, hijos: []},
+            {ast_name: identificador, ast_id: 0, hijos: []}
+        ].concat(acciones)
     }
 
     traducir(ent, arbol) {
-        throw new Error("Method not implemented.");
+
     }
 
     ejecutar(ent, arbol) {

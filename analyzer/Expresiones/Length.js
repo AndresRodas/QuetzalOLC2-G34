@@ -3,15 +3,20 @@ class Length {
     columna;
     exp;
 
+    hijos;
+    ast_name;
+    ast_id;
+
     constructor(exp, linea, columna){
         this.linea = linea;
         this.columna = columna;
         this.exp = exp;
-    
+        this.ast_name = 'Length()'
+        this.ast_id = 0
+        this.hijos = [exp]
     }
     
     traducir(ent, arbol) {
-        throw new Error("Method not implemented.");
     }
 
     getTipo(ent, arbol) {

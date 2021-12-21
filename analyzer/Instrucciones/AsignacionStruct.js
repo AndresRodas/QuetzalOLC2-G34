@@ -3,17 +3,27 @@ class AsignacionStruct{
     columna;
     identificador;
     expresion;
+
+    hijos;
+    ast_name;
+    ast_id;
                 
     constructor(identificador, expresion, linea, columna){
         this.linea = linea;
         this.columna = columna;
         this.identificador = identificador;
         this.expresion = expresion;
-        
+        this.ast_id = 0
+        this.ast_name = 'AsigStruct'
+        this.hijos = []
+        for(let id of identificador){
+            this.hijos.push({ast_name: id, ast_id: 0, hijos: []})
+        }
+        this.hijos.push(expresion)
     }
 
     traducir(ent, arbol) {
-        throw new Error("Method not implemented.");
+
     }
 
     ejecutar(ent, arbol) {

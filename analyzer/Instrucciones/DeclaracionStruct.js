@@ -3,17 +3,23 @@ class DeclaracionStruct{
     columna;
     identificador;
     lista_atr;
+
+    hijos;
+    ast_name;
+    ast_id;
                 
     constructor(identificador, lista_atr, linea, columna){
         this.linea = linea;
         this.columna = columna;
         this.identificador = identificador;
         this.lista_atr = lista_atr;
-        
+        this.ast_id = 0
+        this.ast_name = 'DeclaraStruct'
+        this.hijos = [{ast_name: identificador, ast_id: 0, hijos: []}].concat(lista_atr)        
     }
 
     traducir(ent, arbol) {
-        throw new Error("Method not implemented.");
+
     }
 
     ejecutar(ent, arbol) {

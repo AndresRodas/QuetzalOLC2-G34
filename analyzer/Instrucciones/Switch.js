@@ -4,6 +4,10 @@ class Switch{
     expresion;
     lista_case;
     default_case;
+
+    hijos;
+    ast_name;
+    ast_id;
                 
     constructor(expresion, lista_case, default_case, linea, columna){
         this.linea = linea;
@@ -11,10 +15,13 @@ class Switch{
         this.expresion = expresion;
         this.lista_case = lista_case;
         this.default_case = default_case;
+        this.ast_id = 0
+        this.ast_name = 'Switch'
+        this.hijos = [expresion].concat(lista_case)
     }
 
     traducir(ent, arbol) {
-        throw new Error("Method not implemented.");
+
     }
 
     ejecutar(ent, arbol) {

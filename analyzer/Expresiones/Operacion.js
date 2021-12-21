@@ -4,26 +4,100 @@ class Operacion {
     op_izquierda;
     op_derecha;
     operador;
-
     tmp;
     c3d;
     lv;
     lf;
 
-    constructor(op_izquierda,op_derecha, operacion, linea, columna){
+    hijos;
+    ast_id;
+    ast_name;
 
+    constructor(op_izquierda,op_derecha, operacion, linea, columna){
         this.linea = linea;
         this.columna = columna;
         this.op_izquierda = op_izquierda;
         this.op_derecha = op_derecha;
         this.operador = operacion;
-
-        this.tmp = ''
-        this.c3d = ''
-        this.lv = ''
-        this.lf = ''
+        this.hijos = [op_izquierda, {ast_name: operacion, ast_id: 0, hijos: []}, op_derecha]
+        this.ast_id = 0
+        this.ast_name = 'Operacion'
     }
-    traducir(tmp, c3d, lv, lf) {
+    
+    traducir(ent, arbol) {
+
+        this.op_izquierda.traducir(ent, arbol)
+        this.op_derecha.traducir(ent, arbol)
+        var op1 = this.op_izquierda, op2 = this.op_derecha;
+        var tmp = '', c3d = '', lv = '', lf = '';
+
+        if (this.operador == 'SUMA'){
+            tmp = new_temp()
+            c3d = op1.c3d + op2.c3d + tmp +'='+ op1.tmp +'+'+ op2.tmp +';\n'
+        }
+        else if(this.operador == 'RESTA'){
+            tmp = new_temp()
+            c3d = op1.c3d + op2.c3d + tmp +'='+ op1.tmp +'-'+ op2.tmp +';\n'
+        }
+        else if(this.operador == 'MULTIPLICACION'){
+            tmp = new_temp()
+            c3d = op1.c3d + op2.c3d + tmp +'='+ op1.tmp +'*'+ op2.tmp +';\n'
+        }
+        else if(this.operador == 'DIVISION'){
+            tmp = new_temp()
+            c3d = op1.c3d + op2.c3d + tmp +'='+ op1.tmp +'/'+ op2.tmp +';\n'
+        }
+        else if(this.operador == 'AND'){
+            c3d = op1.c3d + op1.lv + ':\n' + op2.c3d
+            lv = op2.lv
+            lf = op1.lf + ',' + op2.lf
+        }   
+        else if(this.operador == 'OR'){
+            c3d = op1.c3d + op1.lf + ':\n' + op2.c3d
+            lv = op1.lv + ',' + op2.lv
+            lf = op2.lf
+        } 
+        else if(this.operador == 'IGUAL_IGUAL'){
+            lv = new_label() 
+            lf = new_label()
+            c3d = op1.c3d + op2.c3d + 'if '+op1.tmp + '==' + op2.tmp + ' goto '+ lv + '\n' + 'goto '+ lf +'\n'
+        } 
+        else if(this.operador == 'DIFERENTE_QUE'){
+            lv = new_label() 
+            lf = new_label()
+            c3d = op1.c3d + op2.c3d + 'if '+op1.tmp + '!=' + op2.tmp + ' goto '+ lv + '\n' + 'goto '+ lf +'\n'
+        }
+        else if(this.operador == 'MAYOR_IGUA_QUE'){
+            lv = new_label()
+            lf = new_label()
+            c3d = op1.c3d + op2.c3d + 'if ' + op1.tmp+ '>=' + op2.tmp + ' goto '+ lv +'\n' + 'goto '+ lf + '\n'
+        }
+        else if(this.operador == 'MAYOR_QUE'){                                
+            lv = new_label()
+            lf = new_label()
+            c3d = op1.c3d + op2.c3d + 'if ' + op1.tmp+ '>' + op2.tmp + ' goto '+ lv +'\n' + 'goto '+ lf + '\n' 
+        }
+        else if(this.operador == 'MENOR_IGUA_QUE'){                                 
+            lv = new_label()
+            lf = new_label()
+            c3d = op1.c3d + op2.c3d + 'if ' + op1.tmp+ '<=' + op2.tmp + ' goto '+ lv +'\n' + 'goto '+ lf + '\n' 
+        }
+        else if(this.operador == 'MENOR_QUE'){       
+            lv = new_label()
+            lf = new_label()
+            c3d = op1.c3d + op2.c3d + 'if ' + op1.tmp+ '<' + op2.tmp + ' goto '+ lv +'\n' + 'goto '+ lf + '\n'   
+        }
+        else if(this.operador == 'MENOS_UNARIO'){       
+            tmp = new_temp()
+            c3d = op1.c3d + tmp +'= 0 -'+ op1.tmp + ';\n'   
+        }
+        else if(this.operador == 'NOT'){       
+            tmp = op1.tmp
+            c3d = op1.c3d
+            lv = op1.lf 
+            lf = op1.lv   
+        }
+
         this.tmp = tmp
         this.c3d = c3d
         this.lv = lv

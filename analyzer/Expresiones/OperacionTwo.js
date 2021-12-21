@@ -12,7 +12,6 @@ class OperacionTwo {
         this.operador = operador;
     }
     traducir(ent, arbol) {
-        throw new Error("Method not implemented.");
     }
     
     ejecutar(ent,arbol){

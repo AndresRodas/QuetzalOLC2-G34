@@ -5,6 +5,10 @@ class DecVarStruct{
     identificador;
     id_struct2;
     lista_exp;
+
+    hijos;
+    ast_name;
+    ast_id;
                 
     constructor( id_struct1, identificador, id_struct2, lista_exp, linea, columna){
         this.linea = linea;
@@ -13,10 +17,17 @@ class DecVarStruct{
         this.identificador = identificador;
         this.id_struct2 = id_struct2;
         this.lista_exp = lista_exp;
+        this.ast_id = 0
+        this.ast_name = 'VarStruct'
+        this.hijos = [
+            {ast_name: id_struct1, ast_id: 0, hijos: []},
+            {ast_name: identificador, ast_id: 0, hijos: []},
+            {ast_name: '=', ast_id: 0, hijos: []},
+            {ast_name: id_struct2, ast_id: 0, hijos: []}].concat(lista_exp)
     }
 
     traducir(ent, arbol) {
-        throw new Error("Method not implemented.");
+
     }
 
     ejecutar(ent, arbol) {

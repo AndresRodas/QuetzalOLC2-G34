@@ -4,6 +4,10 @@ class Case{
     expresion;
     acciones;
     break_flag;
+
+    hijos;
+    ast_name;
+    ast_id;
                 
     constructor(expresion, acciones, break_flag, linea, columna){
         this.linea = linea;
@@ -11,14 +15,17 @@ class Case{
         this.expresion = expresion;
         this.acciones = acciones;
         this.break_flag = break_flag;
+        this.ast_id = 0
+        this.ast_name = 'Case'
+        this.hijos = [expresion].concat(acciones)
     }
 
     traducir(ent, arbol) {
-        throw new Error("Method not implemented.");
+
     }
 
     ejecutar(ent, arbol) {
-        throw new Error("Method not implemented.");
+
     }
 
 }

@@ -3,16 +3,29 @@ class Elseif{
     columna;
     expresion;
     acciones;
+
+    hijos;
+    ast_name;
+    ast_id;
                 
     constructor(expresion, acciones, linea, columna){
         this.linea = linea;
         this.columna = columna;
         this.expresion = expresion;
         this.acciones = acciones;
+        this.ast_id = 0
+        this.ast_name = 'ElseIf'
+        this.hijos = [
+            {ast_name: 'Else If', ast_id: 0, hijos: []},
+            expresion,
+            {ast_name: '{', ast_id: 0, hijos: []}
+        ]
+        this.hijos.concat(acciones)
+        this.hijos.push({ast_name: '}', ast_id: 0, hijos: []})
     }
 
     traducir(ent, arbol) {
-        throw new Error("Method not implemented.");
+
     }
 
     ejecutar(ent, arbol) {

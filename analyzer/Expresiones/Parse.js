@@ -4,15 +4,22 @@ class Parse {
     tipo;
     cadena;
 
+    hijos;
+    ast_name;
+    ast_id;
+
     constructor(tipo, cadena, linea, columna){
         this.linea = linea;
         this.columna = columna;
         this.tipo = tipo;
         this.cadena = cadena;
+        this.ast_id = 0
+        this.ast_name = 'Parse()'
+        this.hijos = [{ast_id: 0, ast_name: tipo, hijos: []}].concat(cadena)
     }
     
     traducir(ent, arbol) {
-        throw new Error("Method not implemented.");
+
     }
 
     getTipo(ent, arbol) {

@@ -5,6 +5,10 @@ class If{
     acciones;
     else_if;
     else_ins;
+
+    hijos;
+    ast_name;
+    ast_id;
                 
     constructor(expresion, acciones, else_if, else_ins, linea, columna){
         this.linea = linea;
@@ -13,10 +17,21 @@ class If{
         this.acciones = acciones;
         this.else_if = else_if;
         this.else_ins = else_ins;
+        this.ast_id = 0
+        this.ast_name = 'If'
+        this.hijos = [
+            {ast_name: 'If', ast_id: 0, hijos: []},
+            expresion,
+            {ast_name: '{', ast_id: 0, hijos: []}
+        ]
+        this.hijos.concat(acciones)
+        this.hijos.push({ast_name: '}', ast_id: 0, hijos: []})
+        if (else_if != null) this.hijos.concat(else_if)
+        if (else_ins != null) this.hijos.push(else_ins)
     }
 
     traducir(ent, arbol) {
-        throw new Error("Method not implemented.");
+
     }
 
     ejecutar(ent, arbol) {

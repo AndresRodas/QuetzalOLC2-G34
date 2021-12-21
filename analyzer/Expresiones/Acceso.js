@@ -3,14 +3,21 @@ class Acceso {
     columna;
     identificador;
 
+    hijos;
+    ast_id;
+    ast_name;
+
     constructor(identificador, linea, columna){
         this.linea = linea;
         this.columna = columna;
         this.identificador = identificador;
+        this.hijos = [{ast_name: identificador, ast_id: 0, hijos: []}]
+        this.ast_id = 0
+        this.ast_name = 'Acceso'
     }
     
     traducir(ent, arbol) {
-        throw new Error("Method not implemented.");
+        
     }
 
     getTipo(ent, arbol) {
@@ -36,12 +43,12 @@ class Acceso {
         }
         else if(valor === null){
             return 'NULL';
-        }
-            
+        }    
         return 'VOID';
     }
 
     getValorImplicito(ent, arbol) {
+
         if (ent.existe(this.identificador)) {
             var simbolo = ent.getSimbolo(this.identificador)
             if(Entorno.prototype.isPrototypeOf(simbolo.valor)){

@@ -3,17 +3,23 @@ class Asignacion{
     columna;
     identificador;
     expresion;
+
+    hijos;
+    ast_id;
+    ast_name;
                 
     constructor(identificador, expresion, linea, columna){
         this.linea = linea;
         this.columna = columna;
         this.identificador = identificador;
         this.expresion = expresion;
-        
+        this.hijos = [{ast_name: identificador, ast_id: 0, hijos: []}, expresion]
+        this.ast_id = 0;
+        this.ast_name = 'Asignacion'
     }
 
     traducir(ent, arbol) {
-        throw new Error("Method not implemented.");
+
     }
 
     ejecutar(ent, arbol) {

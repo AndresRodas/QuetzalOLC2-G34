@@ -4,6 +4,10 @@ class DeclaracionArr{
     tipo;
     identificador;
     expresiones;
+
+    hijos;
+    ast_name;
+    ast_id;
                 
     constructor(tipo, identificador, expresiones, linea, columna){
         this.linea = linea;
@@ -11,11 +15,14 @@ class DeclaracionArr{
         this.tipo = tipo;
         this.identificador = identificador;
         this.expresiones = expresiones;
+        this.ast_id = 0
+        this.ast_name = 'DeclaraArray'
+        this.hijos = [{ast_name: tipo, ast_id: 0, hijos: []}, {ast_name: identificador, ast_id: 0, hijos: []}].concat(expresiones)
         
     }
 
     traducir(ent, arbol) {
-        throw new Error("Method not implemented.");
+
     }
 
     ejecutar(ent, arbol) {

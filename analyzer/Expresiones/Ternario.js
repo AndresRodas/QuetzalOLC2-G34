@@ -5,16 +5,23 @@ class Ternario {
     exp_false;
     expresion;
 
+    hijos;
+    ast_name;
+    ast_id;
+
     constructor(expresion, exp_true, exp_false, linea, columna){
         this.linea = linea;
         this.columna = columna;
         this.exp_true = exp_true;
         this.exp_false = exp_false;
         this.expresion = expresion;
+        this.ast_id = 0
+        this.ast_name = 'Ternario'
+        this.hijos = [expresion, exp_true, exp_false]
     }
 
     traducir(ent, arbol) {
-        throw new Error("Method not implemented.");
+
     }
 
     getTipo(ent, arbol) {

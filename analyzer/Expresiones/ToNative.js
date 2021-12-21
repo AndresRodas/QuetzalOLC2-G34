@@ -4,15 +4,23 @@ class ToNative {
     func;
     exp;
 
+    hijos;
+    ast_name;
+    ast_id;
+
+
     constructor(func, exp, linea, columna){
         this.linea = linea;
         this.columna = columna;
         this.func = func;
         this.exp = exp;
+        this.ast_id = 0
+        this.ast_name = 'Native()'
+        this.hijos = [{ast_id: 0, ast_name: func, hijos: [] }, exp]
     }
     
     traducir(ent, arbol) {
-        throw new Error("Method not implemented.");
+
     }
 
     getTipo(ent, arbol) {

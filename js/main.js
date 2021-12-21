@@ -1,10 +1,21 @@
 
 let errorTableXml, symbolTableXml;
 let errorTableXpath, tokenTableXpath;
-let QuetzalEditor, xpathEditor, consoleResult, grammarReport;
+let QuetzalEditor, c3dResult, consoleResult;
 
-let dotStringCst = "", dotStringAst = '', count_temp = 0;
+let dotStringAst = { dot: '' }
 
+//metodos codigo tres direcciones
+var cont_t = 0, cont_l = 0, heap = 0, stack = 0, id_n = 0, cadena = '';
+
+function new_temp(){
+        cont_t += 1
+        return 't'+String(cont_t)
+}
+function new_label(){
+        cont_l += 1
+        return 'L'+String(cont_l)
+}
 
 $(document).ready(function () {
 
@@ -19,7 +30,7 @@ $(document).ready(function () {
 
   QuetzalEditor = editor('xml__editor');
   consoleResult = consola('console__result');
-  c3dResult = consola('c3d__result')
+  c3dResult = consola('c3d__result');
 });
 
 /**
@@ -128,9 +139,8 @@ const cleanEditor = (editor) => {
  * ANALIZADOR QUETZAL
  */
 const AnalyzeQtzl = () => {
-  console.log('Analizador Ascendente')
+
   var texto = QuetzalEditor.getValue();
-  console.log(texto)
 
   //creacion del arbol
   var Ast = grammar.parse(texto);
@@ -138,18 +148,36 @@ const AnalyzeQtzl = () => {
   //creacion entorno global
   var entorno = new Entorno(null, 'GLOBAL')
 
-  //ejecutando intrucciones
-  Ast.instrucciones.forEach(element => {
+  try {
+    //ejecutando intrucciones
+    Ast.instrucciones.forEach(element => {
     element.ejecutar(entorno, Ast)
-  })
-  //ejecutando main
-  Ast.main.ejecutar(entorno, Ast)
-  
-  
-  console.log(Ast)
+    })
+    //ejecutando main
+    Ast.main.ejecutar(entorno, Ast)
+  } catch (error) {
+    console.log('error')
+  }
+
+  //generando C3D
+  Ast.setHeaders()
+  Ast.OrdenarC3D()
 
   //imprimiendo consola
   consoleResult.setValue(Ast.getPrints())
+
+  //imprimiendo c3d
+  c3dResult.setValue(Ast.getC3D())
+
+  console.log(Ast)
+
+  //dibujando grafo
+  cadena = 'digraph G {\n'
+  DrawAst(Ast)
+  cadena += '}'
+  console.log(cadena)
+
+  dotStringAst.dot = cadena
 
  //cargando datos a tabla de simbolos
   symbolTableXml.destroy();
@@ -163,18 +191,21 @@ const AnalyzeQtzl = () => {
     [{ data: "err" }, { data: "type" }, { data: "amb" }, { data: "line" }, { data: "col" }],
     Ast.getErrors());
 
+    //Ast.Clean();
 }
-
-/**
- * TRADUCTOR QUETZAL
- */
-const TranslateQtzl = () => {
-  console.log('Codigo de 3 direcciones')
-
+//GRAFICAR AST 
+function DrawAst(nodo){
+  console.log(nodo)
+  if(nodo.ast_id === 0){
+    nodo.ast_id = id_n
+    id_n++
+  }
+  cadena += nodo.ast_id+'[label="'+nodo.ast_name+'"];\n'
+  nodo.hijos.forEach( element => {
+    cadena += nodo.ast_id+'->'+id_n+';\n'
+    DrawAst(element, cadena)
+  })
 }
-
-
-
 
 /**
  *  Reinitialize data table
@@ -210,11 +241,9 @@ const btnOpenXml = document.getElementById('btn__open__xml'),
   btnRun = document.getElementById('btn_run'),
   btnC3d = document.getElementById('btn_c3d')
 
-btnOpenXml.addEventListener('click', () => openFile(xmlEditor));
-btnSaveXml.addEventListener('click', () => saveFile("database", "xml", xmlEditor));
-btnCleanXml.addEventListener('click', () => cleanEditor(xmlEditor));
-btnShowCst.addEventListener('click', () => localStorage.setItem("dot", dotStringCst));
+btnOpenXml.addEventListener('click', () => openFile(QuetzalEditor));
+btnSaveXml.addEventListener('click', () => saveFile("database", "xml", QuetzalEditor));
+btnCleanXml.addEventListener('click', () => cleanEditor(QuetzalEditor));
+btnShowCst.addEventListener('click', () => localStorage.setItem("dot", JSON.stringify(dotStringAst)));
 
-btnShowAst.addEventListener('click', () => localStorage.setItem("dot", dotStringAst));
 btnRun.addEventListener('click', () => AnalyzeQtzl());
-btnC3d.addEventListener('click', () => TranslateQtzl());
