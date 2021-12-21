@@ -84,9 +84,10 @@ performAction: function anonymous(yytext, yyleng, yylineno, yy, yystate /* actio
 var $0 = $$.length - 1;
 switch (yystate) {
 case 1:
- 
+       
+                        grammar.push('BEGIN -> CODE EOF')
                         //creacion ast
-                        var Ast = new AST($$[$0-1].main, $$[$0-1].global)
+                        var Ast = new AST($$[$0-1].main, $$[$0-1].global, grammar.reverse())
                         //seteo de variables
                         cont_t = 0, cont_l = 0, heap = 0, stack = 0;
                         //errores
@@ -97,16 +98,16 @@ case 1:
                 
 break;
 case 2:
- this.$ = { global: $$[$0-2].concat($$[$0]), main: $$[$0-1] } 
+ this.$ = { global: $$[$0-2].concat($$[$0]), main: $$[$0-1] }; grammar.push('CODE -> GLOBAL MAIN GLOBAL') 
 break;
 case 3:
- this.$ = { global: $$[$0-1], main: $$[$0] } 
+ this.$ = { global: $$[$0-1], main: $$[$0] }; grammar.push('CODE -> GLOBAL MAIN') 
 break;
 case 4:
- this.$ = { global: $$[$0], main: $$[$0-1] } 
+ this.$ = { global: $$[$0], main: $$[$0-1] }; grammar.push('CODE -> MAIN GLOBAL') 
 break;
 case 5:
- this.$ = { global: [], main: $$[$0] } 
+ this.$ = { global: [], main: $$[$0] }; grammar.push('CODE -> MAIN') 
 break;
 case 6:
  errors.push({
@@ -118,331 +119,501 @@ case 6:
                                                 })
                                         
 break;
-case 7: case 8: case 62:
- $$[$0-1].push($$[$0]); this.$ = $$[$0-1] 
+case 7:
+ $$[$0-1].push($$[$0]); this.$ = $$[$0-1]; grammar.push('GLOBAL -> GLOBAL DECLARACION') 
 break;
-case 9: case 10: case 13: case 64: case 67: case 83: case 161:
- this.$ = [$$[$0]] 
+case 8:
+ $$[$0-1].push($$[$0]); this.$ = $$[$0-1]; grammar.push('GLOBAL -> GLOBAL FUNCION') 
+break;
+case 9:
+ this.$ = [$$[$0]]; grammar.push('GLOBAL -> DECLARACION') 
+break;
+case 10:
+ this.$ = [$$[$0]]; grammar.push('GLOBAL -> FUNCION') 
 break;
 case 11:
- this.$ = new Main($$[$0-1], _$[$0-6].first_line, _$[$0-6].first_column) 
+ 
+                                                                this.$ = new Main($$[$0-1], _$[$0-6].first_line, _$[$0-6].first_column); 
+                                                                grammar.push('MAIN -> Tvoid Rmain p_abre p_cierra l_abre ACCIONES l_cierra');
+                                                                
 break;
 case 12:
- $$[$0-1].push($$[$0]); this.$ = $$[$0-1]; 
+ $$[$0-1].push($$[$0]); this.$ = $$[$0-1]; grammar.push('ACCIONES -> ACCIONES ACCION');
 break;
-case 14: case 15: case 16: case 17: case 18: case 19: case 20: case 21: case 22: case 23: case 24: case 26: case 27: case 54: case 56: case 79: case 80: case 93: case 94: case 95: case 96: case 97: case 98: case 99: case 100: case 101: case 102: case 103: case 104: case 105: case 106: case 130: case 131: case 145:
- this.$ = $$[$0] 
+case 13:
+ this.$ = [$$[$0]]; grammar.push('ACCIONES -> ACCION'); 
 break;
-case 25: case 46:
- this.$ = $$[$0-1] 
+case 14:
+ this.$ = $$[$0]; grammar.push('ACCION -> INSTRUCCION'); 
+break;
+case 15:
+ this.$ = $$[$0]; grammar.push('EXPRESION -> OPERACION'); 
+break;
+case 16:
+ this.$ = $$[$0]; grammar.push('EXPRESION -> PRIMITIVA'); 
+break;
+case 17:
+ this.$ = $$[$0]; grammar.push('INSTRUCCION -> IMPRESION'); 
+break;
+case 18:
+ this.$ = $$[$0]; grammar.push('INSTRUCCION -> PRE_DECLARACION'); 
+break;
+case 19:
+ this.$ = $$[$0]; grammar.push('INSTRUCCION -> CONDICION'); 
+break;
+case 20:
+ this.$ = $$[$0]; grammar.push('INSTRUCCION -> CICLO'); 
+break;
+case 21:
+ this.$ = $$[$0]; grammar.push('INSTRUCCION -> TO_CONTINUE'); 
+break;
+case 22:
+ this.$ = $$[$0]; grammar.push('INSTRUCCION -> INC_DECRE_INSTR'); 
+break;
+case 23:
+ this.$ = $$[$0]; grammar.push('INSTRUCCION -> RETURN'); 
+break;
+case 24:
+ this.$ = $$[$0]; grammar.push('INSTRUCCION -> PUSH'); 
+break;
+case 25:
+ this.$ = $$[$0-1]; grammar.push('INSTRUCCION -> POP pyc'); 
+break;
+case 26:
+ this.$ = $$[$0]; grammar.push('PRE_DECLARACION -> DECLARACION'); 
+break;
+case 27:
+ this.$ = $$[$0]; grammar.push('PRE_DECLARACION -> ASIGNACION'); 
 break;
 case 28:
- this.$ = new Operacion($$[$0-2],$$[$0],'SUMA', _$[$0-2].first_line, _$[$0-2].first_column);
+ this.$ = new Operacion($$[$0-2],$$[$0],'SUMA', _$[$0-2].first_line, _$[$0-2].first_column); grammar.push('OPERACION -> EXPRESION mas EXPRESION');
 break;
 case 29:
- this.$ = new Operacion($$[$0-2],$$[$0],'RESTA', _$[$0-2].first_line, _$[$0-2].first_column); 
+ this.$ = new Operacion($$[$0-2],$$[$0],'RESTA', _$[$0-2].first_line, _$[$0-2].first_column); grammar.push('OPERACION -> EXPRESION menos EXPRESION');
 break;
 case 30:
- this.$ = new Operacion($$[$0-2],$$[$0],'MULTIPLICACION', _$[$0-2].first_line, _$[$0-2].first_column); 
+ this.$ = new Operacion($$[$0-2],$$[$0],'MULTIPLICACION', _$[$0-2].first_line, _$[$0-2].first_column); grammar.push('OPERACION -> EXPRESION por EXPRESION');
 break;
 case 31:
- this.$ = new Operacion($$[$0-2],$$[$0],'DIVISION', _$[$0-2].first_line, _$[$0-2].first_column);
+ this.$ = new Operacion($$[$0-2],$$[$0],'DIVISION', _$[$0-2].first_line, _$[$0-2].first_column); grammar.push('OPERACION -> EXPRESION div EXPRESION');
 break;
 case 32:
- this.$ = new Operacion($$[$0-2],$$[$0],'MODULO', _$[$0-2].first_line, _$[$0-2].first_column);
+ this.$ = new Operacion($$[$0-2],$$[$0],'MODULO', _$[$0-2].first_line, _$[$0-2].first_column);grammar.push('OPERACION -> EXPRESION mod EXPRESION');
 break;
 case 33:
- this.$ = new Operacion($$[$0-2],$$[$0],'AND', _$[$0-2].first_line, _$[$0-2].first_column);
+ this.$ = new Operacion($$[$0-2],$$[$0],'AND', _$[$0-2].first_line, _$[$0-2].first_column); grammar.push('OPERACION -> EXPRESION land EXPRESION');
 break;
 case 34:
- this.$ = new Operacion($$[$0-2],$$[$0],'OR', _$[$0-2].first_line, _$[$0-2].first_column); 
+ this.$ = new Operacion($$[$0-2],$$[$0],'OR', _$[$0-2].first_line, _$[$0-2].first_column); grammar.push('OPERACION -> EXPRESION lor EXPRESION');
 break;
 case 35:
- this.$ = new Operacion($$[$0-2],$$[$0],'IGUAL_IGUAL', _$[$0-2].first_line, _$[$0-2].first_column); 
+ this.$ = new Operacion($$[$0-2],$$[$0],'IGUAL_IGUAL', _$[$0-2].first_line, _$[$0-2].first_column); grammar.push('OPERACION -> EXPRESION igual EXPRESION');
 break;
 case 36:
- this.$ = new Operacion($$[$0-2],$$[$0],'DIFERENTE_QUE', _$[$0-2].first_line, _$[$0-2].first_column) 
+ this.$ = new Operacion($$[$0-2],$$[$0],'DIFERENTE_QUE', _$[$0-2].first_line, _$[$0-2].first_column); grammar.push('OPERACION -> EXPRESION dif EXPRESION');
 break;
 case 37:
- this.$ = new Operacion($$[$0-2],$$[$0],'MAYOR_IGUA_QUE', _$[$0-2].first_line, _$[$0-2].first_column); 
+ this.$ = new Operacion($$[$0-2],$$[$0],'MAYOR_IGUA_QUE', _$[$0-2].first_line, _$[$0-2].first_column); grammar.push('OPERACION -> EXPRESION may_ig EXPRESION');
 break;
 case 38:
- this.$ = new Operacion($$[$0-2],$$[$0],'MAYOR_QUE', _$[$0-2].first_line, _$[$0-2].first_column);
+ this.$ = new Operacion($$[$0-2],$$[$0],'MAYOR_QUE', _$[$0-2].first_line, _$[$0-2].first_column); grammar.push('OPERACION -> EXPRESION may_que EXPRESION');
 break;
 case 39:
- this.$ = new Operacion($$[$0-2],$$[$0],'MENOR_IGUA_QUE', _$[$0-2].first_line, _$[$0-2].first_column);
+ this.$ = new Operacion($$[$0-2],$$[$0],'MENOR_IGUA_QUE', _$[$0-2].first_line, _$[$0-2].first_column); grammar.push('OPERACION -> EXPRESION men_ig EXPRESION');
 break;
 case 40:
- this.$ = new Operacion($$[$0-2],$$[$0],'MENOR_QUE', _$[$0-2].first_line, _$[$0-2].first_column);
+ this.$ = new Operacion($$[$0-2],$$[$0],'MENOR_QUE', _$[$0-2].first_line, _$[$0-2].first_column);grammar.push('OPERACION -> EXPRESION men_que EXPRESION');
 break;
 case 41:
- this.$ = new Operacion($$[$0-2],$$[$0],'CONCAT', _$[$0-2].first_line, _$[$0-2].first_column);
+ this.$ = new Operacion($$[$0-2],$$[$0],'CONCAT', _$[$0-2].first_line, _$[$0-2].first_column);grammar.push('OPERACION -> EXPRESION concat EXPRESION');
 break;
 case 42:
- this.$ = new Operacion($$[$0-2],$$[$0],'REPET', _$[$0-2].first_line, _$[$0-2].first_column); 
+ this.$ = new Operacion($$[$0-2],$$[$0],'REPET', _$[$0-2].first_line, _$[$0-2].first_column); grammar.push('OPERACION -> EXPRESION repeat EXPRESION');
 break;
 case 43:
- this.$ = new Operacion($$[$0],$$[$0],'MENOS_UNARIO', _$[$0-1].first_line, _$[$0-1].first_column);
+ this.$ = new Operacion($$[$0],$$[$0],'MENOS_UNARIO', _$[$0-1].first_line, _$[$0-1].first_column);grammar.push('OPERACION -> menos EXPRESION');
 break;
 case 44:
- this.$ = new Operacion($$[$0],$$[$0],'NOT', _$[$0-1].first_line, _$[$0-1].first_column);
+ this.$ = new Operacion($$[$0],$$[$0],'NOT', _$[$0-1].first_line, _$[$0-1].first_column); grammar.push('OPERACION -> lnot EXPRESION');
 break;
 case 45:
- this.$ = new Ternario($$[$0-4], $$[$0-2], $$[$0], _$[$0-4].first_line, _$[$0-4].first_column); 
+ this.$ = new Ternario($$[$0-4], $$[$0-2], $$[$0], _$[$0-4].first_line, _$[$0-4].first_column); grammar.push('OPERACION -> EXPRESION quest EXPRESION d_puntos EXPRESION');
+break;
+case 46:
+ this.$ = $$[$0-1]; grammar.push('OPERACION -> p_abre EXPRESION p_cierra'); 
 break;
 case 47:
- this.$ = new Primitivo(Number($$[$0]), _$[$0].first_line, _$[$0].first_column); 
+ this.$ = new Primitivo(Number($$[$0]), _$[$0].first_line, _$[$0].first_column); grammar.push('PRIMITIVA -> num'); 
 break;
 case 48:
- this.$ = new Primitivo($$[$0].split("\"")[1], _$[$0].first_line, _$[$0].first_column);
+ this.$ = new Primitivo($$[$0].split("\"")[1], _$[$0].first_line, _$[$0].first_column); grammar.push('PRIMITIVA -> StringLiteral');
 break;
 case 49:
- this.$ = new Primitivo($$[$0].split("\'")[1], _$[$0].first_line, _$[$0].first_column); 
+ this.$ = new Primitivo($$[$0].split("\'")[1], _$[$0].first_line, _$[$0].first_column); grammar.push('PRIMITIVA -> CharLiteral');
 break;
 case 50:
- this.$ = new Primitivo(null, _$[$0].first_line, _$[$0].first_column);
+ this.$ = new Primitivo(null, _$[$0].first_line, _$[$0].first_column); grammar.push('PRIMITIVA -> Tnull');
 break;
 case 51:
- this.$ = new Primitivo(true, _$[$0].first_line, _$[$0].first_column);
+ this.$ = new Primitivo(true, _$[$0].first_line, _$[$0].first_column); grammar.push('PRIMITIVA -> Rtrue');
 break;
 case 52:
- this.$ = new Primitivo(false, _$[$0].first_line, _$[$0].first_column);
+ this.$ = new Primitivo(false, _$[$0].first_line, _$[$0].first_column); grammar.push('PRIMITIVA -> Rfalse');
 break;
 case 53:
- this.$ = new Acceso($$[$0], _$[$0].first_line, _$[$0].first_column); 
+ this.$ = new Acceso($$[$0], _$[$0].first_line, _$[$0].first_column); grammar.push('PRIMITIVA -> id');
+break;
+case 54:
+ this.$ = $$[$0]; grammar.push('PRIMITIVA -> CALL'); 
 break;
 case 55:
 
                                         $$[$0-1].push($$[$0])
-                                        this.$ = new AccesoStruct($$[$0-1], _$[$0-1].first_line, _$[$0-1].first_column);
+                                        this.$ = new AccesoStruct($$[$0-1], _$[$0-1].first_line, _$[$0-1].first_column); 
+                                        grammar.push('PRIMITIVA -> ACCESO_ID id');
                                         
 break;
+case 56:
+ this.$ = $$[$0]; grammar.push('PRIMITIVA -> ACCESO_ARR'); 
+break;
 case 57:
- this.$ = new Declaracion($$[$0-4], $$[$0-3], $$[$0-1], _$[$0-4].first_line, _$[$0-4].first_column) 
+ this.$ = new Declaracion($$[$0-4], $$[$0-3], $$[$0-1], _$[$0-4].first_line, _$[$0-4].first_column); grammar.push('DECLARACION -> TIPO LISTA_ID eq EXPRESION pyc'); 
 break;
 case 58:
- this.$ = new Declaracion($$[$0-2], $$[$0-1], null, _$[$0-2].first_line, _$[$0-2].first_column) 
+ this.$ = new Declaracion($$[$0-2], $$[$0-1], null, _$[$0-2].first_line, _$[$0-2].first_column); grammar.push('DECLARACION -> TIPO LISTA_ID pyc'); 
 break;
 case 59:
- this.$ = new DeclaracionStruct($$[$0-4], $$[$0-2], _$[$0-5].first_line, _$[$0-5].first_column) 
+ this.$ = new DeclaracionStruct($$[$0-4], $$[$0-2], _$[$0-5].first_line, _$[$0-5].first_column); grammar.push('DECLARACION -> Tstruct id l_abre LISTA_ATR l_cierra pyc'); 
 break;
 case 60:
- this.$ = new DecVarStruct($$[$0-7], $$[$0-6], $$[$0-4], $$[$0-2], _$[$0-7].first_line, _$[$0-7].first_column) 
+ this.$ = new DecVarStruct($$[$0-7], $$[$0-6], $$[$0-4], $$[$0-2], _$[$0-7].first_line, _$[$0-7].first_column); grammar.push('DECLARACION -> id id eq id p_abre LISTA_EXP p_cierra pyc'); 
 break;
 case 61:
- this.$ = new DeclaracionArr($$[$0-8], $$[$0-5], $$[$0-2], _$[$0-8].first_line, _$[$0-8].first_column) 
+ this.$ = new DeclaracionArr($$[$0-8], $$[$0-5], $$[$0-2], _$[$0-8].first_line, _$[$0-8].first_column); grammar.push('DECLARACION -> TIPO c_abre c_cierra id eq c_abre LISTA_EXP c_cierra pyc'); 
+break;
+case 62:
+ $$[$0-1].push($$[$0]); this.$ = $$[$0-1]; grammar.push('LISTA_ATR -> LISTA_ATR DECLARACION '); 
 break;
 case 63:
- $$[$0-3].push(new Declaracion($$[$0-2], [$$[$0-1]], null, _$[$0-3].first_line, _$[$0-3].first_column)); this.$ = $$[$0-3] 
+ $$[$0-3].push(new Declaracion($$[$0-2], [$$[$0-1]], null, _$[$0-3].first_line, _$[$0-3].first_column)); this.$ = $$[$0-3]; grammar.push('LISTA_ATR -> LISTA_ATR id id pyc'); 
+break;
+case 64:
+ this.$ = [$$[$0]]; grammar.push('LISTA_ATR -> DECLARACION'); 
 break;
 case 65:
- this.$ = [new Declaracion($$[$0-2], [$$[$0-1]], null, _$[$0-2].first_line, _$[$0-2].first_column)] 
+ this.$ = [new Declaracion($$[$0-2], [$$[$0-1]], null, _$[$0-2].first_line, _$[$0-2].first_column)]; grammar.push('LISTA_ATR -> id id pyc'); 
 break;
-case 66: case 82: case 160:
- $$[$0-2].push($$[$0]); this.$ = $$[$0-2] 
+case 66:
+ $$[$0-2].push($$[$0]); this.$ = $$[$0-2]; grammar.push('LISTA_ID -> LISTA_ID coma id'); 
+break;
+case 67:
+ this.$ = [$$[$0]]; grammar.push('LISTA_ID -> id');  
 break;
 case 68:
- this.$ = 'INT' 
+ this.$ = 'INT'; grammar.push('TIPO -> Tint ');  
 break;
-case 69: case 73:
- this.$ = 'DOUBLE' 
+case 69:
+ this.$ = 'DOUBLE'; grammar.push('TIPO -> Tdouble'); 
 break;
 case 70:
- this.$ = 'BOOL' 
+ this.$ = 'BOOL'; grammar.push('TIPO -> Tboolean'); 
 break;
-case 71: case 72:
- this.$ = 'STRING' 
+case 71:
+ this.$ = 'STRING'; grammar.push('TIPO -> Tchar'); 
+break;
+case 72:
+ this.$ = 'STRING'; grammar.push('TIPO -> Tstring'); 
+break;
+case 73:
+ this.$ = 'DOUBLE'; grammar.push('TIPO -> Tfloat'); 
 break;
 case 74:
- this.$ = new Asignacion($$[$0-3], $$[$0-1], _$[$0-3].first_line, _$[$0-3].first_column) 
+ this.$ = new Asignacion($$[$0-3], $$[$0-1], _$[$0-3].first_line, _$[$0-3].first_column); grammar.push('ASIGNACION -> id eq EXPRESION pyc'); 
 break;
 case 75:
 
                                                                 $$[$0-4].push($$[$0-3]) 
                                                                 this.$ = new AsignacionStruct($$[$0-4], $$[$0-1], _$[$0-4].first_line, _$[$0-4].first_column) 
+                                                                grammar.push('ASIGNACION -> ACCESO_ID id eq EXPRESION pyc');
                                                                 
 break;
 case 76:
- this.$ = new AsignacionArr($$[$0-6], $$[$0-4], $$[$0-1], _$[$0-6].first_line, _$[$0-6].first_column) 
+ this.$ = new AsignacionArr($$[$0-6], $$[$0-4], $$[$0-1], _$[$0-6].first_line, _$[$0-6].first_column); grammar.push('ASIGNACION -> id c_abre EXPRESION c_cierra eq EXPRESION pyc'); 
 break;
 case 77:
- $$[$0-2].push($$[$0-1]); this.$ = $$[$0-2] 
+ $$[$0-2].push($$[$0-1]); this.$ = $$[$0-2]; grammar.push('ACCESO_ID -> ACCESO_ID id punto'); 
 break;
 case 78:
- this.$ = [$$[$0-1]] 
+ this.$ = [$$[$0-1]]; grammar.push('ACCESO_ID -> id punto'); 
+break;
+case 79:
+ this.$ = $$[$0]; grammar.push('CALL -> DERIVADA'); 
+break;
+case 80:
+ this.$ = $$[$0]; grammar.push('CALL -> NATIVA'); 
 break;
 case 81:
- this.$ = new Call($$[$0-3], $$[$0-1], _$[$0-3].first_line, _$[$0-3].first_column) 
+ this.$ = new Call($$[$0-3], $$[$0-1], _$[$0-3].first_line, _$[$0-3].first_column); grammar.push('DERIVADA -> id p_abre LISTA_EXP p_cierra'); 
 break;
-case 84: case 87:
- this.$ = [] 
+case 82:
+ $$[$0-2].push($$[$0]); this.$ = $$[$0-2]; grammar.push('LISTA_EXP -> LISTA_EXP coma EXPRESION'); 
+break;
+case 83:
+ this.$ = [$$[$0]]; grammar.push('LISTA_EXP -> EXPRESION'); 
+break;
+case 84:
+ this.$ = []; 
 break;
 case 85:
- $$[$0-3].push( { tipo: $$[$0-1], id: $$[$0] } ); this.$ = $$[$0-3] 
+ $$[$0-3].push( { tipo: $$[$0-1], id: $$[$0] } ); this.$ = $$[$0-3]; grammar.push('LISTA_PARAMETROS -> LISTA_PARAMETROS coma TIPO id'); 
 break;
 case 86:
- this.$ = [ { tipo: $$[$0-1], id: $$[$0] } ] 
+ this.$ = [ { tipo: $$[$0-1], id: $$[$0] } ]; grammar.push('LISTA_PARAMETROS -> TIPO id'); 
+break;
+case 87:
+ this.$ = [] 
 break;
 case 88:
- this.$ = new AccesoArr($$[$0-3], $$[$0-1], null, _$[$0-3].first_line, _$[$0-3].first_column) 
+ this.$ = new AccesoArr($$[$0-3], $$[$0-1], null, _$[$0-3].first_line, _$[$0-3].first_column); grammar.push('ACCESO_ARR -> id c_abre EXPRESION c_cierra'); 
 break;
-case 89: case 90: case 91: case 92:
- this.$ = new AccesoArr($$[$0-5], $$[$0-3], $$[$0-1], _$[$0-5].first_line, _$[$0-5].first_column) 
+case 89:
+ this.$ = new AccesoArr($$[$0-5], $$[$0-3], $$[$0-1], _$[$0-5].first_line, _$[$0-5].first_column); grammar.push('ACCESO_ARR -> id c_abre EXPRESION d_puntos EXPRESION c_cierra'); 
+break;
+case 90:
+ this.$ = new AccesoArr($$[$0-5], $$[$0-3], $$[$0-1], _$[$0-5].first_line, _$[$0-5].first_column); grammar.push('ACCESO_ARR -> id c_abre Rbegin d_puntos EXPRESION c_cierra'); 
+break;
+case 91:
+ this.$ = new AccesoArr($$[$0-5], $$[$0-3], $$[$0-1], _$[$0-5].first_line, _$[$0-5].first_column); grammar.push('ACCESO_ARR -> id c_abre EXPRESION d_puntos Rend c_cierra'); 
+break;
+case 92:
+ this.$ = new AccesoArr($$[$0-5], $$[$0-3], $$[$0-1], _$[$0-5].first_line, _$[$0-5].first_column); grammar.push('ACCESO_ARR -> id c_abre Rbegin d_puntos Rend c_cierra'); 
+break;
+case 93:
+ this.$ = $$[$0]; grammar.push('NATIVA -> POW'); 
+break;
+case 94:
+ this.$ = $$[$0]; grammar.push('NATIVA -> SQRT'); 
+break;
+case 95:
+ this.$ = $$[$0]; grammar.push('NATIVA -> SIN'); 
+break;
+case 96:
+ this.$ = $$[$0]; grammar.push('NATIVA -> COS'); 
+break;
+case 97:
+ this.$ = $$[$0]; grammar.push('NATIVA -> TAN'); 
+break;
+case 98:
+ this.$ = $$[$0]; grammar.push('NATIVA -> LOG'); 
+break;
+case 99:
+ this.$ = $$[$0]; grammar.push('NATIVA -> PARSE'); 
+break;
+case 100:
+ this.$ = $$[$0]; grammar.push('NATIVA -> TO_NATIVE'); 
+break;
+case 101:
+ this.$ = $$[$0]; grammar.push('NATIVA -> POS_STR'); 
+break;
+case 102:
+ this.$ = $$[$0]; grammar.push('NATIVA -> SUB_STR'); 
+break;
+case 103:
+ this.$ = $$[$0]; grammar.push('NATIVA -> LENGTH'); 
+break;
+case 104:
+ this.$ = $$[$0]; grammar.push('NATIVA -> TO_UPPER'); 
+break;
+case 105:
+ this.$ = $$[$0]; grammar.push('NATIVA -> TO_LOWER'); 
+break;
+case 106:
+ this.$ = $$[$0]; grammar.push('NATIVA -> POP'); 
 break;
 case 107:
- this.$ = new Pow($$[$0-3], $$[$0-1], _$[$0-5].first_line, _$[$0-5].first_column) 
+ this.$ = new Pow($$[$0-3], $$[$0-1], _$[$0-5].first_line, _$[$0-5].first_column); grammar.push('NATIVA -> POP'); 
 break;
 case 108:
- this.$ = new Sqrt($$[$0-1], _$[$0-3].first_line, _$[$0-3].first_column) 
+ this.$ = new Sqrt($$[$0-1], _$[$0-3].first_line, _$[$0-3].first_column); grammar.push('SQRT -> sqrt p_abre EXPRESION p_cierra '); 
 break;
 case 109:
- this.$ = new Sin($$[$0-1], _$[$0-3].first_line, _$[$0-3].first_column) 
+ this.$ = new Sin($$[$0-1], _$[$0-3].first_line, _$[$0-3].first_column); grammar.push('SIN -> sin p_abre EXPRESION p_cierra'); 
 break;
 case 110:
- this.$ = new Cos($$[$0-1], _$[$0-3].first_line, _$[$0-3].first_column) 
+ this.$ = new Cos($$[$0-1], _$[$0-3].first_line, _$[$0-3].first_column); grammar.push('COS -> cos p_abre EXPRESION p_cierra'); 
 break;
 case 111:
- this.$ = new Tan($$[$0-1], _$[$0-3].first_line, _$[$0-3].first_column) 
+ this.$ = new Tan($$[$0-1], _$[$0-3].first_line, _$[$0-3].first_column); grammar.push('TAN -> tan p_abre EXPRESION p_cierra '); 
 break;
 case 112:
- this.$ = new Log($$[$0-1], _$[$0-3].first_line, _$[$0-3].first_column) 
+ this.$ = new Log($$[$0-1], _$[$0-3].first_line, _$[$0-3].first_column); grammar.push('LOG -> log p_abre EXPRESION p_cierra'); 
 break;
 case 113:
- this.$ = new Parse( $$[$0-5], $$[$0-1], _$[$0-5].first_line, _$[$0-5].first_column) 
+ this.$ = new Parse( $$[$0-5], $$[$0-1], _$[$0-5].first_line, _$[$0-5].first_column); grammar.push('PARSE -> TIPO punto parse p_abre EXPRESION p_cierra'); 
 break;
-case 114: case 115: case 116: case 117:
- this.$ = new ToNative( $$[$0-3], $$[$0-1], _$[$0-3].first_line, _$[$0-3].first_column ) 
+case 114:
+ this.$ = new ToNative( $$[$0-3], $$[$0-1], _$[$0-3].first_line, _$[$0-3].first_column ); grammar.push('TO_NATIVE -> toint p_abre EXPRESION p_cierra'); 
+break;
+case 115:
+ this.$ = new ToNative( $$[$0-3], $$[$0-1], _$[$0-3].first_line, _$[$0-3].first_column ); grammar.push('TO_NATIVE -> todouble p_abre EXPRESION p_cierra'); 
+break;
+case 116:
+ this.$ = new ToNative( $$[$0-3], $$[$0-1], _$[$0-3].first_line, _$[$0-3].first_column ); grammar.push('TO_NATIVE -> str p_abre EXPRESION p_cierra'); 
+break;
+case 117:
+ this.$ = new ToNative( $$[$0-3], $$[$0-1], _$[$0-3].first_line, _$[$0-3].first_column ); grammar.push('TO_NATIVE -> typeof p_abre EXPRESION p_cierra'); 
 break;
 case 118:
- this.$ = new PositionStr( $$[$0-5], $$[$0-1], _$[$0-5].first_line, _$[$0-5].first_column) 
+ this.$ = new PositionStr( $$[$0-5], $$[$0-1], _$[$0-5].first_line, _$[$0-5].first_column); grammar.push('POS_STR -> EXPRESION punto posstr p_abre EXPRESION p_cierra'); 
 break;
 case 119:
 
                                                         var id = new Acceso($$[$0-5], _$[$0-5].first_line, _$[$0-5].first_column);
-                                                        this.$ = new PositionStr( id, $$[$0-1], _$[$0-5].first_line, _$[$0-5].first_column) 
+                                                        this.$ = new PositionStr( id, $$[$0-1], _$[$0-5].first_line, _$[$0-5].first_column)
+                                                        grammar.push('POS_STR -> id punto posstr p_abre EXPRESION p_cierra');
+                                                        
 break;
 case 120:
- this.$ = new SubStr($$[$0-7], $$[$0-3], $$[$0-1], _$[$0-7].first_line, _$[$0-7].first_column) 
+ this.$ = new SubStr($$[$0-7], $$[$0-3], $$[$0-1], _$[$0-7].first_line, _$[$0-7].first_column); grammar.push('SUB_STR -> EXPRESION punto substr p_abre EXPRESION coma EXPRESION p_cierra'); 
 break;
 case 121:
  
                                                                         var id = new Acceso($$[$0-7], _$[$0-7].first_line, _$[$0-7].first_column);
                                                                         this.$ = new SubStr(id, $$[$0-3], $$[$0-1], _$[$0-7].first_line, _$[$0-7].first_column) 
+                                                                        grammar.push('SUB_STR -> id punto substr p_abre EXPRESION coma EXPRESION p_cierra');
                                                                         
 break;
 case 122:
- this.$ = new Length( $$[$0-4], _$[$0-4].first_line, _$[$0-4].first_column ) 
+ this.$ = new Length( $$[$0-4], _$[$0-4].first_line, _$[$0-4].first_column ); grammar.push('LENGTH -> EXPRESION punto length p_abre p_cierra'); 
 break;
 case 123:
 
                                                         var id = new Acceso($$[$0-4], _$[$0-4].first_line, _$[$0-4].first_column);
-                                                        this.$ = new Length( id, _$[$0-4].first_line, _$[$0-4].first_column ) 
+                                                        this.$ = new Length( id, _$[$0-4].first_line, _$[$0-4].first_column );
+                                                        grammar.push('LENGTH -> id punto length p_abre p_cierra');
                                                         
 break;
 case 124:
- this.$ = new Upper( $$[$0-4], _$[$0-4].first_line, _$[$0-4].first_column ) 
+ this.$ = new Upper( $$[$0-4], _$[$0-4].first_line, _$[$0-4].first_column ); grammar.push('TO_UPPER -> EXPRESION punto upper p_abre p_cierra'); 
 break;
 case 125:
 
                                                         var id = new Acceso($$[$0-4], _$[$0-4].first_line, _$[$0-4].first_column);
-                                                        this.$ = new Upper( id, _$[$0-4].first_line, _$[$0-4].first_column ) 
+                                                        this.$ = new Upper( id, _$[$0-4].first_line, _$[$0-4].first_column);
+                                                        grammar.push('TO_UPPER -> id punto upper p_abre p_cierra ');
                                                         
 break;
 case 126:
- this.$ = new Lower( $$[$0-4], _$[$0-4].first_line, _$[$0-4].first_column ) 
+ this.$ = new Lower( $$[$0-4], _$[$0-4].first_line, _$[$0-4].first_column ); grammar.push('TO_LOWER -> EXPRESION punto lower p_abre p_cierra'); 
 break;
 case 127:
 
                                                         var id = new Acceso($$[$0-4], _$[$0-4].first_line, _$[$0-4].first_column);
                                                         this.$ = new Lower( id, _$[$0-4].first_line, _$[$0-4].first_column ) 
+                                                        grammar.push('TO_LOWER -> id punto lower p_abre p_cierra');
                                                         
 break;
 case 128:
- this.$ = new Push( $$[$0-6], $$[$0-2], _$[$0-6].first_line, _$[$0-6].first_column ) 
+ this.$ = new Push( $$[$0-6], $$[$0-2], _$[$0-6].first_line, _$[$0-6].first_column ); grammar.push('PUSH -> id punto Rpush p_abre EXPRESION p_cierra pyc'); 
 break;
 case 129:
- this.$ = new Pop( $$[$0-4], _$[$0-4].first_line, _$[$0-4].first_column ) 
+ this.$ = new Pop( $$[$0-4], _$[$0-4].first_line, _$[$0-4].first_column ); grammar.push('POP -> id punto Rpop p_abre p_cierra'); 
+break;
+case 130:
+ this.$ = $$[$0]; grammar.push('CONDICION -> IF'); 
+break;
+case 131:
+ this.$ = $$[$0]; grammar.push('CONDICION -> SWITCH'); 
 break;
 case 132:
- this.$ = new If( $$[$0-6], $$[$0-3], $$[$0-1], $$[$0], _$[$0-8].first_line, _$[$0-8].first_column ) 
+ this.$ = new If( $$[$0-6], $$[$0-3], $$[$0-1], $$[$0], _$[$0-8].first_line, _$[$0-8].first_column ); grammar.push('IF -> Rif p_abre EXPRESION p_cierra l_abre ACCIONES l_cierra ELSE_IF ELSE '); 
 break;
 case 133:
- this.$ = new If( $$[$0-5], $$[$0-2], $$[$0], null, _$[$0-7].first_line, _$[$0-7].first_column ) 
+ this.$ = new If( $$[$0-5], $$[$0-2], $$[$0], null, _$[$0-7].first_line, _$[$0-7].first_column ); grammar.push('IF -> Rif p_abre EXPRESION p_cierra l_abre ACCIONES l_cierra ELSE_IF'); 
 break;
 case 134:
- this.$ = new If( $$[$0-5], $$[$0-2], null, $$[$0], _$[$0-7].first_line, _$[$0-7].first_column ) 
+ this.$ = new If( $$[$0-5], $$[$0-2], null, $$[$0], _$[$0-7].first_line, _$[$0-7].first_column ); grammar.push('IF -> Rif p_abre EXPRESION p_cierra l_abre ACCIONES l_cierra ELSE'); 
 break;
 case 135:
- this.$ = new If( $$[$0-4], $$[$0-1], null, null, _$[$0-6].first_line, _$[$0-6].first_column ) 
+ this.$ = new If( $$[$0-4], $$[$0-1], null, null, _$[$0-6].first_line, _$[$0-6].first_column ); grammar.push('IF -> Rif p_abre EXPRESION p_cierra l_abre ACCIONES l_cierra '); 
 break;
 case 136:
- this.$ = new If( $$[$0-2], $$[$0], null, null, _$[$0-4].first_line, _$[$0-4].first_column ) 
+ this.$ = new If( $$[$0-2], $$[$0], null, null, _$[$0-4].first_line, _$[$0-4].first_column ); grammar.push('IF -> Rif p_abre EXPRESION p_cierra ACCION'); 
 break;
 case 137:
- $$[$0-7].push(new Elseif( $$[$0-4], $$[$0-1], _$[$0-7].first_line, _$[$0-7].first_column)); this.$ = $$[$0-7] 
+ $$[$0-7].push(new Elseif( $$[$0-4], $$[$0-1], _$[$0-7].first_line, _$[$0-7].first_column)); this.$ = $$[$0-7]; grammar.push('ELSE_IF -> ELSE_IF Relseif p_abre EXPRESION p_cierra l_abre ACCIONES l_cierra '); 
 break;
 case 138:
- this.$ = [new Elseif( $$[$0-4], $$[$0-1], _$[$0-6].first_line, _$[$0-6].first_column)] 
+ this.$ = [new Elseif( $$[$0-4], $$[$0-1], _$[$0-6].first_line, _$[$0-6].first_column)]; grammar.push('ELSE_IF -> Relseif p_abre EXPRESION p_cierra l_abre ACCIONES l_cierra'); 
 break;
 case 139:
- this.$ = new Else($$[$0-1], _$[$0-3].first_line, _$[$0-3].first_column) 
+ this.$ = new Else($$[$0-1], _$[$0-3].first_line, _$[$0-3].first_column); grammar.push('ELSE -> Relse l_abre ACCIONES l_cierra'); 
 break;
 case 140:
- this.$ = new Switch( $$[$0-5], $$[$0-2], $$[$0-1], _$[$0-7].first_line, _$[$0-7].first_column ) 
+ this.$ = new Switch( $$[$0-5], $$[$0-2], $$[$0-1], _$[$0-7].first_line, _$[$0-7].first_column ); grammar.push('SWITCH -> Rswitch p_abre EXPRESION p_cierra l_abre LISTA_CASE DEFAULT_CASE l_cierra'); 
 break;
 case 141:
- $$[$0-6].push(new Case( $$[$0-4], $$[$0-2], true, _$[$0-6].first_line, _$[$0-6].first_column)); this.$ = $$[$0-6]; 
+ $$[$0-6].push(new Case( $$[$0-4], $$[$0-2], true, _$[$0-6].first_line, _$[$0-6].first_column)); this.$ = $$[$0-6]; grammar.push('LISTA_CASE -> LISTA_CASE Rcase EXPRESION d_puntos ACCIONES Rbreak pyc '); 
 break;
 case 142:
- $$[$0-4].push(new Case( $$[$0-2], $$[$0], false, _$[$0-4].first_line, _$[$0-4].first_column)); this.$ = $$[$0-4]; 
+ $$[$0-4].push(new Case( $$[$0-2], $$[$0], false, _$[$0-4].first_line, _$[$0-4].first_column)); this.$ = $$[$0-4]; grammar.push('LISTA_CASE -> LISTA_CASE Rcase EXPRESION d_puntos ACCIONES ');
 break;
 case 143:
- this.$ = [new Case( $$[$0-4], $$[$0-2], true, _$[$0-5].first_line, _$[$0-5].first_column)] 
+ this.$ = [new Case( $$[$0-4], $$[$0-2], true, _$[$0-5].first_line, _$[$0-5].first_column)]; grammar.push('LISTA_CASE -> Rcase EXPRESION d_puntos ACCIONES Rbreak pyc'); 
 break;
 case 144:
- this.$ = [new Case( $$[$0-2], $$[$0], false, _$[$0-3].first_line, _$[$0-3].first_column)] 
+ this.$ = [new Case( $$[$0-2], $$[$0], false, _$[$0-3].first_line, _$[$0-3].first_column)]; grammar.push('LISTA_CASE -> Rcase EXPRESION d_puntos ACCIONES'); 
+break;
+case 145:
+ this.$ = $$[$0]; grammar.push('DEFAULT_CASE -> Rdefault d_puntos ACCIONES'); 
 break;
 case 146:
- this.$ = null 
+ this.$ = null;
 break;
 case 147:
-this.$ = new OperacionTwo($$[$0-1],"SUMASUMA",_$[$0-1].first_line, _$[$0-1].first_column)
+this.$ = new OperacionTwo($$[$0-1],"SUMASUMA",_$[$0-1].first_line, _$[$0-1].first_column); grammar.push('INC_DECRE_INSTR -> id masmas');
 break;
 case 148:
-this.$ = new OperacionTwo($$[$0-1],"RESTARESTA",_$[$0-1].first_line, _$[$0-1].first_column)
+this.$ = new OperacionTwo($$[$0-1],"RESTARESTA",_$[$0-1].first_line, _$[$0-1].first_column); grammar.push('INC_DECRE_INSTR -> id menosmenos');
 break;
 case 149:
- this.$ = new Continue(_$[$0].first_line, _$[$0].first_column)
+ this.$ = new Continue(_$[$0].first_line, _$[$0].first_column); grammar.push('TO_CONTINUE -> Rcontinue');
 break;
 case 150:
- this.$ = $$[$0]
+ this.$ = $$[$0]; grammar.push('CICLO -> WHILE');
 break;
 case 151:
- this.$ = $$[$0-1]
+ this.$ = $$[$0-1]; grammar.push('CICLO -> DOWHILE pyc');
 break;
 case 152:
-this.$ = new While($$[$0-4],$$[$0-1],_$[$0-6].first_line, _$[$0-6].first_column)
+this.$ = new While($$[$0-4],$$[$0-1],_$[$0-6].first_line, _$[$0-6].first_column); grammar.push('WHILE -> Rwhile p_abre EXPRESION p_cierra l_abre ACCIONES l_cierra');
 break;
 case 153:
-this.$ = new DoWhile($$[$0-1],$$[$0-5],_$[$0-7].first_line, _$[$0-7].first_column)
+this.$ = new DoWhile($$[$0-1],$$[$0-5],_$[$0-7].first_line, _$[$0-7].first_column); grammar.push('DOWHILE -> Rdo  l_abre ACCIONES l_cierra Rwhile p_abre EXPRESION p_cierra');
 break;
 case 154:
-this.$ = new PFOR($$[$0-8],$$[$0-6],$$[$0-4],$$[$0-1],_$[$0-10].first_line, _$[$0-10].first_column)
+this.$ = new PFOR($$[$0-8],$$[$0-6],$$[$0-4],$$[$0-1],_$[$0-10].first_line, _$[$0-10].first_column); grammar.push('PREFOR -> Rfor p_abre PRE_DECLARACION pyc EXPRESION pyc ACCIONES p_cierra l_abre ACCIONES l_cierra');
 break;
 case 155:
- this.$ = new Function($$[$0-7], $$[$0-6], $$[$0-4], $$[$0-1], _$[$0-7].first_line, _$[$0-7].first_column) 
+ this.$ = new Function($$[$0-7], $$[$0-6], $$[$0-4], $$[$0-1], _$[$0-7].first_line, _$[$0-7].first_column); grammar.push('FUNCION -> TIPO id p_abre LISTA_PARAMETROS p_cierra l_abre ACCIONES l_cierra');
 break;
 case 156:
- this.$ = new Return($$[$0-1],_$[$0-2].first_line, _$[$0-2].first_column) 
+ this.$ = new Return($$[$0-1],_$[$0-2].first_line, _$[$0-2].first_column); grammar.push('RETURN -> Rreturn EXPRESION pyc '); 
 break;
 case 157:
- this.$ = new Return(null,_$[$0-1].first_line, _$[$0-1].first_column) 
+ this.$ = new Return(null,_$[$0-1].first_line, _$[$0-1].first_column); grammar.push('RETURN -> Rreturn pyc'); 
 break;
 case 158:
- this.$ = new Print( $$[$0-2], _$[$0-4].first_line, _$[$0-4].first_column, true) 
+ this.$ = new Print( $$[$0-2], _$[$0-4].first_line, _$[$0-4].first_column, true); grammar.push('IMPRESION -> println p_abre CONTENIDO_PRINT p_cierra pyc'); 
 break;
 case 159:
- this.$ = new Print( $$[$0-2], _$[$0-4].first_line, _$[$0-4].first_column, false) 
+ this.$ = new Print( $$[$0-2], _$[$0-4].first_line, _$[$0-4].first_column, false); grammar.push('IMPRESION -> print p_abre CONTENIDO_PRINT p_cierra pyc '); 
+break;
+case 160:
+ $$[$0-2].push($$[$0]); this.$ = $$[$0-2]; grammar.push('CONTENIDO_PRINT -> CONTENIDO_PRINT coma EXPRESION'); 
+break;
+case 161:
+ this.$ = [$$[$0]]; grammar.push('CONTENIDO_PRINT -> EXPRESION'); 
 break;
 }
 },
@@ -697,6 +868,7 @@ _handle_error:
 }};
 
         var errors = []
+        var grammar = []
 /* generated by jison-lex 0.3.4 */
 var lexer = (function(){
 var lexer = ({

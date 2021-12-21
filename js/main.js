@@ -1,5 +1,5 @@
 
-let errorTableXml, symbolTableXml;
+let errorTableXml, symbolTableXml, grammarTable;
 let errorTableXpath, tokenTableXpath;
 let QuetzalEditor, c3dResult, consoleResult;
 
@@ -21,6 +21,7 @@ $(document).ready(function () {
 
   errorTableXml = $('#errorTableXml').DataTable();
   symbolTableXml = $('#symbolTableXml').DataTable();
+  grammarTable = $('#grammarTable').DataTable();
   errorTableXpath = $('#errorTableXpath').DataTable();
   tokenTableXpath = $('#tokenTableXpath').DataTable();
 
@@ -163,20 +164,17 @@ const AnalyzeQtzl = () => {
   Ast.setHeaders()
   Ast.OrdenarC3D()
 
-  //imprimiendo consola
+  //imprimiendo consola e imprimiendo c3d
   consoleResult.setValue(Ast.getPrints())
-
-  //imprimiendo c3d
   c3dResult.setValue(Ast.getC3D())
 
   console.log(Ast)
 
-  //dibujando grafo
+  //dibujando grafo (recorriendo arbol)
   cadena = 'digraph G {\n'
   DrawAst(Ast)
   cadena += '}'
-  console.log(cadena)
-
+  console.log(Ast.grammarReport)
   dotStringAst.dot = cadena
 
  //cargando datos a tabla de simbolos
@@ -191,11 +189,16 @@ const AnalyzeQtzl = () => {
     [{ data: "err" }, { data: "type" }, { data: "amb" }, { data: "line" }, { data: "col" }],
     Ast.getErrors());
 
-    //Ast.Clean();
+  //cargando datos de reporte gramatical
+  grammarTable.destroy();
+  grammarTable = newDataTable('#grammarTable',[{data: 'grammar'}],
+    Ast.getGrammar());
+  
+  
 }
 //GRAFICAR AST 
 function DrawAst(nodo){
-  console.log(nodo)
+  //console.log(nodo)
   if(nodo.ast_id === 0){
     nodo.ast_id = id_n
     id_n++

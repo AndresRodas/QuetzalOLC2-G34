@@ -13,7 +13,9 @@ class AST{
     ast_id;
     ast_name;
 
-    constructor(main, instrucciones){
+    grammarReport;
+
+    constructor(main, instrucciones, grammarReport){
         this.main = main
         this.instrucciones = instrucciones;
         this.structs = {};
@@ -26,6 +28,14 @@ class AST{
         this.hijos = [{ hijos: this.instrucciones, ast_id: 0, ast_name: 'Declaraciones'}, this.main]
         this.ast_id = 0
         this.ast_name = 'AST'
+        this.grammarReport = []
+        for(let gram of grammarReport){
+            this.grammarReport.push({grammar: gram})
+        }
+    }
+
+    getGrammar(){
+        return this.grammarReport
     }
 
     setMainC3D(main){

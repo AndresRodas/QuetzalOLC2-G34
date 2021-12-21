@@ -19,8 +19,10 @@ class AccesoArr {
             {ast_name: identificador, ast_id: 0, hijos: []},
             {ast_name: '[', ast_id: 0, hijos: []},
         ]
-        this.hijos.push(exp1)
-        if (exp2 != null) this.hijos.push(exp2)
+        if (exp1 === 'begin') this.hijos.push({ast_name: 'begin', ast_id: 0, hijos: []})
+        else if(exp1 != null) this.hijos.push(exp1)
+        if (exp2 === 'end') this.hijos.push({ast_name: 'end', ast_id: 0, hijos: []})
+        else if (exp2 != null) this.hijos.push(exp2)
         this.hijos.push({ast_name: ']', ast_id: 0, hijos: []})
         this.ast_name = 'AccessArray'
         this.ast_id = 0
