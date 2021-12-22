@@ -12,6 +12,7 @@ class AccesoStruct {
         this.identificador = identificador;
         this.ast_id = 0
         this.ast_name = 'AccessStruct'
+        this.hijos = []
         for(let id of identificador){
             this.hijos.push({ast_name: id, ast_id: 0, hijos: []})
             this.hijos.push({ast_name: '.', ast_id: 0, hijos: []})
@@ -50,16 +51,19 @@ class AccesoStruct {
     }
 
     getValorImplicito(ent, arbol) {
-        var ent_val = ent
+        var ent_val = ent, ret = null;
             for( let id of this.identificador){
                 if (ent_val.existe(id)) {
                     var simbolo = ent_val.getSimbolo(id)
+                    console.log(simbolo)
                     //si el valor es un entorno
-                    if ( Entorno.prototype.isPrototypeOf(simbolo.valor)     ){
+                    console.log(Entorno.prototype.isPrototypeOf(simbolo.valor))
+                    if (Entorno.prototype.isPrototypeOf(simbolo.valor)){
                         ent_val = simbolo.valor
+                        ret = simbolo.valor
                     }
                     else{
-                        return simbolo.valor
+                        ret = simbolo.valor
                     }
                 }
                 else{
@@ -72,7 +76,7 @@ class AccesoStruct {
                       })
                 }
             }
-        return null
+        return ret
     }
 
     isInt(n){

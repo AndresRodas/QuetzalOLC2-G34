@@ -34,7 +34,6 @@ class DecVarStruct{
         if (this.id_struct1 === this.id_struct2) {
             //identificador
             var id = this.id_struct1
-
             //nuevo simbolo a agregar jeje
             // const simbolo = new Simbolo(func.valor.parametros[index].tipo, func.valor.parametros[index].id, this.linea, this.columna, this.parametros[index].getValorImplicito(ent, arbol))
             // new_ent.agregar(func.valor.parametros[index].id, simbolo)
@@ -55,11 +54,9 @@ class DecVarStruct{
                     //Recorriendo atributos
                     for (let i = 0; i < atributos.length; i++) {
                         //si son del mismo tipo
-                        if(atributos[i].getTipo(entorno_struct, arbol) === this.lista_exp[i].getTipo(entorno_struct, arbol)){
-                            //asignando valor
-                            //atributos[i].valor = this.lista_exp[i].getValorImplicito(ent, arbol)
-                            //entorno_struct.reemplazar(this.identificador, atributos[i])
-                            var new_sim = new Simbolo(atributos[i].getTipo(entorno_struct, arbol),llaves[i], this.linea, this.columna,this.lista_exp[i].getValorImplicito(ent, arbol) )
+                        //console.log(this.lista_exp[i].getTipo(ent, arbol))
+                        if(atributos[i].getTipo(ent, arbol) === this.lista_exp[i].getTipo(ent, arbol) || this.lista_exp[i].getTipo(ent, arbol) === 'ARRAY' ){
+                            var new_sim = new Simbolo(atributos[i].getTipo(ent, arbol),llaves[i], this.linea, this.columna,this.lista_exp[i].getValorImplicito(ent, arbol) )
                             new_ent.agregar(llaves[i], new_sim)
                         }
                         else{

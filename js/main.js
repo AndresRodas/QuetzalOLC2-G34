@@ -6,7 +6,7 @@ let QuetzalEditor, c3dResult, consoleResult;
 let dotStringAst = { dot: '' }
 
 //metodos codigo tres direcciones
-var cont_t = 0, cont_l = 0, heap = 0, stack = 0, id_n = 0, cadena = '';
+var cont_t = 0, cont_l = 0, heap = 0, stack = 0, id_n = 0, cadena = '', tabla3d = {};
 
 function new_temp(){
         cont_t += 1
@@ -143,39 +143,35 @@ const AnalyzeQtzl = () => {
 
   var texto = QuetzalEditor.getValue();
 
-  //creacion del arbol
+  //creacion del arbol y entorno
   var Ast = grammar.parse(texto);
-
-  //creacion entorno global
   var entorno = new Entorno(null, 'GLOBAL')
 
+  /*******EJECUCION*********/
   try {
     //ejecutando intrucciones
     Ast.instrucciones.forEach(element => {
-    element.ejecutar(entorno, Ast)
+      element.ejecutar(entorno, Ast)
     })
     //ejecutando main
     Ast.main.ejecutar(entorno, Ast)
+    //generando C3D
+    Ast.setHeaders()
+    Ast.OrdenarC3D()
+    //imprimiendo consola e imprimiendo c3d
+    consoleResult.setValue(Ast.getPrints())
+    c3dResult.setValue(Ast.getC3D())
+    //dibujando grafo (recorriendo arbol)
+    cadena = 'digraph G {\n'
+    DrawAst(Ast)
+    cadena += '}'
+    dotStringAst.dot = cadena
+
   } catch (error) {
     console.log('error')
   }
-
-  //generando C3D
-  Ast.setHeaders()
-  Ast.OrdenarC3D()
-
-  //imprimiendo consola e imprimiendo c3d
-  consoleResult.setValue(Ast.getPrints())
-  c3dResult.setValue(Ast.getC3D())
-
+  console.log(tabla3d)
   console.log(Ast)
-
-  //dibujando grafo (recorriendo arbol)
-  cadena = 'digraph G {\n'
-  DrawAst(Ast)
-  cadena += '}'
-  console.log(Ast.grammarReport)
-  dotStringAst.dot = cadena
 
  //cargando datos a tabla de simbolos
   symbolTableXml.destroy();
@@ -191,23 +187,27 @@ const AnalyzeQtzl = () => {
 
   //cargando datos de reporte gramatical
   grammarTable.destroy();
-  grammarTable = newDataTable('#grammarTable',[{data: 'grammar'}],
+  grammarTable = newDataTable('#grammarTable',
+  [{data: 'pos'},{data: 'grammar'}],
     Ast.getGrammar());
   
-  
 }
+
+
 //GRAFICAR AST 
 function DrawAst(nodo){
   //console.log(nodo)
-  if(nodo.ast_id === 0){
-    nodo.ast_id = id_n
-    id_n++
+  if (nodo.hijos != undefined){
+    if(nodo.ast_id === 0){
+      nodo.ast_id = id_n
+      id_n++
+    }
+    cadena += nodo.ast_id+'[label="'+nodo.ast_name+'"];\n'
+    nodo.hijos.forEach( element => {
+      cadena += nodo.ast_id+'->'+id_n+';\n'
+      DrawAst(element, cadena)
+    })
   }
-  cadena += nodo.ast_id+'[label="'+nodo.ast_name+'"];\n'
-  nodo.hijos.forEach( element => {
-    cadena += nodo.ast_id+'->'+id_n+';\n'
-    DrawAst(element, cadena)
-  })
 }
 
 /**

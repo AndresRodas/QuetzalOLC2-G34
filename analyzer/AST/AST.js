@@ -28,10 +28,12 @@ class AST{
         this.hijos = [{ hijos: this.instrucciones, ast_id: 0, ast_name: 'Declaraciones'}, this.main]
         this.ast_id = 0
         this.ast_name = 'AST'
+        console.log(grammarReport)
         this.grammarReport = []
-        for(let gram of grammarReport){
-            this.grammarReport.push({grammar: gram})
+        for(let index = 0; index < grammarReport.length ; index++ ){
+            this.grammarReport.push({pos: index, grammar: grammarReport[index]})
         }
+        console.log(this.grammarReport)
     }
 
     getGrammar(){
@@ -99,7 +101,6 @@ class AST{
     }
 
     agregar(id, simbolo){
-        console.log(id, simbolo)
         id = id.toLowerCase();
         simbolo.indentificador = simbolo.identificador.toLowerCase();
         this.structs[id] = simbolo;

@@ -20,8 +20,9 @@ class Main{
     }
 
     traducir(ent, arbol) {
+        
         for (let inst of this.instrucciones) {
-            inst.traducir(new_ent, arbol)
+            inst.traducir(ent, arbol)
             this.c3d += inst.c3d
             if(Return.prototype.isPrototypeOf(inst)) break;
         }
@@ -34,6 +35,7 @@ class Main{
             inst.ejecutar(new_ent, arbol)
             if(Return.prototype.isPrototypeOf(inst)) break;
         }
+        this.traducir(ent, arbol)
     }
 
 }

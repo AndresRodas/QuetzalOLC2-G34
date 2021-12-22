@@ -3,6 +3,7 @@ class Print{
     columna;
     expresiones;
     salto;
+
     c3d;
 
     hijos;
@@ -27,8 +28,9 @@ class Print{
 
         for(let exp of this.expresiones){
 
-                exp.traducir(ent, arbol)
-
+            exp.traducir(ent, arbol)
+            console.log(exp)
+            console.log(exp.getTipo(ent, arbol))
             //functions
             if (!arbol.existeFunc('print') && exp.getTipo(ent, arbol) === 'STRING' ){
                 var tmp1 = new_temp(), tmp2 = new_temp(), tmp3 = new_temp(), lvl1 = new_label(), lvl2 = new_label();
@@ -43,11 +45,11 @@ class Print{
                 arbol.agregarFunc('print', func)
             }
             //int
-            if (exp.getTipo(ent, arbol) === 'INT' || exp.getTipo(ent, arbol) === 'DOUBLE'){
+            if (exp.getTipo(ent, arbol) === 'INT' || exp.getTipo(ent, arbol) === 'DOUBLE' || exp.tipo === 'INT' || exp.tipo === 'DOUBLE' ){
                 c3d += exp.c3d + '// PRINT NUMERO\n'+'printf(\"%f\", (double)'+exp.tmp+');\n\n'
             }
             //String
-            else if(exp.getTipo(ent, arbol) === 'STRING'){
+            else if(exp.getTipo(ent, arbol) === 'STRING' || exp.tipo === 'STRING'){
                 tmp = new_temp()
                 c3d += exp.c3d +'// PRINT STRING\n'+ tmp +' = P + '+stack+';\n'
                 c3d += tmp +' = '+ tmp + ' + 1;\n'
@@ -57,6 +59,10 @@ class Print{
                 tmp = new_temp()
                 c3d += tmp+' = stack[(int)P];\n'
                 c3d += 'P = P - '+ stack +';\n\n'
+            }
+            //Acceso a variable
+            else if(exp.getTipo(ent, arbol) === 'ARRAY'){
+                c3d += exp.c3d + '// PRINT ACCESO\n'+'printf(\"%f\", (double)'+exp.tmp+');\n\n'
             }
         }
         if (this.salto) c3d += 'printf(\"%c\", (char)10);\n\n'
@@ -73,8 +79,18 @@ class Print{
         var out_string = ''
         for (let exp of this.expresiones){
             var valor = exp.getValorImplicito(ent, arbol);
+            if(Entorno.prototype.isPrototypeOf(valor)){
+                var tmp_val = valor.identificador+'( '
+                for(let val of Object.keys(valor.tabla)){
+                    tmp_val+= val+' '
+                }
+                tmp_val += ')'
+                valor = tmp_val
+            }
             if (valor !== null && valor !== undefined) out_string += valor.toString() + ' '
         }
         arbol.setPrints(out_string, this.salto)
+        console.log(ent)
+
     }
 }

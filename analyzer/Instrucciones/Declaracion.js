@@ -5,6 +5,11 @@ class Declaracion{
     lista_id;
     expresion;
 
+    tmp;
+    c3d;
+    lv;
+    lf;
+
     hijos;
     ast_id;
     ast_name;
@@ -25,6 +30,30 @@ class Declaracion{
     }
 
     traducir(ent, arbol) {
+        var tmp = '', c3d = '', lv = '', lf = '';
+        if(this.expresion != null){
+            this.expresion.traducir(ent, arbol)
+            c3d = this.expresion.c3d
+            for(let id of this.lista_id){
+                c3d += '//GUARDANDO VARIABLE//\nstack[(int)'+stack+'] = '+this.expresion.tmp+';\n';
+                tabla3d[id] = stack
+                stack++  
+            }
+        }
+        else{
+            for(let id of this.lista_id){
+                c3d += '//GUARDANDO VARIABLE//\nstack[(int)'+stack+'] = 0;\n';
+                tabla3d[id] = stack
+                stack++  
+            }
+        }
+        
+
+        this.tmp = tmp
+        this.c3d = c3d
+        this.lv = lv
+        this.lf = lf
+        
 
     }
 

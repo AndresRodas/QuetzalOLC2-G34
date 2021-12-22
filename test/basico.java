@@ -103,6 +103,16 @@ void main(){
     arr.pop();
     println(arr);
 
+    int num = 6;
+	Nodo der = Nodo(num, num);
+    Nodo izq = Nodo(3,2);
+    Arbol arb = Arbol(der, izq);
+    Bosque forest = Bosque(arb);
+    println(arb.derecho.alto);
+    arb.derecho.alto = 7;
+    println(arb.derecho.alto);
+    println(arb.derecho);
+
 	return;
 }
 
@@ -133,3 +143,16 @@ struct Casa{
     boolean disponible;
 };
 
+struct Nodo{
+	int alto;
+    int ancho;
+};
+
+struct Arbol{
+	Nodo derecho;
+    Nodo izquierdo;
+};
+
+struct Bosque{
+	Arbol tree;
+};
