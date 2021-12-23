@@ -85,7 +85,6 @@ class Print{
             if (valor !== null && valor !== undefined) out_string += valor.toString() + ' '
         }
         arbol.setPrints(out_string, this.salto)
-        console.log(ent)
         //this.traducir(ent, arbol)
     }
 }

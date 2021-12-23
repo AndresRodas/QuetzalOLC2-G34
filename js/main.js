@@ -148,7 +148,7 @@ const AnalyzeQtzl = () => {
   var entorno = new Entorno(null, 'GLOBAL')
 
   /***************************EJECUCION***************************/
-  // try {
+  try {
     //ejecutando intrucciones
     Ast.instrucciones.forEach(element => {
       element.ejecutar(entorno, Ast)
@@ -167,9 +167,9 @@ const AnalyzeQtzl = () => {
     cadena += '}'
     dotStringAst.dot = cadena
 
-  // } catch (error) {
-  //   console.log('Se ha producido un error interno')
-  // }
+  } catch (error) {
+    console.log('Se ha producido un error interno')
+  }
 
   //cargando datos a tabla de simbolos
   symbolTableXml.destroy();

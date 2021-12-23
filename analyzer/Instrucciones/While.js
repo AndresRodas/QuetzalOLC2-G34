@@ -24,8 +24,8 @@ class While{
 
     ejecutar(ent, arbol) {
         if(this.condicion.getTipo(ent, arbol) === 'BOOL'){              //VERIFICA SI ES VERDADERA LA CONDICION
-
-            while (true) {
+            var cont = 0
+            while (true && cont < 1000) {
                 //si es verdadero
                 if(this.condicion.getValorImplicito(ent, arbol)){
                     //crear entorno
@@ -40,7 +40,8 @@ class While{
                 }
                 else{
                     break
-                }      
+                } 
+                cont += 1     
             }
 
             return undefined
