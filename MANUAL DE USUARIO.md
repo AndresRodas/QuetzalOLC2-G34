@@ -81,22 +81,28 @@ La aplicación tendra una sintaxis, la cual debera ser respetada o de lo contrar
 
 - Declaraciones y Asignaciones: Quetzal permite la declaración y asignación de variables, las NO variables pueden cambiar su tipo de dato en cualquier momento.
 1. Declaracion:
+
 ![](https://i.imgur.com/xQfCatY.png)
 2. Asignación:
+
 ![](https://i.imgur.com/qep6Wms.png)
 
 
 
 - Llamada a funciones: Una llamada a función es como un desvío en el flujo de la ejecución. En lugar de pasar a la siguiente sentencia, el flujo salta al cuerpo de la función, ejecuta esta y regresa para continuar después de la llamada a la función:
+
 ![](https://i.imgur.com/CMpa9nu.png)
 
 - Distintas Funciones Nativas: Quetzal utiliza diversas funciones nativas para sus expresiones, estas son:
+
 ![](https://i.imgur.com/QMHBVo3.png)
 
 - Funciones:  Las funciones son secuencias de sentencias que ejecuta una operación que nosotros deseamos. Cuando se crea una función se especifica su nombre y secuencia de sentencias. Luego, ya se puede llamar a estas usando su nombre y los parámetros solicitados. Se definen las funciones en Quetzal así:
+
 ![](https://i.imgur.com/KbGQHxg.png)
 
 - Condicionales: Quetzal cuenta con sentencias condicionales, lo que permite que un bloque de codigo pueda ser o no ejecutado. Estas se definen por if,if...else y if...else if y adicional con la sentencia switch case. Su estructura es la siguiente:
+
 1.![](https://i.imgur.com/k0FqGrk.png)
 
 2.![](https://i.imgur.com/kuAZPBw.png)
@@ -104,12 +110,15 @@ La aplicación tendra una sintaxis, la cual debera ser respetada o de lo contrar
 - Loops: Quetzal cuenta con sentencias iterativas, lo que permite ejecutar repetidamente un bloque de sentencias. Existen 2 de estas, el ciclo while, el ciclo do while y el ciclo for.
 
 1. While: 
+
 ![](https://i.imgur.com/fyfLNt3.png)
 
 2. DoWhile:
+
 ![](https://i.imgur.com/nL8iQFT.png)
 
 3. For:
+
 ![](https://i.imgur.com/3n0jyC2.png)
 
 - STructs : Como se menciono en secciones anteriores, Quetzal cuenta con tipos compuestos que los desarrolladores podrán definir mediante una sintaxis. Para la declaración de estos se utiliza la siguiente sintaxis:
