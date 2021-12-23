@@ -62,9 +62,53 @@ No se recibe algun parametro extra, simplemente la fila y la columna, ya que a l
 Constructor que va a recibir como parametro Tipo, Lista de identificadores, expresion, linea y la columna, teniendo tambien dentro de el la declaracion para la creacion del AST.
 Al momento de ser ejecutado, utilizando la lista de ID se recorre  y se verifica si existe la variable a declarar, de existir entonces se marca un error... Si no existe y no viene con un "valor" pasa a ser agregada, recopilando toda su informacion como el "identificado", "tipo", "valor", linea y columna... Pero si viene de la otra forma con su "expresion" declarada seria casi como la opcion anterior a diferencia que a la hora de ser agregada a la tabla la "expresion" tambien seria agregada.
 - If.js:
+Constructor que va a recibir de parametros: Acciones, Expresion, elseif (condicion), else_ins(Instrucciones), linea y columna
+
+- Main.js:
+
+- Print.Js:
+
+- Push.js:
+- Switch.js:
+
+<center>EXPRESIONES
+</center>
+
+- Acceso.js
+- AccesoArr.js
+- AccesoStruct.js
+- Call.js
+- Cos.js
+- Lenght.js
+- Log.js
+- Lowe.js
+- .Operacion.js
+- OperacionTwo.js
+- Parse.js
+- Pop.js
+- Pow.js
+- Sin.js
+- Primitivo.js
+- Sin.js
+- Sqrt.js
+- SubStr.js
+
+
+<center>AST
+</center>
+
+- AST.JS
+- Entorno.Js
+- Simbolo.js
+
 
 <center>INDEX
 </center>
+
+<center>GRAMATICA
+</center>
+
+-Gramar.jison: 
 
 - Index.html:
 Archivo escrito en Html plano, que funciona para la pagina principal.
