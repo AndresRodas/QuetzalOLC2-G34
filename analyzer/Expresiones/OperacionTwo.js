@@ -19,12 +19,8 @@ class OperacionTwo {
         
         if (ent.existe(this.op_izquierda)) {
             //var simbolo = ent.getSimbolo(this.op_izquierda)
-
-
             var simbolo = ent.getSimbolo(this.op_izquierda)
-
             var new_valor = simbolo.valor
-            
 
             let op1 = new_valor;
             let op2 = 1;
@@ -56,7 +52,6 @@ class OperacionTwo {
                     return { err: 'Tipos de datos no permitidos realizando una resta' }
                 }
             }
-
 
 
             simbolo.valor = rs    

@@ -35,11 +35,20 @@ class DeclaracionStruct{
             const simbolo = new Simbolo('STRUCT', this.identificador, this.linea, this.columna, entorno_struct)
             arbol.agregar(this.identificador, simbolo)
             /**********SYMBOL_TABLE*************/
+            var simval = simbolo.valor
+            if(Entorno.prototype.isPrototypeOf(simval)){
+                var tmp_val = simval.identificador+'( '
+                for(let val of Object.keys(simval.tabla)){
+                    tmp_val+= val+' '
+                }
+                tmp_val += ')'
+                simval = tmp_val
+            }
             arbol.setTable({
                 id: simbolo.identificador,
                 type: simbolo.tipo,
                 env: ent.identificador,
-                val: simbolo.valor,
+                val: simval,
                 row: simbolo.linea,
                 col: simbolo.columna
             })
@@ -53,6 +62,7 @@ class DeclaracionStruct{
                 col: this.columna
               })
         }
+        this.traducir(ent, arbol)
     }
 
     getValorDefault(){

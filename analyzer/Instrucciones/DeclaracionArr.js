@@ -64,6 +64,7 @@ class DeclaracionArr{
                     col: this.columna
                   })
             }
+            this.traducir(ent, arbol)
     
     }
 

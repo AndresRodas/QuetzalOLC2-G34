@@ -19,7 +19,11 @@ class Asignacion{
     }
 
     traducir(ent, arbol) {
-
+        var tmp = '', c3d = '', lv = '', lf = '';
+        this.expresion.traducir(ent, arbol)
+        c3d += this.expresion.c3d + '//REASIGNANDO VARIABLE//\nstack[(int)'+tabla3d[this.identificador]+'] = '+this.expresion.tmp+';\n';
+        this.tmp = tmp, this.c3d = c3d, this.lv = lv, this.lf = lf;
+        arbol.setMainC3D(this.c3d)
     }
 
     ejecutar(ent, arbol) {
@@ -50,6 +54,6 @@ class Asignacion{
                 col: this.columna
               })
         }
-
+        this.traducir(ent, arbol)
     }
 }

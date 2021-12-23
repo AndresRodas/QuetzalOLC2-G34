@@ -179,7 +179,7 @@ BEGIN: CODE EOF {
 CODE : GLOBAL_ENV MAIN GLOBAL_ENV       { $$ = { global: $1.concat($3), main: $2 }; grammar.push('CODE ::= GLOBAL MAIN GLOBAL') } 
         | GLOBAL_ENV MAIN               { $$ = { global: $1, main: $2 }; grammar.push('CODE ::= GLOBAL MAIN') }
         | MAIN GLOBAL_ENV               { $$ = { global: $2, main: $1 }; grammar.push('CODE ::= MAIN GLOBAL') }
-        | MAIN                          { $$ = { global: [], main: $1 }; grammar.push('CODE ::= MAIN') }
+        | MAIN                          { $$ = { global: [], main: $1 }; grammar.push('CODE ::= MAIN'); }
         | error                         { errors.push({
                                                 err: 'No se esperaba el valor '+yytext,
                                                 type: 'Semántico',
@@ -206,7 +206,7 @@ ACCIONES : ACCIONES ACCION { $1.push($2); $$ = $1; grammar.push('ACCIONES ::= AC
         | ACCION { $$ = [$1]; grammar.push('ACCIONES ::= ACCION'); }
 ;
 
-ACCION : INSTRUCCION { $$ = $1; grammar.push('ACCION ::= INSTRUCCION'); }
+ACCION : INSTRUCCION { $$ = $1; grammar.push('ACCION ::= INSTRUCCION');  }
 ;
 
 EXPRESION : OPERACION { $$ = $1; grammar.push('EXPRESION ::= OPERACION'); }
@@ -246,7 +246,7 @@ OPERACION : EXPRESION mas EXPRESION             { $$ = new Operacion($1,$3,'SUMA
         | menos EXPRESION %prec UMINUS          { $$ = new Operacion($2,$2,'MENOS_UNARIO', @1.first_line, @1.first_column);grammar.push('OPERACION ::= menos EXPRESION');}
         | lnot EXPRESION %prec UMINUS           { $$ = new Operacion($2,$2,'NOT', @1.first_line, @1.first_column); grammar.push('OPERACION ::= lnot EXPRESION');}
         | EXPRESION quest EXPRESION d_puntos EXPRESION { $$ = new Ternario($1, $3, $5, @1.first_line, @1.first_column); grammar.push('OPERACION ::= EXPRESION quest EXPRESION d_puntos EXPRESION');}
-        | p_abre EXPRESION p_cierra     { $$ = $2; grammar.push('OPERACION ::= p_abre EXPRESION p_cierra'); }
+        | p_abre EXPRESION p_cierra             { $$ = $2; grammar.push('OPERACION ::= p_abre EXPRESION p_cierra'); }
 ;
 
 PRIMITIVA : num                         { $$ = new Primitivo(Number($1), @1.first_line, @1.first_column); grammar.push('PRIMITIVA ::= num'); }
@@ -459,17 +459,28 @@ TO_CONTINUE : Rcontinue                            { $$ = new Continue(@1.first_
 
 ;
 
-CICLO : WHILE           { $$ = $1; grammar.push('CICLO ::= WHILE');}
-      | DOWHILE pyc        { $$ = $1; grammar.push('CICLO ::= DOWHILE pyc');}
+CICLO : WHILE           { $$ = $1; grammar.push('CICLO ::= WHILE'); }
+      | DOWHILE pyc     { $$ = $1; grammar.push('CICLO ::= DOWHILE pyc'); }
+      | FOR             { $$ = $1; grammar.push('CICLO ::= FOR '); }
 ;
-
 
 WHILE : Rwhile p_abre EXPRESION p_cierra l_abre ACCIONES l_cierra              {$$ = new While($3,$6,@1.first_line, @1.first_column); grammar.push('WHILE ::= Rwhile p_abre EXPRESION p_cierra l_abre ACCIONES l_cierra');}
 ;    
 
-DOWHILE : Rdo  l_abre ACCIONES l_cierra Rwhile p_abre EXPRESION p_cierra     {$$ = new DoWhile($7,$3,@1.first_line, @1.first_column); grammar.push('DOWHILE ::= Rdo  l_abre ACCIONES l_cierra Rwhile p_abre EXPRESION p_cierra');}
+DOWHILE : Rdo l_abre ACCIONES l_cierra Rwhile p_abre EXPRESION p_cierra     {$$ = new DoWhile($7,$3,@1.first_line, @1.first_column); grammar.push('DOWHILE ::= Rdo  l_abre ACCIONES l_cierra Rwhile p_abre EXPRESION p_cierra');}
 ;
 
+FOR : Rfor p_abre DECLARACION EXPRESION pyc INC_DECRE_INSTR p_cierra l_abre ACCIONES l_cierra 
+                                                { 
+                                                        $$ = new For($3, $4, $6, $9, @1.first_line, @1.first_column); 
+                                                        grammar.push('FOR ::= Rfor p_abre DECLARACION pyc EXPRESION pyc INC_DECRE_INSTR p_cierra c_abre ACCIONES c_cierra ');
+                                                }
+        | Rfor id Rin EXPRESION l_abre ACCIONES l_cierra
+                                                {
+                                                        $$ = new For($2, $4, null, $6, @1.first_line, @1.first_column); 
+                                                        grammar.push('FOR ::= Rfor id Rin EXPRESION l_abre ACCIONES l_cierra');
+                                                }
+;
 
 PREFOR : Rfor p_abre PRE_DECLARACION pyc EXPRESION pyc ACCIONES p_cierra l_abre ACCIONES l_cierra {$$ = new PFOR($3,$5,$7,$10,@1.first_line, @1.first_column); grammar.push('PREFOR ::= Rfor p_abre PRE_DECLARACION pyc EXPRESION pyc ACCIONES p_cierra l_abre ACCIONES l_cierra');}
 ;

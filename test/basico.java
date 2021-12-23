@@ -7,7 +7,7 @@ void main(){
 	println(( 5 <= 3 ) || (false && true)  );
     println(56+54);
 	println(!(false || true));
-	println("conche"&" la"&" lora");
+	println("hola"&" mundo "&":3");
 	println("ja"^5 &" que risa bro");
 	println(60 >= 50 ? "Puede vacunarse" : "No puede vacunarse");   
     print("salto de linea: ");
@@ -112,6 +112,13 @@ void main(){
     arb.derecho.alto = 7;
     println(arb.derecho.alto);
     println(arb.derecho);
+
+    for (int i = 0; i < 10; i++) {
+      println(i);
+    }
+    for letra in "Hola Mundo!"{
+       print(letra, "-");
+    }
 
 	return;
 }

@@ -48,7 +48,7 @@ class Function{
                 col: this.columna
               })
         }
-        console.log(ent)
+        this.traducir(ent, arbol)
     }
 
 }

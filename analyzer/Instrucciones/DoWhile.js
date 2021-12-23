@@ -53,6 +53,7 @@ class DoWhile{
                 col: this.columna
               })
         }
+        this.traducir(ent, arbol)
     }
 
 }

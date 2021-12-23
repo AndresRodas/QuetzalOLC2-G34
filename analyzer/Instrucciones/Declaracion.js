@@ -53,7 +53,7 @@ class Declaracion{
         this.c3d = c3d
         this.lv = lv
         this.lf = lf
-        
+        arbol.setMainC3D(this.c3d)
 
     }
 
@@ -110,6 +110,7 @@ class Declaracion{
                   })
             }
         }
+        this.traducir(ent, arbol)
     }
 
     getValorDefault(){

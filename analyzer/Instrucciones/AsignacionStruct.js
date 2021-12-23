@@ -51,5 +51,6 @@ class AsignacionStruct{
                     })
             }
         }
+        this.traducir(ent, arbol)
     }
 }

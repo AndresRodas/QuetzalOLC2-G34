@@ -29,8 +29,6 @@ class Print{
         for(let exp of this.expresiones){
 
             exp.traducir(ent, arbol)
-            console.log(exp)
-            console.log(exp.getTipo(ent, arbol))
             //functions
             if (!arbol.existeFunc('print') && exp.getTipo(ent, arbol) === 'STRING' ){
                 var tmp1 = new_temp(), tmp2 = new_temp(), tmp3 = new_temp(), lvl1 = new_label(), lvl2 = new_label();
@@ -45,7 +43,7 @@ class Print{
                 arbol.agregarFunc('print', func)
             }
             //int
-            if (exp.getTipo(ent, arbol) === 'INT' || exp.getTipo(ent, arbol) === 'DOUBLE' || exp.tipo === 'INT' || exp.tipo === 'DOUBLE' ){
+            if (exp.getTipo(ent, arbol) === 'INT' || exp.getTipo(ent, arbol) === 'DOUBLE'){
                 c3d += exp.c3d + '// PRINT NUMERO\n'+'printf(\"%f\", (double)'+exp.tmp+');\n\n'
             }
             //String
@@ -60,10 +58,7 @@ class Print{
                 c3d += tmp+' = stack[(int)P];\n'
                 c3d += 'P = P - '+ stack +';\n\n'
             }
-            //Acceso a variable
-            else if(exp.getTipo(ent, arbol) === 'ARRAY'){
-                c3d += exp.c3d + '// PRINT ACCESO\n'+'printf(\"%f\", (double)'+exp.tmp+');\n\n'
-            }
+         
         }
         if (this.salto) c3d += 'printf(\"%c\", (char)10);\n\n'
 
@@ -71,7 +66,7 @@ class Print{
         this.c3d = c3d
         this.lv = lv
         this.lf = lf
-        //arbol.setMainC3D(this.c3d)
+        arbol.setMainC3D(this.c3d)
         
     }
 
@@ -91,6 +86,6 @@ class Print{
         }
         arbol.setPrints(out_string, this.salto)
         console.log(ent)
-
+        //this.traducir(ent, arbol)
     }
 }

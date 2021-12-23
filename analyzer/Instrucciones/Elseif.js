@@ -24,8 +24,20 @@ class Elseif{
         this.hijos.push({ast_name: '}', ast_id: 0, hijos: []})
     }
 
-    traducir(ent, arbol) {
+    traducir(ent, arbol, le) {
 
+        var tmp = '', c3d = '', lv = le, lf = '';
+        this.expresion.traducir(ent, arbol)
+        //condicion else if
+        c3d += '//ELSE IF\n' +this.expresion.c3d + this.expresion.lv +':\n'
+        arbol.setMainC3D(c3d)  
+        //acciones else if
+        for(let acc of this.acciones){
+            acc.traducir(ent, arbol)
+        }
+        //salida
+        c3d = '//ESCAPE ELSE IF\ngoto '+lv+';\n' + this.expresion.lf+':\n'
+        arbol.setMainC3D(c3d)
     }
 
     ejecutar(ent, arbol) {

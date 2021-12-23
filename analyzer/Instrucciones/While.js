@@ -55,6 +55,7 @@ class While{
                 col: this.columna
               })
         }
+        this.traducir(ent, arbol)
     }
 
 }

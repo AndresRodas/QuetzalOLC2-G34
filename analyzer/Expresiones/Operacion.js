@@ -60,32 +60,32 @@ class Operacion {
         else if(this.operador == 'IGUAL_IGUAL'){
             lv = new_label() 
             lf = new_label()
-            c3d = op1.c3d + op2.c3d + 'if '+op1.tmp + '==' + op2.tmp + ' goto '+ lv + '\n' + 'goto '+ lf +'\n'
+            c3d = op1.c3d + op2.c3d + 'if ('+op1.tmp + '==' + op2.tmp + ') goto '+ lv + ';\n' + 'goto '+ lf +';\n'
         } 
         else if(this.operador == 'DIFERENTE_QUE'){
             lv = new_label() 
             lf = new_label()
-            c3d = op1.c3d + op2.c3d + 'if '+op1.tmp + '!=' + op2.tmp + ' goto '+ lv + '\n' + 'goto '+ lf +'\n'
+            c3d = op1.c3d + op2.c3d + 'if ('+op1.tmp + '!=' + op2.tmp + ') goto '+ lv + ';\n' + 'goto '+ lf +';\n'
         }
         else if(this.operador == 'MAYOR_IGUA_QUE'){
             lv = new_label()
             lf = new_label()
-            c3d = op1.c3d + op2.c3d + 'if ' + op1.tmp+ '>=' + op2.tmp + ' goto '+ lv +'\n' + 'goto '+ lf + '\n'
+            c3d = op1.c3d + op2.c3d + 'if (' + op1.tmp+ '>=' + op2.tmp + ') goto '+ lv +';\n' + 'goto '+ lf + ';\n'
         }
         else if(this.operador == 'MAYOR_QUE'){                                
             lv = new_label()
             lf = new_label()
-            c3d = op1.c3d + op2.c3d + 'if ' + op1.tmp+ '>' + op2.tmp + ' goto '+ lv +'\n' + 'goto '+ lf + '\n' 
+            c3d = op1.c3d + op2.c3d + 'if (' + op1.tmp+ '>' + op2.tmp + ') goto '+ lv +';\n' + 'goto '+ lf + ';\n' 
         }
         else if(this.operador == 'MENOR_IGUA_QUE'){                                 
             lv = new_label()
             lf = new_label()
-            c3d = op1.c3d + op2.c3d + 'if ' + op1.tmp+ '<=' + op2.tmp + ' goto '+ lv +'\n' + 'goto '+ lf + '\n' 
+            c3d = op1.c3d + op2.c3d + 'if (' + op1.tmp+ '<=' + op2.tmp + ') goto '+ lv +';\n' + 'goto '+ lf + ';\n' 
         }
         else if(this.operador == 'MENOR_QUE'){       
             lv = new_label()
             lf = new_label()
-            c3d = op1.c3d + op2.c3d + 'if ' + op1.tmp+ '<' + op2.tmp + ' goto '+ lv +'\n' + 'goto '+ lf + '\n'   
+            c3d = op1.c3d + op2.c3d + 'if (' + op1.tmp+ '<' + op2.tmp + ') goto '+ lv +';\n' + 'goto '+ lf + ';\n'   
         }
         else if(this.operador == 'MENOS_UNARIO'){       
             tmp = new_temp()
@@ -132,8 +132,8 @@ class Operacion {
         return 'VOID';
     }
     
-
     getValorImplicito(ent, arbol) {
+
         if (this.operador !== 'MENOS_UNARIO' && this.operador !== 'NOT'){
             let op1 = this.op_izquierda.getValorImplicito(ent, arbol);
             let op2 = this.op_derecha.getValorImplicito(ent, arbol);

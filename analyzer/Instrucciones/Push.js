@@ -60,6 +60,7 @@ class Push{
                 line: this.linea,
                 col: this.columna
                 })
-        }    
+        }  
+        this.traducir(ent, arbol)  
     }
 }

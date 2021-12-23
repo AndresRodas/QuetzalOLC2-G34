@@ -17,7 +17,11 @@ class Else{
     }
 
     traducir(ent, arbol) {
-
+        var tmp = '', c3d = '', lv = '', lf = '';
+        //acciones if
+        for(let acc of this.acciones){
+            acc.traducir(ent, arbol)
+        }
     }
 
     ejecutar(ent, arbol) {

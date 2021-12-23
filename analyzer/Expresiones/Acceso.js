@@ -2,7 +2,6 @@ class Acceso {
     linea;
     columna;
     identificador;
-    tipo;
 
     tmp;
     c3d;
@@ -20,7 +19,6 @@ class Acceso {
         this.hijos = [{ast_name: identificador, ast_id: 0, hijos: []}]
         this.ast_id = 0
         this.ast_name = 'Acceso'
-        this.tipo = ''
     }
     
     traducir(ent, arbol) {

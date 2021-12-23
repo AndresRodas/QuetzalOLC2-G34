@@ -31,12 +31,40 @@ class If{
     }
 
     traducir(ent, arbol) {
-
+        var tmp = '', c3d = '', lv = '', lf = '';
+        this.expresion.traducir(ent, arbol)
+        //lvl salida
+        lv = new_label()
+        //condicion if
+        c3d += '//IF\n' +this.expresion.c3d + this.expresion.lv +':\n'
+        arbol.setMainC3D(c3d)  
+        //acciones if
+        for(let acc of this.acciones){
+            acc.traducir(ent, arbol)
+        }
+        //salida
+        c3d = '//ESCAPE IF\ngoto '+lv+';\n'
+        //else if o else
+        c3d += this.expresion.lf+':\n'
+        arbol.setMainC3D(c3d)
+        //acciones elseif
+        if(this.else_if != null){
+            for(let eli of this.else_if){
+                eli.traducir(ent, arbol, lv)
+            }
+        }
+        //acciones else
+        if(this.else_ins != null){
+            this.else_ins.traducir(ent, arbol)
+        }
+        
+        //salidita
+        c3d = lv+':\n'
+        arbol.setMainC3D(c3d)
     }
 
     ejecutar(ent, arbol) {
         if(this.expresion.getTipo(ent, arbol) === 'BOOL'){
-
             //si es verdadero
             if(this.expresion.getValorImplicito(ent, arbol)){
                 //crear entorno
@@ -44,9 +72,13 @@ class If{
                 for(let acci of this.acciones){
                     var salida = acci.ejecutar(new_ent, arbol)
                     if(salida !== undefined) {
-                        if(salida.retorno !== undefined) return salida
+                        if(salida.retorno !== undefined) {
+                            this.traducir(ent, arbol)
+                            return salida
+                        }
                     }
                 }
+                this.traducir(ent, arbol)
                 return undefined
             }
             //si es falso se valida si hay elseif
@@ -57,8 +89,14 @@ class If{
                 for (let element of this.else_if) {
                     var salida = element.ejecutar(new_ent, arbol)
                     if(salida !== undefined) {
-                        if(salida.retorno !== undefined) return salida
-                        else if(salida === true) return undefined     
+                        if(salida.retorno !== undefined) {
+                            this.traducir(ent, arbol)
+                            return salida
+                        }
+                        else if(salida === true) {
+                            this.traducir(ent, arbol)
+                            return undefined 
+                        }    
                     }
                 }
 
@@ -70,10 +108,12 @@ class If{
 
                 var salida = this.else_ins.ejecutar(new_ent, arbol)
                 if(salida !== undefined) {
-                    if(salida.retorno !== undefined) return salida
+                    if(salida.retorno !== undefined) {
+                        this.traducir(ent, arbol)
+                        return salida
+                    }
                 }
-            } 
-            
+            }  
         }
         else{
             arbol.setError({
@@ -84,6 +124,7 @@ class If{
                 col: this.columna
               })
         }
+        this.traducir(ent, arbol)
     }
 
 }

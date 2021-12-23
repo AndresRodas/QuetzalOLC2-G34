@@ -63,5 +63,6 @@ class AsignacionArr{
                 col: this.columna
               })
         }
+        this.traducir(ent, arbol)
     }
 }

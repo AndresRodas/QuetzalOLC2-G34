@@ -35,7 +35,6 @@ class Main{
             inst.ejecutar(new_ent, arbol)
             if(Return.prototype.isPrototypeOf(inst)) break;
         }
-        this.traducir(ent, arbol)
     }
 
 }

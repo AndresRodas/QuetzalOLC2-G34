@@ -147,8 +147,8 @@ const AnalyzeQtzl = () => {
   var Ast = grammar.parse(texto);
   var entorno = new Entorno(null, 'GLOBAL')
 
-  /*******EJECUCION*********/
-  try {
+  /***************************EJECUCION***************************/
+  // try {
     //ejecutando intrucciones
     Ast.instrucciones.forEach(element => {
       element.ejecutar(entorno, Ast)
@@ -167,13 +167,11 @@ const AnalyzeQtzl = () => {
     cadena += '}'
     dotStringAst.dot = cadena
 
-  } catch (error) {
-    console.log('error')
-  }
-  console.log(tabla3d)
-  console.log(Ast)
+  // } catch (error) {
+  //   console.log('Se ha producido un error interno')
+  // }
 
- //cargando datos a tabla de simbolos
+  //cargando datos a tabla de simbolos
   symbolTableXml.destroy();
   symbolTableXml = newDataTable('#symbolTableXml',
     [{ data: "id" }, { data: "type" }, { data: "env" }, { data: "val" }, { data: "row" }, { data: "col" }],
