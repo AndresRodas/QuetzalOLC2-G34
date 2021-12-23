@@ -65,9 +65,7 @@ Al momento de ser ejecutado, utilizando la lista de ID se recorre  y se verifica
 Constructor que va a recibir de parametros: Acciones, Expresion, elseif (condicion), else_ins(Instrucciones), linea y columna
 
 - Main.js:
-
 - Print.Js:
-
 - Push.js:
 - Switch.js:
 
@@ -102,13 +100,15 @@ Constructor que va a recibir de parametros: Acciones, Expresion, elseif (condici
 - Simbolo.js
 
 
-<center>INDEX
-</center>
-
 <center>GRAMATICA
 </center>
 
--Gramar.jison: 
+- Gramar.jison: 
+
+<center>INDEX
+</center>
+
+
 
 - Index.html:
 Archivo escrito en Html plano, que funciona para la pagina principal.
