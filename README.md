@@ -21,7 +21,6 @@
 | Carné     | Nombre                              |
 | --------- | ----------------------------------- |
 | 201504220 | José Andres Rodas Arrecis           |
-| 201700355 | Diego Alejandro Martinez Garcia     |
 ---
 
 ## Documentación

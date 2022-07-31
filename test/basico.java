@@ -3,13 +3,14 @@ String saludo = "holas";
 String[] arr = ["H","O","L","A"];
 
 void main(){
+    int num = 0;
     println(2,true,"jajaja",5, saludo);
 	println(( 5 <= 3 ) || (false && true)  );
     println(56+54);
 	println(!(false || true));
 	println("hola"&" mundo "&":3");
 	println("ja"^5 &" que risa bro");
-	println(60 >= 50 ? "Puede vacunarse" : "No puede vacunarse");   
+	println(num >= 50 ? "Puede vacunarse" : "No puede vacunarse");   
     print("salto de linea: ");
     println("Esto sale en la misma linea");
     println("esto ya es otra linea");
