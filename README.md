@@ -14,10 +14,6 @@
 
 **Aux. Haroldo Pablo Arias Molina**
 
----
-
-## Integrantes
-
 | Carné     | Nombre                              |
 | --------- | ----------------------------------- |
 | 201504220 | José Andres Rodas Arrecis           |
